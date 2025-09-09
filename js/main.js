@@ -2,6 +2,9 @@
 // PAGE NAVIGATION AND INITIALIZATION
 // ==========================================
 
+// Configuration - Update this path if the default ranges file moves
+const DEFAULT_RANGES_PATH = 'assets/default-preflop-ranges-v1.json';
+
 // Global state
 let currentHeroPosition = 'BU';
 let currentVillainPosition = 'SB';
@@ -15,12 +18,37 @@ let isDragging = false;
 let dragAction = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
-    initializeApp();
-    generateHandMatrix();
-    setupEditRangesControls();
-    await loadDefaultRanges();
-    initializeRangeData();
-    initializeTheme();
+    try {
+        initializeApp();
+        generateHandMatrix();
+        setupEditRangesControls();
+        
+        // Load default ranges first, then initialize range data
+        const defaultsLoaded = await loadDefaultRanges();
+        initializeRangeData();
+        
+        // Initialize theme last
+        initializeTheme();
+        
+        // Provide user feedback about default ranges loading
+        if (defaultsLoaded) {
+            console.log('✅ Application initialized with default preflop ranges');
+        } else {
+            console.warn('⚠️ Application initialized with empty ranges (default ranges failed to load)');
+        }
+        
+        // Register service worker for PWA functionality
+        registerServiceWorker();
+        
+    } catch (error) {
+        console.error('Error during application initialization:', error);
+        // Continue with initialization even if there's an error
+        initializeRangeData();
+        initializeTheme();
+        
+        // Still try to register service worker even if there's an error
+        registerServiceWorker();
+    }
 });
 
 function initializeApp() {
@@ -244,6 +272,8 @@ function showPage(pageId) {
             initializePracticePage();
         } else if (pageId === 'statistics-page') {
             loadAndDisplayStatistics();
+        } else if (pageId === 'import-export-page') {
+            updateRangeDataStatus();
         }
         
         // Update header navigation
@@ -654,16 +684,38 @@ function initializeRangeData() {
     // Try to load from localStorage first
     loadRangeDataFromStorage();
     
-    // If no data was loaded, initialize empty range data for all valid matchups
+    // If no data was loaded from localStorage, populate with default ranges
     if (Object.keys(rangeData).length === 0) {
-        positions.forEach(hero => {
-            positions.forEach(villain => {
-                if (hero !== villain) {
-                    const key = `${hero}_vs_${villain}`;
-                    rangeData[key] = {};
-                }
+        console.log('No saved range data found. Loading default ranges...');
+        
+        // Check if default ranges are available
+        if (Object.keys(defaultRanges).length > 0) {
+            // Copy default ranges to rangeData
+            rangeData = { ...defaultRanges };
+            console.log('Default ranges loaded into practice data');
+            
+            // Optionally save the default ranges to localStorage for future use
+            saveRangeDataToStorage();
+            console.log('Default ranges saved to localStorage for future sessions');
+            
+            // Update status indicator if import-export page is active
+            if (currentPageId === 'import-export-page') {
+                updateRangeDataStatus();
+            }
+        } else {
+            // If default ranges failed to load, create empty range data for all valid matchups
+            console.log('No default ranges available. Creating empty range data...');
+            positions.forEach(hero => {
+                positions.forEach(villain => {
+                    if (hero !== villain) {
+                        const key = `${hero}_vs_${villain}`;
+                        rangeData[key] = {};
+                    }
+                });
             });
-        });
+        }
+    } else {
+        console.log('Existing range data loaded from localStorage');
     }
 }
 
@@ -691,7 +743,7 @@ function saveRangeDataToStorage() {
 
 async function loadDefaultRanges() {
     try {
-        const response = await fetch('assets/default-preflop-ranges-v1.json');
+        const response = await fetch(DEFAULT_RANGES_PATH);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -704,12 +756,14 @@ async function loadDefaultRanges() {
             defaultRanges = data;
         }
         
-        console.log('Default ranges loaded successfully');
+        console.log('Default ranges loaded successfully from:', DEFAULT_RANGES_PATH);
         console.log('Available default range keys:', Object.keys(defaultRanges));
+        return true; // Return success status
     } catch (error) {
-        console.error('Error loading default ranges:', error);
+        console.error('Error loading default ranges from:', DEFAULT_RANGES_PATH, error);
         // Initialize empty defaults if file can't be loaded
         defaultRanges = {};
+        return false; // Return failure status
     }
 }
 
@@ -1453,22 +1507,39 @@ function generateAvailableHands() {
     });
     
     // Generate hands for each valid matchup
+    let totalRangesChecked = 0;
+    let rangesWithData = 0;
+    
     filteredMatchups.forEach(matchup => {
-        practiceConfig.selectedHands.forEach(hand => {
-            // Check if this hand has range data for this matchup
-            const rangeKey = `${matchup.hero}_vs_${matchup.villain}`;
-            const range = rangeData[rangeKey] || defaultRanges[rangeKey];
-            
-            if (range && range[hand]) {
-                practiceState.availableHands.push({
-                    hero: matchup.hero,
-                    villain: matchup.villain,
-                    hand: hand,
-                    correctAction: range[hand]
-                });
-            }
-        });
+        const rangeKey = `${matchup.hero}_vs_${matchup.villain}`;
+        const range = rangeData[rangeKey] || defaultRanges[rangeKey];
+        totalRangesChecked++;
+        
+        if (range && Object.keys(range).length > 0) {
+            rangesWithData++;
+            practiceConfig.selectedHands.forEach(hand => {
+                if (range[hand]) {
+                    practiceState.availableHands.push({
+                        hero: matchup.hero,
+                        villain: matchup.villain,
+                        hand: hand,
+                        correctAction: range[hand]
+                    });
+                }
+            });
+        }
     });
+    
+    // Provide feedback about range data availability
+    console.log(`Range data status: ${rangesWithData}/${totalRangesChecked} matchups have data`);
+    console.log(`Generated ${practiceState.availableHands.length} practice hands`);
+    
+    if (practiceState.availableHands.length === 0) {
+        console.warn('⚠️ No practice hands available! This could be because:');
+        console.warn('  - Default ranges failed to load');
+        console.warn('  - No hands are selected for practice');
+        console.warn('  - The selected position matchup has no range data');
+    }
     
     // Shuffle available hands
     practiceState.availableHands = shuffleArray(practiceState.availableHands);
@@ -1485,7 +1556,25 @@ function shuffleArray(array) {
 
 function dealNextPracticeHand() {
     if (practiceState.availableHands.length === 0) {
-        alert('No more hands available with current settings. Please reconfigure.');
+        // Provide more helpful error message
+        const hasDefaultRanges = Object.keys(defaultRanges).length > 0;
+        const hasUserRanges = Object.keys(rangeData).length > 0;
+        
+        let errorMessage = 'No hands available for practice!\n\n';
+        
+        if (!hasDefaultRanges && !hasUserRanges) {
+            errorMessage += 'Possible causes:\n' +
+                          '• Default ranges failed to load from ' + DEFAULT_RANGES_PATH + '\n' +
+                          '• No custom ranges have been created\n\n' +
+                          'Please check the console for more details or try reloading the page.';
+        } else {
+            errorMessage += 'Possible causes:\n' +
+                          '• No hands are selected in the practice configuration\n' +
+                          '• The selected position matchup has no range data\n' +
+                          '• Try selecting "Any Position" to include all matchups';
+        }
+        
+        alert(errorMessage);
         return;
     }
     
@@ -2673,6 +2762,11 @@ function importRanges(event) {
                 loadCurrentRange();
             }
             
+            // Update status indicator if import-export page is active
+            if (currentPageId === 'import-export-page') {
+                updateRangeDataStatus();
+            }
+            
             console.log('Ranges imported successfully');
             
             // Visual feedback - need to find the import button
@@ -2739,6 +2833,178 @@ function updateHeroPosition(position) {
     // For now, it's just a placeholder
     console.log(`Hero position changed to: ${position}`);
 }
+
+// ==========================================
+// RANGE STATUS INDICATOR
+// ==========================================
+
+function updateRangeDataStatus() {
+    const statusElement = document.getElementById('range-data-status');
+    if (!statusElement) return;
+    
+    const statusIcon = statusElement.querySelector('.status-icon');
+    const statusTitle = statusElement.querySelector('.status-title');
+    const statusDescription = statusElement.querySelector('.status-description');
+    
+    // Clear existing status classes
+    statusElement.classList.remove('default-ranges', 'custom-ranges', 'no-ranges');
+    
+    // Check data sources
+    const hasDefaultRanges = Object.keys(defaultRanges).length > 0;
+    const hasUserRanges = Object.keys(rangeData).length > 0;
+    const rangeDataFromDefaults = hasUserRanges && hasDefaultRanges && JSON.stringify(rangeData) === JSON.stringify(defaultRanges);
+    
+    if (!hasUserRanges && !hasDefaultRanges) {
+        // No data at all
+        statusElement.classList.add('no-ranges');
+        statusIcon.textContent = '❌';
+        statusTitle.textContent = 'No Range Data';
+        statusDescription.textContent = 'No range data is currently loaded. Default ranges failed to load and no custom ranges exist.';
+    } else if (hasUserRanges && !rangeDataFromDefaults) {
+        // Custom ranges (user has modified ranges)
+        statusElement.classList.add('custom-ranges');
+        statusIcon.textContent = '🎯';
+        statusTitle.textContent = 'Custom Ranges';
+        statusDescription.textContent = `Using custom range data. ${Object.keys(rangeData).length} position matchups configured.`;
+    } else {
+        // Default ranges
+        statusElement.classList.add('default-ranges');
+        statusIcon.textContent = '📊';
+        statusTitle.textContent = 'Default Ranges';
+        statusDescription.textContent = `Using default preflop ranges loaded from ${DEFAULT_RANGES_PATH}. ${Object.keys(defaultRanges).length} matchups available.`;
+    }
+}
+
+// ==========================================
+// PWA SERVICE WORKER REGISTRATION
+// ==========================================
+
+function registerServiceWorker() {
+    // Check if service workers are supported
+    if ('serviceWorker' in navigator) {
+        console.log('[PWA] Service Worker support detected');
+        
+        window.addEventListener('load', async () => {
+            try {
+                const registration = await navigator.serviceWorker.register('./sw.js', {
+                    scope: './'
+                });
+                
+                console.log('[PWA] Service Worker registered successfully:', registration.scope);
+                
+                // Handle service worker updates
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('[PWA] New Service Worker found, installing...');
+                    
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('[PWA] New Service Worker installed, ready to activate');
+                            // Optionally show update notification to user
+                            showUpdateAvailable(registration);
+                        }
+                    });
+                });
+                
+                // Listen for controlling service worker changes
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('[PWA] Service Worker controller changed, reloading page...');
+                    window.location.reload();
+                });
+                
+            } catch (error) {
+                console.warn('[PWA] Service Worker registration failed:', error);
+            }
+        });
+        
+        // Handle install prompt for PWA
+        window.addEventListener('beforeinstallprompt', (event) => {
+            console.log('[PWA] Install prompt available');
+            // Prevent the default prompt
+            event.preventDefault();
+            // Store the event for later use
+            window.deferredPrompt = event;
+            // Optionally show custom install button
+            showInstallButton();
+        });
+        
+        // Handle successful PWA installation
+        window.addEventListener('appinstalled', (event) => {
+            console.log('[PWA] App successfully installed');
+            // Hide install button if shown
+            hideInstallButton();
+            // Clear the deferred prompt
+            window.deferredPrompt = null;
+        });
+        
+    } else {
+        console.log('[PWA] Service Workers not supported in this browser');
+    }
+}
+
+function showUpdateAvailable(registration) {
+    // Create a simple notification for updates
+    // You can customize this to match your UI
+    console.log('[PWA] App update available');
+    
+    // For now, just log to console. You could show a toast notification here
+    if (confirm('A new version of Preflop Builder is available. Update now?')) {
+        if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+    }
+}
+
+function showInstallButton() {
+    // Show install button - you can customize this for your UI
+    console.log('[PWA] Install button should be shown');
+    
+    // Example: You could add an install button to your header
+    // For now, we'll just log that the option is available
+    console.log('[PWA] User can install this app to their home screen');
+}
+
+function hideInstallButton() {
+    // Hide install button after successful installation
+    console.log('[PWA] Install button should be hidden');
+}
+
+// Utility function to manually trigger app install
+function installPWA() {
+    if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('[PWA] User accepted the install prompt');
+            } else {
+                console.log('[PWA] User dismissed the install prompt');
+            }
+            window.deferredPrompt = null;
+        });
+    }
+}
+
+// Check if app is running in standalone mode (installed PWA)
+function isRunningStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+}
+
+// Initialize PWA features
+function initializePWAFeatures() {
+    if (isRunningStandalone()) {
+        console.log('[PWA] App is running in standalone mode');
+        document.body.classList.add('pwa-standalone');
+    } else {
+        console.log('[PWA] App is running in browser mode');
+        document.body.classList.add('pwa-browser');
+    }
+}
+
+// Call PWA initialization
+document.addEventListener('DOMContentLoaded', () => {
+    initializePWAFeatures();
+});
 
 // Initialize the app when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {

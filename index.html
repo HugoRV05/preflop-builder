@@ -4,6 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Preflop Builder</title>
+    <meta name="description" content="Master your preflop ranges in 5-max No-Limit Hold'em. Practice and edit poker preflop strategies.">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Preflop Builder">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-icon-180.png">
+
+    
+    <!-- Microsoft Windows PWA Support -->
+    <meta name="msapplication-TileColor" content="#00d4ff">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#00d4ff">
+    <meta name="msapplication-navbutton-color" content="#00d4ff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+    <link rel="preload" href="assets/default-preflop-ranges-v1.json" as="fetch" crossorigin>
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=switzer@300,400,500,600,700,800,900&display=swap" rel="stylesheet">
@@ -790,6 +818,18 @@
                     <h2>📁 Import/Export</h2>
                 </div>
                 <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>Current Range Data Status</h3>
+                        <div class="setting-item">
+                            <div id="range-data-status" class="range-status-indicator">
+                                <div class="status-icon">📊</div>
+                                <div class="status-text">
+                                    <div class="status-title">Loading...</div>
+                                    <div class="status-description">Checking range data source...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="setting-group">
                         <h3>Export Ranges</h3>
                         <div class="setting-item">
