@@ -2847,6 +2847,20 @@ body.on-landing-page .header-right {
     border-color: #1e7e34;
 }
 
+.grid-control-btn.reset-defaults-btn {
+    background: var(--accent-orange);
+    border-color: var(--accent-orange);
+    color: white;
+    font-weight: 600;
+}
+
+.grid-control-btn.reset-defaults-btn:hover {
+    background: #e85d22;
+    border-color: #d4521a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
 /* ==========================================
    PRACTICE PAGE STYLES
    ========================================== */

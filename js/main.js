@@ -838,6 +838,7 @@ function setupGridControls() {
     const resetBtn = document.querySelector('.reset-btn');
     const saveBtn = document.querySelector('.save-btn');
     const pasteBtn = document.querySelector('.paste-btn');
+    const resetDefaultsBtn = document.querySelector('.reset-defaults-btn');
     
     if (cleanBtn) {
         cleanBtn.addEventListener('click', cleanCurrentRange);
@@ -853,6 +854,10 @@ function setupGridControls() {
     
     if (pasteBtn) {
         pasteBtn.addEventListener('click', pasteLastTable);
+    }
+    
+    if (resetDefaultsBtn) {
+        resetDefaultsBtn.addEventListener('click', resetAllTablesToDefaults);
     }
 }
 
@@ -1016,6 +1021,59 @@ function pasteLastTable() {
     
     // Save to localStorage
     saveRangeDataToStorage();
+}
+
+function resetAllTablesToDefaults() {
+    // Check if default ranges are available
+    if (!defaultRanges || Object.keys(defaultRanges).length === 0) {
+        console.warn('No default ranges available to reset to');
+        
+        // Visual feedback for no defaults
+        const resetBtn = document.querySelector('.reset-defaults-btn');
+        const originalText = resetBtn.textContent;
+        resetBtn.textContent = 'NO DEFAULTS';
+        resetBtn.style.background = '#ff9800';
+        
+        setTimeout(() => {
+            resetBtn.textContent = originalText;
+            resetBtn.style.background = '';
+        }, 2000);
+        return;
+    }
+    
+    // Confirm action since this affects all tables
+    if (!confirm('This will reset ALL position matchups to default ranges. Are you sure?')) {
+        return;
+    }
+    
+    console.log('Resetting all tables to default ranges...');
+    
+    // Copy all default ranges to rangeData
+    rangeData = { ...defaultRanges };
+    
+    // Re-render the current table to show the changes immediately
+    loadCurrentRange();
+    
+    // Save the reset data to localStorage
+    saveRangeDataToStorage();
+    
+    console.log(`Reset ${Object.keys(defaultRanges).length} position matchups to defaults`);
+    
+    // Visual feedback
+    const resetBtn = document.querySelector('.reset-defaults-btn');
+    const originalText = resetBtn.textContent;
+    resetBtn.textContent = 'RESET COMPLETE!';
+    resetBtn.style.background = '#4caf50';
+    
+    setTimeout(() => {
+        resetBtn.textContent = originalText;
+        resetBtn.style.background = '';
+    }, 2000);
+    
+    // Update status indicator if import-export page is active
+    if (currentPageId === 'import-export-page') {
+        updateRangeDataStatus();
+    }
 }
 
 // ==========================================
