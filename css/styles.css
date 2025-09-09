@@ -2573,7 +2573,7 @@ body.on-landing-page .header-right {
     width: 320px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     flex-shrink: 0;
 }
 
@@ -2729,7 +2729,7 @@ body.on-landing-page .header-right {
     background: transparent;
     padding: 0 0 15px 0;
     flex-shrink: 0;
-    margin: 15px 0 8px 0;
+    margin: 15px 0 8px -85px;
 }
 
 .grid-header h2 {
