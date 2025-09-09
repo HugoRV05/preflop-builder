@@ -2946,7 +2946,7 @@ function registerServiceWorker() {
             try {
                 // Add version parameter to force GitHub Pages to serve latest version
                 // Update this version number when you want to force cache refresh
-                const SW_VERSION = '1.2.6';
+                const SW_VERSION = '1.2.7';
                 const swUrl = `./sw.js?v=${SW_VERSION}`;
                 const registration = await navigator.serviceWorker.register(swUrl, {
                     scope: './'

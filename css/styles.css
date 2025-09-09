@@ -4505,7 +4505,7 @@ body.on-landing-page .header-right {
 
     /* Mobile landing header - larger title */
     .landing-header {
-        margin-top: 10px; /* Reduced from 30px to 10px */
+        margin-top: 30px;
         margin-bottom: -60px; /* Reduced from -90px to -60px */
         text-align: center;
     }
@@ -4658,6 +4658,25 @@ body.on-landing-page .header-right {
         /* Instant feedback without highlight */
         transform: scale(0.98);
         transition: transform 0.1s ease;
+    }
+    
+    /* Disable border color change animations on mobile devices only */
+    .landing-btn,
+    .landing-btn.edit-btn,
+    .landing-btn.practice-btn {
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   background 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    
+    /* Keep hover states but remove border transitions for mobile */
+    .landing-btn:hover,
+    .landing-btn.edit-btn:hover,
+    .landing-btn.practice-btn:hover {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   background 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
     /* Mobile Practice Page Home Button (in-flow, mobile-only) */
@@ -5152,7 +5171,7 @@ body.on-landing-page .header-right {
         .hand-detail-content {
             width: 95vw;
             max-width: 95vw;
-            max-height: 85vh;
+            max-height: 80vh;
             padding: 15px;
             margin: 0;
             border-radius: 10px;
@@ -5338,6 +5357,25 @@ body.on-landing-page .header-right {
             rgba(59, 130, 246, 0.15) 100%);
         border-color: rgba(14, 165, 233, 0.4);
         box-shadow: 0 6px 16px rgba(14, 165, 233, 0.2);
+    }
+    
+    /* Disable border color change animations on mobile devices for light theme */
+    [data-theme="light"] .landing-btn,
+    [data-theme="light"] .landing-btn.edit-btn,
+    [data-theme="light"] .landing-btn.practice-btn {
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   background 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    
+    /* Keep hover states but remove border transitions for mobile - light theme */
+    [data-theme="light"] .landing-btn:hover,
+    [data-theme="light"] .landing-btn.edit-btn:hover,
+    [data-theme="light"] .landing-btn.practice-btn:hover {
+        border-color: #e2e8f0 !important;
+        transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   background 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                   box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
     /* Light theme practice home button */
