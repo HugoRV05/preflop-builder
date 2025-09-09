@@ -4537,7 +4537,7 @@ body.on-landing-page .header-right {
         align-items: center;
         width: 100%;
         max-width: 400px;
-        margin: 0 auto;
+        margin: 100px auto 0 auto;
     }
 
     /* Large Practice button for mobile */
@@ -4843,7 +4843,7 @@ body.on-landing-page .header-right {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
-            padding: 12px 8px 40px 8px; /* Reduced top and bottom padding */
+            padding: 12px 8px 54px 8px; /* Reduced top and bottom padding */
             background: var(--darker-grey);
             border-top: 1px solid var(--lighter-grey);
             border-radius: 12px; /* Full border radius to contain the background */
@@ -5012,9 +5012,11 @@ body.on-landing-page .header-right {
         /* End session container */
         .end-session-container {
             padding: 8px 0px 5px 0px; /* Further reduced padding */
-            margin: 5px 0px 5px 0px; /* Reduced margins */
+            margin: 10px 0px 5px 0px; /* Reduced margins */
         }
-        
+        .end-session-btn {
+            margin-top: 15px;
+        }
         /* Reduce decorative shadows that add visual bulk */
         .practice-poker-table {
             /* Keep the table itself unchanged but tone down excessive shadows */
@@ -5445,7 +5447,7 @@ body.on-landing-page .header-right {
         padding-right: env(safe-area-inset-right, 0);
         min-height: 100vh;
         /* Add bottom margin for real device viewport differences */
-        margin-bottom: 60px;
+        margin-bottom: 40px;
     }
     
     /* Override mobile landing container padding for standalone */
