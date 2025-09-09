@@ -1,9 +1,9 @@
 // Service Worker for Preflop Builder PWA
-// Version 1.0.0
+// Version 1.1.0
 
-const CACHE_NAME = 'preflop-builder-v1.0.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v1.0.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v1.0.0';
+const CACHE_NAME = 'preflop-builder-v1.1.0';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v1.1.0';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v1.1.0';
 
 // Essential files to cache for offline functionality
 const STATIC_ASSETS = [
