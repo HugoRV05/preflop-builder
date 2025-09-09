@@ -4476,7 +4476,7 @@ body.on-landing-page .header-right {
 
     /* Update main content margin for no header */
     .main-content {
-        margin-top: 0;
+        margin-top: -30px;
         min-height: 100vh;
     }
 
