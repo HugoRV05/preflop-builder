@@ -4890,6 +4890,72 @@ body.on-landing-page .header-right {
         }
         
         /* ==========================================
+           SETTINGS PAGES MOBILE OPTIMIZATION
+           ========================================== */
+        
+        /* Fix scrolling for Statistics and Import/Export pages on mobile */
+        .settings-container {
+            min-height: auto !important; /* Override calc(100vh - var(--header-height)) */
+            padding: 20px 15px 60px 15px; /* Adjust padding for mobile with bottom space */
+            margin-bottom: 40px; /* Ensure space at bottom for scrolling */
+        }
+        
+        /* Mobile settings header adjustments */
+        .settings-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+        
+        .settings-header h2 {
+            font-size: 24px; /* Smaller on mobile */
+        }
+        
+        /* Mobile settings content spacing */
+        .settings-content {
+            gap: 20px; /* Reduce gap between setting groups */
+        }
+        
+        /* Mobile setting groups */
+        .setting-group {
+            padding: 20px 15px; /* Reduce padding on mobile */
+        }
+        
+        .setting-item {
+            flex-direction: column; /* Stack items vertically on mobile */
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .setting-item label {
+            min-width: auto;
+            margin-bottom: 5px;
+        }
+        
+        /* Statistics page specific mobile optimizations */
+        .stats-summary {
+            margin-bottom: 25px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile instead of 4 */
+            gap: 15px;
+        }
+        
+        .stat-card {
+            padding: 15px; /* Reduce padding for mobile */
+        }
+        
+        .stat-number {
+            font-size: 20px; /* Smaller stat numbers on mobile */
+        }
+        
+        .session-history-container {
+            max-height: 300px; /* Limit height to ensure scrollability */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* ==========================================
            PRACTICE PAGE MOBILE OPTIMIZATION
            ========================================== */
         

@@ -1,5 +1,6 @@
 // ==========================================
 // PAGE NAVIGATION AND INITIALIZATION
+// Version 1.2.8 - Fixed mobile scrolling for settings pages
 // ==========================================
 
 // Configuration - Update this path if the default ranges file moves
