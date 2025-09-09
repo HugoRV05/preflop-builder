@@ -4950,7 +4950,7 @@ body.on-landing-page .header-right {
         }
         
         .session-history-container {
-            max-height: 300px; /* Limit height to ensure scrollability */
+            max-height: 230px; /* Limit height to ensure scrollability */
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
