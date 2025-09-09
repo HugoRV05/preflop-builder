@@ -5152,10 +5152,10 @@ body.on-landing-page .header-right {
         .hand-detail-content {
             width: 95vw;
             max-width: 95vw;
-            max-height: 95vh;
+            max-height: 85vh;
             padding: 15px;
             margin: 0;
-            border-radius: 0;
+            border-radius: 10px;
             overflow-y: auto;
         }
         
