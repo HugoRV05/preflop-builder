@@ -4712,7 +4712,7 @@ body.on-landing-page .header-right {
             padding: 15px; /* Reduced from 20px */
             margin: 5px; /* Reduced from 10px */
             overflow: visible; /* Override desktop overflow: hidden to prevent clipping */
-            max-height: 90vh; /* Reduced from 95vh to fit better on screen */
+            max-height: 70vh; /* Reduced from 95vh to fit better on screen */
         }
         
         .practice-config-content h2 {
@@ -5516,8 +5516,8 @@ body.on-landing-page .header-right {
             padding-bottom: env(safe-area-inset-bottom, 0);
             padding-left: env(safe-area-inset-left, 0);
             padding-right: env(safe-area-inset-right, 0);
-            /* Extra bottom margin for real iOS viewport differences */
-            margin-bottom: 80px;
+            /* Remove extra bottom margin to prevent unwanted scroll */
+            margin-bottom: 0;
         }
         
         /* Landing container: Start content immediately after safe area */
@@ -5540,6 +5540,115 @@ body.on-landing-page .header-right {
                 padding: 20px 30px;
             }
         }
+    }
+}
+
+/* Standalone PWA on small screens: enforce no-page-scroll and tighter layout */
+@media (display-mode: standalone) and (max-width: 430px) {
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .main-content {
+        height: 100svh;
+        min-height: 100svh;
+        margin: 0 !important;
+        overflow: hidden; /* No external scroll */
+        padding-top: env(safe-area-inset-top, 0);
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
+    }
+
+    /* Ensure each page section does not create its own scroll */
+    .page {
+        height: 100%;
+        min-height: 100%;
+        overflow: hidden;
+    }
+
+    /* Landing page: fit all content without vertical scroll */
+    #landing-page .landing-container {
+        height: 100%;
+        min-height: 100%;
+        justify-content: space-between;
+    }
+
+    /* Slightly tighter primary button to guarantee fit */
+    #landing-page .landing-btn.practice-btn {
+        min-height: 140px;
+        padding: 32px 24px;
+    }
+
+    /* Reduce vertical gaps on mobile landing */
+    #landing-page .mobile-landing-content {
+        gap: 24px;
+        justify-content: flex-start;
+    }
+
+    #landing-page .landing-header {
+        margin-top: 6px;
+        margin-bottom: -40px;
+    }
+
+    /* Practice page: compress top/bottom utilities and prevent page scroll */
+    #practice-page .practice-layout {
+        height: 100%;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    #practice-page .practice-table-container {
+        flex: 1 1 auto; /* Let table area take the remaining space */
+        min-height: 0;  /* Allow flexbox to shrink if needed */
+    }
+
+    #practice-page .facing-positions {
+        padding: 2px 8px;
+        margin: 8px 8px -20px 8px;
+    }
+
+    #practice-page #current-matchup {
+        font-size: 24px;
+    }
+
+    #practice-page .practice-history-tracker {
+        padding: 6px;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    #practice-page .history-slots { gap: 8px; }
+    #practice-page .history-slot { width: 38px; height: 38px; }
+    #practice-page .history-slot .slot-number { font-size: 13px; }
+    #practice-page .history-nav-btn { width: 34px; height: 34px; font-size: 12px; }
+
+    #practice-page .practice-action-buttons {
+        padding: 10px;
+        flex-shrink: 0;
+    }
+
+    #practice-page .end-session-container {
+        padding: 6px 0 6px 0;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    /* Ensure only the config panel can scroll internally when open */
+    #practice-config-panel.practice-config-overlay {
+        overflow: hidden; /* Overlay itself doesn't scroll */
+    }
+    #practice-config-panel .practice-config-content {
+        max-height: 80svh; /* Keep within viewport */
+        overflow: hidden;
+    }
+    #practice-config-panel .config-layout {
+        max-height: calc(80svh - 80px);
+        overflow-y: auto; /* Internal scroll only */
+        -webkit-overflow-scrolling: touch;
     }
 }
 
