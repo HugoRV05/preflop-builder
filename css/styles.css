@@ -102,6 +102,35 @@ body {
     overflow-x: hidden;
 }
 
+/* Mobile tap highlight removal for better UX */
+@media (hover: none) and (pointer: coarse) {
+    /* Remove tap highlight on mobile devices */
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+    }
+    
+    /* Specifically target landing page buttons */
+    .landing-btn,
+    .mobile-secondary-btn,
+    button {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        /* Disable iOS button styling */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    
+    /* Maintain focus for accessibility */
+    .landing-btn:focus-visible,
+    .mobile-secondary-btn:focus-visible,
+    button:focus-visible {
+        outline: 2px solid var(--accent-blue);
+        outline-offset: 2px;
+    }
+}
+
 /* Apply Clash Display to all elements */
 * {
     font-family: var(--font-family);
@@ -4621,6 +4650,14 @@ body.on-landing-page .header-right {
             0 40px 80px rgba(0, 0, 0, 0.4),
             0 20px 40px rgba(124, 58, 237, 0.2);
     }
+    
+    /* Mobile secondary buttons tap highlight removal */
+    .mobile-secondary-btn:active,
+    .landing-btn.practice-btn:active {
+        /* Instant feedback without highlight */
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
 
     /* Mobile Practice Page Home Button (in-flow, mobile-only) */
     .practice-home-btn {
@@ -5388,21 +5425,38 @@ body.on-landing-page .header-right {
    PWA SPECIFIC STYLES
    ========================================== */
 
-/* PWA standalone mode adjustments */
+/* PWA standalone mode adjustments - iOS Safe Area Fix */
 @media (display-mode: standalone) {
-    /* Add safe area padding for devices with notches */
+    /* Ensure background extends into notch area seamlessly */
     body {
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
+        background: var(--dark-grey);
+        padding: 0;
+        margin: 0;
     }
     
-    /* Adjust header for standalone mode */
+    /* Critical: Only add safe area top padding to replace the removed header margin */
+    .main-content {
+        /* Keep existing margin-top: 0 from mobile rules */
+        /* Add only the safe area inset without double-counting */
+        padding-top: env(safe-area-inset-top, 0);
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
+        min-height: 100vh;
+    }
+    
+    /* Override mobile landing container padding for standalone */
+    .landing-container {
+        padding: 20px !important; /* Reduced from 40px to prevent double spacing */
+        margin-top: 0; /* Ensure no extra margin */
+    }
+    
+    /* Ensure header doesn't interfere but don't modify its positioning */
     .header {
-        position: sticky;
-        top: env(safe-area-inset-top);
-        z-index: 1000;
+        /* Let header handle its own safe areas if needed */
+        padding-top: env(safe-area-inset-top, 0);
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
     }
     
     /* Enhanced focus states for PWA */
@@ -5438,24 +5492,49 @@ body.on-landing-page .header-right {
 
 /* iOS PWA specific styles */
 @supports (-webkit-touch-callout: none) {
-    .pwa-standalone {
-        /* iOS safe area handling */
-        padding-top: max(env(safe-area-inset-top), 20px);
-        padding-bottom: max(env(safe-area-inset-bottom), 20px);
-    }
-    
-    /* Fix iOS PWA scroll bounce */
-    body.pwa-standalone {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-    
-    .main-content {
-        height: 100vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+    /* iOS specific standalone mode adjustments */
+    @media (display-mode: standalone) {
+        body {
+            /* Prevent iOS scroll bounce */
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* Background extends to edges for seamless notch integration */
+            background: var(--dark-grey);
+        }
+        
+        .main-content {
+            height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            /* iOS: Only use the safe area top inset, don't add extra spacing */
+            padding-top: env(safe-area-inset-top, 0);
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            padding-left: env(safe-area-inset-left, 0);
+            padding-right: env(safe-area-inset-right, 0);
+        }
+        
+        /* Landing container: Start content immediately after safe area */
+        .landing-container {
+            /* Override mobile padding to eliminate double spacing */
+            padding: 20px !important; /* Minimal spacing, safe area handled by main-content */
+            /* Ensure content starts right below the notch */
+            margin-top: 0;
+        }
+        
+        /* Mobile landscape adjustments for iPhone */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .landing-container {
+                padding-top: 20px;
+                padding-bottom: 10px;
+            }
+            
+            .landing-btn.practice-btn {
+                min-height: 120px;
+                padding: 20px 30px;
+            }
+        }
     }
 }
 
