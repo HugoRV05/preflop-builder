@@ -4446,6 +4446,7 @@ body.on-landing-page .header-right {
    MOBILE RESPONSIVE DESIGN
    ========================================== */
 
+/* Mobile optimizations for iPhone 12 and similar sized screens in standalone/PWA mode */
 @media screen and (max-width: 430px) {
     /* Hide all additional landing page sections on mobile */
     .landing-features,
@@ -4483,7 +4484,7 @@ body.on-landing-page .header-right {
     /* Mobile landing container - full viewport height */
     .landing-container {
         min-height: 100vh;
-        padding: 40px 20px 20px 20px;
+        padding: 20px 20px 10px 20px; /* Reduced top padding from 40px to 20px, bottom from 20px to 10px */
         justify-content: space-between;
         align-items: center;
         display: flex;
@@ -4504,15 +4505,15 @@ body.on-landing-page .header-right {
 
     /* Mobile landing header - larger title */
     .landing-header {
-        margin-top: 30px;
-        margin-bottom: -90px;
+        margin-top: 10px; /* Reduced from 30px to 10px */
+        margin-bottom: -60px; /* Reduced from -90px to -60px */
         text-align: center;
     }
 
     .landing-header h2 {
         font-size: clamp(36px, 10vw, 52px);
         line-height: 1.1;
-        margin-bottom: 25px;
+        margin-bottom: 15px; /* Reduced from 25px to 15px */
         font-weight: 900;
     }
 
@@ -4579,7 +4580,7 @@ body.on-landing-page .header-right {
         width: 100%;
         max-width: 380px;
         margin-top: 0;
-        padding-bottom: 20px;
+        padding-bottom: 10px; /* Reduced from 20px to 10px */
     }
 
     /* Mobile secondary buttons (Import/Export, Statistics) */
@@ -4708,25 +4709,25 @@ body.on-landing-page .header-right {
         .practice-config-content {
             width: 98vw;
             max-width: none;
-            padding: 20px;
-            margin: 10px;
+            padding: 15px; /* Reduced from 20px */
+            margin: 5px; /* Reduced from 10px */
             overflow: visible; /* Override desktop overflow: hidden to prevent clipping */
-            max-height: 95vh; /* Slightly larger to accommodate mobile screens */
+            max-height: 90vh; /* Reduced from 95vh to fit better on screen */
         }
         
         .practice-config-content h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 22px; /* Reduced from 24px */
+            margin-bottom: 15px; /* Reduced from 20px */
         }
         
         /* Config layout - stack vertically on mobile with proper reordering */
         .config-layout {
             display: flex;
             flex-direction: column;
-            gap: 12px; /* smaller gap for mobile */
+            gap: 10px; /* Reduced gap for mobile */
             height: auto;
             min-height: auto;
-            max-height: calc(95vh - 120px); /* Account for header and padding */
+            max-height: calc(90vh - 100px); /* Reduced height constraint */
             overflow-y: auto;
             -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
         }
@@ -4771,12 +4772,12 @@ body.on-landing-page .header-right {
         
         /* Config sections mobile optimization */
         .config-section {
-            padding: 12px;
+            padding: 10px; /* Reduced from 12px */
         }
-        
+
         .config-section h3 {
-            font-size: 15px;
-            margin-bottom: 10px;
+            font-size: 14px; /* Reduced from 15px */
+            margin-bottom: 8px; /* Reduced from 10px */
         }
         
         /* Button groups mobile optimization */
@@ -4842,11 +4843,11 @@ body.on-landing-page .header-right {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
-            padding: 15px 8px 56px 8px; /* Sufficient bottom padding within container */
+            padding: 12px 8px 40px 8px; /* Reduced top and bottom padding */
             background: var(--darker-grey);
             border-top: 1px solid var(--lighter-grey);
             border-radius: 12px; /* Full border radius to contain the background */
-            margin: 8px 0; /* Small margin for spacing but keeps background intact */
+            margin: 5px 0; /* Reduced margin */
             min-height: 44px; /* Ensure tappable area */
         }
         
@@ -4860,7 +4861,7 @@ body.on-landing-page .header-right {
         
         /* Practice Home button mobile - fix margins */
         .practice-home-btn {
-            margin: 20px 20px 14px 20px; /* Add comfortable spacing around button */
+            margin: 10px 20px 8px 20px; /* Reduced top and bottom margins for compactness */
             align-self: flex-start; /* Align to top-left when in flex container */
         }
         
@@ -4875,7 +4876,7 @@ body.on-landing-page .header-right {
         
         /* Compact practice table container - maximize poker table space */
         .practice-table-container {
-            padding: 10px; /* Reduced from 20px to maximize poker table space */
+            padding: 5px; /* Further reduced from 10px to maximize poker table space */
         }
         
 
@@ -4909,8 +4910,8 @@ body.on-landing-page .header-right {
         
         /* Compact practice history tracker */
         .practice-history-tracker {
-            padding: 12px; /* Reduced from 20px for more compact design */
-            gap: 12px; /* Reduced from 15px */
+            padding: 8px; /* Further reduced from 12px for more compact design */
+            gap: 10px; /* Further reduced from 12px */
         }
         
         .history-slots {
@@ -4949,7 +4950,7 @@ body.on-landing-page .header-right {
         /* Facing positions - ultra compact with proper top spacing */
         .facing-positions {
             padding: 2px 8px; /* Further reduced padding */
-            margin: 25px 8px -20px 8px; /* Top margin to move element lower, reduced side margins */
+            margin: 15px 8px -25px 8px; /* Reduced top margin from 25px to 15px for more compactness */
         }
         
         /* Player elements - compact sizing (around table, not the table itself) */
@@ -4959,19 +4960,19 @@ body.on-landing-page .header-right {
         
         /* Player rectangles - compact player info */
         .player-rectangle {
-            padding: 6px 8px; /* Reduced padding */
-            font-size: 0.85rem; /* 15% smaller font */
-            max-width: 90px; /* Prevent excessive width */
+            padding: 5px 6px; /* Further reduced padding */
+            font-size: 0.8rem; /* Smaller font (was 0.85rem) */
+            max-width: 85px; /* Prevent excessive width (was 90px) */
             box-sizing: border-box;
         }
-        
+
         .position-label-practice {
-            font-size: 0.8rem; /* Compact position labels */
-            padding: 3px 6px; /* Reduced padding */
+            font-size: 0.75rem; /* Smaller position labels (was 0.8rem) */
+            padding: 2px 5px; /* Further reduced padding */
         }
-        
+
         .stack-amount {
-            font-size: 0.85rem; /* Compact stack display */
+            font-size: 0.8rem; /* Smaller stack display (was 0.85rem) */
         }
         
         /* Player bet areas - compact chip display */
@@ -5010,8 +5011,8 @@ body.on-landing-page .header-right {
 
         /* End session container */
         .end-session-container {
-            padding: 15px 0px 8px 0px; /* Reduced padding */
-            margin: 10px 0px 10px 0px;
+            padding: 8px 0px 5px 0px; /* Further reduced padding */
+            margin: 5px 0px 5px 0px; /* Reduced margins */
         }
         
         /* Reduce decorative shadows that add visual bulk */
