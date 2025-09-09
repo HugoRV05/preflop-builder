@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Preflop Builder</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=switzer@300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition-overlay" id="transition-overlay"></div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Left Navigation -->
+            <div class="header-left">
+                <button class="nav-btn" id="edit-ranges-nav">📊 Edit Ranges</button>
+                <button class="nav-btn" id="practice-nav">🎯 Practice</button>
+            </div>
+            
+            <!-- Center Title -->
+            <div class="header-center">
+                <h1 class="header-title" id="home-btn">Preflop Builder</h1>
+            </div>
+            
+            <!-- Right Navigation -->
+            <div class="header-right">
+                <div class="dropdown">
+                    <button class="dropdown-btn">⚙️ Settings</button>
+                    <div class="dropdown-content">
+                        <a href="#" id="preferences-link">🎛️ Preferences</a>
+                        <a href="#" id="import-export-link">📁 Import/Export</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="dropdown-btn">👤 Profile</button>
+                    <div class="dropdown-content">
+                        <a href="#" id="account-link">🏠 My Account</a>
+                        <a href="#" id="statistics-link">📊 Statistics</a>
+                        <a href="#" id="logout-link">🚪 Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+        
+        <!-- Landing Page -->
+        <section id="landing-page" class="page active">
+            <div class="landing-container">
+                <!-- Floating Geometric Shapes -->
+                <div class="floating-shape floating-shape-1"></div>
+                <div class="floating-shape floating-shape-2"></div>
+                <div class="floating-shape floating-shape-3"></div>
+                <div class="floating-shape floating-shape-4"></div>
+                <div class="floating-shape floating-shape-5"></div>
+                <div class="floating-shape floating-shape-6"></div>
+                <div class="floating-shape floating-shape-7"></div>
+                
+                                  <div class="landing-header">
+                     <h2>Welcome to<br>Preflop Builder</h2>
+                     <p>Master your preflop ranges in 5-max No-Limit Hold'em</p>
+                  </div>
+                
+                <div class="mobile-landing-content">
+                    <div class="landing-buttons">
+                        <button class="landing-btn edit-btn" id="landing-edit-ranges">
+                            <div class="btn-icon">📊</div>
+                            <div class="btn-text">
+                                <h3>Edit Ranges</h3>
+                                <p>Configure preflop ranges for each position</p>
+                            </div>
+                        </button>
+                        
+                        <button class="landing-btn practice-btn" id="landing-practice">
+                            <div class="btn-icon">🎯</div>
+                            <div class="btn-text">
+                                <h3>Practice</h3>
+                                <p>Test your decisions with saved ranges</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Secondary Buttons (only visible on mobile) -->
+                <div class="mobile-secondary-buttons">
+                    <button class="mobile-secondary-btn" id="mobile-import-export" aria-label="Open Import/Export settings">📁 Import/Export</button>
+                    <button class="mobile-secondary-btn" id="mobile-statistics" aria-label="View Statistics">📊 Statistics</button>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <section class="landing-features">
+                <!-- Floating shapes for features section -->
+                <div class="floating-shape floating-shape-8"></div>
+                <div class="floating-shape floating-shape-9"></div>
+                <div class="floating-shape floating-shape-10"></div>
+                
+                <div class="features-container">
+                    <h2>Powerful Features</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>Lightning Fast</h3>
+                            <p>Instant range calculations and real-time practice feedback to accelerate your learning.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Precision Training</h3>
+                            <p>Practice with exact scenarios you'll face at the tables. Perfect your decision-making process.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🔧</div>
+                            <h3>Customizable Ranges</h3>
+                            <p>Build and save your own preflop ranges or import proven strategies from pros.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us Section -->
+            <section class="landing-why-choose">
+                <!-- Floating shapes for why choose section -->
+                <div class="floating-shape floating-shape-11"></div>
+                <div class="floating-shape floating-shape-12"></div>
+                <div class="floating-shape floating-shape-20"></div>
+                <div class="floating-shape floating-shape-21"></div>
+                
+                <div class="why-choose-container">
+                    <div class="why-choose-content">
+                        <div class="why-choose-text">
+                            <h2>Why Choose Preflop Builder?</h2>
+                            <p>The most comprehensive preflop training platform designed by poker professionals for serious players.</p>
+                            <div class="benefits-list">
+                                <div class="benefit-item">
+                                    <div class="benefit-check">✓</div>
+                                    <span>Used by 10,000+ winning players worldwide</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <div class="benefit-check">✓</div>
+                                    <span>Based on GTO solver solutions</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <div class="benefit-check">✓</div>
+                                    <span>Regular updates with latest strategies</span>
+                                </div>
+                                <div class="benefit-item">
+                                    <div class="benefit-check">✓</div>
+                                    <span>Mobile-friendly design for practice anywhere</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="why-choose-visual">
+                            <div class="stats-showcase">
+                                <div class="stat-item">
+                                    <div class="stat-number">98%</div>
+                                    <div class="stat-label">Accuracy Rate</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">50K+</div>
+                                    <div class="stat-label">Hands Trained</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">24/7</div>
+                                    <div class="stat-label">Available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Showcase Section -->
+            <section class="landing-showcase">
+                <!-- Floating shapes for showcase section -->
+                <div class="floating-shape floating-shape-13"></div>
+                <div class="floating-shape floating-shape-14"></div>
+                <div class="floating-shape floating-shape-22"></div>
+                <div class="floating-shape floating-shape-23"></div>
+                
+                <div class="showcase-container">
+                    <h2>See It In Action</h2>
+                    <div class="showcase-grid">
+                        <div class="showcase-item">
+                            <div class="showcase-preview">
+                                <div class="preview-placeholder">
+                                    <div class="preview-grid">
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell active"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell active"></div>
+                                        <div class="grid-cell"></div>
+                                        <div class="grid-cell active"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>Range Editor</h3>
+                            <p>Intuitive grid-based interface for building and editing your preflop ranges with visual feedback.</p>
+                        </div>
+                        <div class="showcase-item">
+                            <div class="showcase-preview">
+                                <div class="preview-placeholder">
+                                    <div class="preview-table">
+                                        <div class="table-seat">🂠</div>
+                                        <div class="table-seat active">🂡</div>
+                                        <div class="table-seat">🂠</div>
+                                        <div class="table-center">POT</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>Practice Mode</h3>
+                            <p>Realistic poker table simulation with randomized scenarios to test your range knowledge.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Achievement Section -->
+            <section class="landing-achievement">
+                <!-- Floating shapes for achievement section -->
+                <div class="floating-shape floating-shape-15"></div>
+                <div class="floating-shape floating-shape-16"></div>
+                <div class="floating-shape floating-shape-17"></div>
+                
+                <div class="achievement-container">
+                    <div class="achievement-header">
+                        <h2>Transform Your Poker Game</h2>
+                        <p>Join thousands of players who've elevated their skills and increased their winnings</p>
+                    </div>
+                    <div class="achievement-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">💪</div>
+                            <h3>Master Complex Decisions</h3>
+                            <p>Turn confusing preflop spots into confident, profitable decisions with our proven range training system.</p>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">📈</div>
+                            <h3>Increase Your Winrate</h3>
+                            <p>Players typically see a 15-30% improvement in preflop accuracy within their first month of focused practice.</p>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">⚡</div>
+                            <h3>Speed Up Your Learning</h3>
+                            <p>Compress years of trial-and-error into weeks of targeted practice with our interactive training modules.</p>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🏆</div>
+                            <h3>Build Lasting Confidence</h3>
+                            <p>Develop unshakeable confidence at the tables through systematic practice and proven GTO-based strategies.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section class="landing-testimonials">
+                <!-- Floating shapes for testimonials section -->
+                <div class="floating-shape floating-shape-18"></div>
+                <div class="floating-shape floating-shape-19"></div>
+                <div class="floating-shape floating-shape-24"></div>
+                <div class="floating-shape floating-shape-25"></div>
+                
+                <div class="testimonials-container">
+                    <h2>What Players Say</h2>
+                    <div class="testimonials-grid">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>"This tool completely transformed my preflop game. I went from break-even to consistently profitable in just 3 months."</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">👨‍💼</div>
+                                <div class="author-info">
+                                    <div class="author-name">Mike Chen</div>
+                                    <div class="author-title">Professional Player</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>"The practice mode is genius. It's like having a coach available 24/7. My decision-making speed improved dramatically."</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">👩‍🎓</div>
+                                <div class="author-info">
+                                    <div class="author-name">Sarah Johnson</div>
+                                    <div class="author-title">Tournament Grinder</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>"Finally, a preflop trainer that actually works. The ranges are spot-on and the interface is incredibly intuitive."</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">👨‍🔬</div>
+                                <div class="author-info">
+                                    <div class="author-name">David Rodriguez</div>
+                                    <div class="author-title">Poker Coach</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="landing-footer">
+                <div class="footer-container">
+                    <div class="footer-content">
+                        <div class="footer-brand">
+                            <h3>Preflop Builder</h3>
+                            <p>Master your preflop ranges and dominate the tables.</p>
+                        </div>
+                        <div class="footer-links">
+                            <div class="footer-column">
+                                <h4>Product</h4>
+                                <a href="#">Features</a>
+                                <a href="#">Pricing</a>
+                                <a href="#">Updates</a>
+                            </div>
+                            <div class="footer-column">
+                                <h4>Support</h4>
+                                <a href="#">Help Center</a>
+                                <a href="#">Contact</a>
+                                <a href="#">Feedback</a>
+                            </div>
+                            <div class="footer-column">
+                                <h4>Community</h4>
+                                <a href="#">Discord</a>
+                                <a href="#">Twitter</a>
+                                <a href="#">Blog</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; 2024 Preflop Builder. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- Edit Ranges Page -->
+        <section id="edit-ranges-page" class="page">
+            <div class="edit-ranges-layout">
+                <!-- Main Content -->
+                <div class="edit-ranges-main">
+                    <!-- Left Panel - Controls -->
+                    <div class="left-panel">
+                        <!-- Combined Position Selector -->
+                        <div class="position-selector-combined">
+                            <div class="position-row">
+                                <div class="position-label">HERO</div>
+                                <div class="position-buttons" id="hero-positions">
+                                    <button class="position-btn" data-position="MP">MP</button>
+                                    <button class="position-btn" data-position="CO">CO</button>
+                                    <button class="position-btn active" data-position="BU">BU</button>
+                                    <button class="position-btn" data-position="SB">SB</button>
+                                    <button class="position-btn" data-position="BB">BB</button>
+                                </div>
+                            </div>
+                            <div class="position-row">
+                                <div class="position-label">VILLAIN</div>
+                                <div class="position-buttons" id="villain-positions">
+                                    <button class="position-btn" data-position="MP">MP</button>
+                                    <button class="position-btn" data-position="CO">CO</button>
+                                    <button class="position-btn" data-position="BU">BU</button>
+                                    <button class="position-btn active" data-position="SB">SB</button>
+                                    <button class="position-btn" data-position="BB">BB</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Selector -->
+                        <div class="action-group">
+                            <h3>SELECT ACTION</h3>
+                            <div class="action-buttons" id="action-buttons">
+                                <!-- Actions will be populated dynamically based on position matchup -->
+                            </div>
+                        </div>
+
+                        <!-- Grid Controls moved from right panel -->
+                        <div class="grid-controls">
+                            <button class="grid-control-btn clean-btn">CLEAN</button>
+                            <button class="grid-control-btn reset-btn">RESET</button>
+                            <button class="grid-control-btn save-btn">SAVE TABLE</button>
+                            <button class="grid-control-btn paste-btn">PASTE LAST</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Grid -->
+                    <div class="right-panel">
+                        <!-- Dynamic Title -->
+                        <div class="grid-header">
+                            <h2 id="matchup-title">BU VS SB</h2>
+                        </div>
+
+                        <!-- Hand Matrix -->
+                        <div class="hand-matrix-container">
+                            <div class="hand-matrix" id="hand-matrix">
+                                <!-- 13x13 grid will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Page -->
+        <section id="practice-page" class="page">
+            <!-- Practice Configuration Panel -->
+            <div id="practice-config-panel" class="practice-config-overlay">
+                <div class="practice-config-content">
+                    <h2>Practice Configuration</h2>
+                    
+                    <div class="config-layout">
+                        <!-- Left Panel - Settings -->
+                        <div class="config-left-panel">
+                            <!-- Position Selection -->
+                            <div class="config-section">
+                                <h3>Positions</h3>
+                                <div class="config-position-selector">
+                                    <div class="config-position-row">
+                                        <div class="config-position-label">HERO</div>
+                                        <div class="config-position-buttons" id="config-hero-positions">
+                                            <button class="config-position-btn active" data-position="Any">Any</button>
+                                            <button class="config-position-btn" data-position="MP">MP</button>
+                                            <button class="config-position-btn" data-position="CO">CO</button>
+                                            <button class="config-position-btn" data-position="BU">BU</button>
+                                            <button class="config-position-btn" data-position="SB">SB</button>
+                                            <button class="config-position-btn" data-position="BB">BB</button>
+                                        </div>
+                                    </div>
+                                    <div class="config-position-row">
+                                        <div class="config-position-label">VILLAIN</div>
+                                        <div class="config-position-buttons" id="config-villain-positions">
+                                            <button class="config-position-btn active" data-position="Any">Any</button>
+                                            <button class="config-position-btn" data-position="MP">MP</button>
+                                            <button class="config-position-btn" data-position="CO">CO</button>
+                                            <button class="config-position-btn" data-position="BU">BU</button>
+                                            <button class="config-position-btn" data-position="SB">SB</button>
+                                            <button class="config-position-btn" data-position="BB">BB</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Game Type Selection -->
+                            <div class="config-section">
+                                <h3>Game Type</h3>
+                                <div class="config-button-group" id="game-type-buttons">
+                                    <button class="config-option-btn active" data-value="full-mode">Full Mode</button>
+                                    <button class="config-option-btn" data-value="fold-no-fold">Fold / No Fold</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Hand Start Mode -->
+                            <div class="config-section">
+                                <h3>How the hand starts</h3>
+                                <div class="config-button-group" id="hand-start-buttons">
+                                    <button class="config-option-btn active" data-value="both">Both</button>
+                                    <button class="config-option-btn" data-value="early-vs-late">Early vs Late</button>
+                                    <button class="config-option-btn" data-value="late-vs-early">Late vs Early</button>
+                                </div>
+                                <div class="config-option-hint">
+                                    <span id="hand-start-hint">Both action types: OR and 3BET scenarios</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="config-actions">
+                                <button class="config-btn secondary" id="practice-cancel">Cancel</button>
+                                <button class="config-btn primary" id="practice-apply">Apply</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Panel - Hand Matrix -->
+                        <div class="config-right-panel">
+                            <div class="config-section">
+                                <h3>Hand Selection</h3>
+                                <div class="config-hand-matrix-container">
+                                    <div class="config-hand-matrix" id="config-hand-matrix">
+                                        <!-- Will be populated by JavaScript -->
+                                    </div>
+                                    <div class="matrix-controls">
+                                        <button class="matrix-control-btn" id="select-all-hands">Select All</button>
+                                        <button class="matrix-control-btn" id="deselect-all-hands">Deselect All</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="practice-layout">
+                <!-- Mobile Home Button (in-flow, mobile only) -->
+                <button class="practice-home-btn" id="mobile-home-btn" aria-label="Home">🏠 Home</button>
+                
+                <!-- Facing Positions Display -->
+                <div class="facing-positions" id="facing-positions">    
+                    <span class="facing-text-mobile">Now facing:</span>
+                    <span class="facing-text"><span id="current-matchup">BU vs SB</span></span>
+                </div>
+                
+                <!-- Poker Table Container -->
+                <div class="practice-table-container">
+                    <!-- Horizontal Poker Table -->
+                    <div class="practice-poker-table">
+                        <!-- Player: Villain 3 (Top Left) -->
+                        <div class="practice-player villain-3" data-position="MP">
+                            <div class="player-hole-cards">
+                                <div class="hole-card face-down"></div>
+                                <div class="hole-card face-down"></div>
+                            </div>
+                            <div class="player-rectangle">
+                                <div class="position-label position-label-practice">MP</div>
+                                <div class="stack-amount">100</div>
+                            </div>
+                            <div class="player-bet-area">
+                                <div class="chip-icon">🪙</div>
+                                <div class="bet-amount"></div>
+                            </div>
+                        </div>
+
+                        <!-- Player: Villain 4 (Top Right) -->
+                        <div class="practice-player villain-4" data-position="CO">
+                            <div class="player-hole-cards">
+                                <div class="hole-card face-down"></div>
+                                <div class="hole-card face-down"></div>
+                            </div>
+                            <div class="player-rectangle">
+                                <div class="position-label position-label-practice">CO</div>
+                                <div class="stack-amount">100</div>
+                            </div>
+                            <div class="player-bet-area">
+                                <div class="chip-icon">🪙</div>
+                                <div class="bet-amount"></div>
+                            </div>
+                        </div>
+
+                        <!-- Player: Villain 1 (Bottom Left) -->
+                        <div class="practice-player villain-1" data-position="SB">
+                            <div class="player-hole-cards">
+                                <div class="hole-card face-down"></div>
+                                <div class="hole-card face-down"></div>
+                            </div>
+                            <div class="player-rectangle">
+                                <div class="position-label position-label-practice">BB</div>
+                                <div class="stack-amount">99</div>
+                            </div>
+                            <div class="player-bet-area">
+                                <div class="chip-icon">🪙</div>
+                                <div class="bet-amount">1</div>
+                            </div>
+                        </div>
+
+                        <!-- Player: Hero (Bottom Center) -->
+                        <div class="practice-player hero" data-position="BB">
+                            <div class="player-hole-cards hero-cards">
+                                <div class="hole-card face-up spades" data-card="As">A</div>
+                                <div class="hole-card face-up hearts" data-card="Kh">K</div>
+                            </div>
+                            <div class="player-rectangle hero-rectangle">
+                                <div class="position-label position-label-practice">SB</div>
+                                <div class="stack-amount">99.5</div>
+                            </div>
+                            <div class="player-bet-area">
+                                <div class="chip-icon">🪙</div>
+                                <div class="bet-amount">0.5</div>
+                            </div>
+                        </div>
+
+                        <!-- Player: Villain 2 (Bottom Right) -->
+                        <div class="practice-player villain-2" data-position="BTN">
+                            <div class="player-hole-cards">
+                                <div class="hole-card face-down"></div>
+                                <div class="hole-card face-down"></div>
+                            </div>
+                            <div class="player-rectangle">
+                                <div class="position-label position-label-practice">BU</div>
+                                <div class="stack-amount">97.5</div>
+                            </div>
+                            <div class="player-bet-area">
+                                <div class="chip-icon">🪙</div>
+                                <div class="bet-amount">2.5</div>
+                            </div>
+                        </div>
+
+                        <!-- Pot Display -->
+                        <div class="pot-display">
+                            <div class="pot-label">POT</div>
+                            <div class="pot-value">4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="practice-action-buttons">
+                    <button class="practice-action-btn fold">Fold</button>
+                    <button class="practice-action-btn no-fold" style="display: none;">No Fold</button>
+                    <button class="practice-action-btn call">Call</button>
+                    <button class="practice-action-btn or-fold" style="display: none;">OR/Fold</button>
+                    <button class="practice-action-btn or-call" style="display: none;">OR/Call</button>
+                    <button class="practice-action-btn or-4bet-fold" style="display: none;">OR/4Bet/Fold</button>
+                    <button class="practice-action-btn or-4bet-call" style="display: none;">OR/4Bet/Call</button>
+                    <button class="practice-action-btn three-bet-fold">3Bet/Fold</button>
+                    <button class="practice-action-btn three-bet-call">3Bet/Call</button>
+                    <button class="practice-action-btn three-bet-push">3Bet/Push</button>
+                </div>
+                
+                <!-- History Tracker -->
+                <div class="practice-history-tracker">
+                    <button class="history-nav-btn prev-btn" id="history-prev-btn" disabled>◀</button>
+                    <div class="history-slots">
+                        <div class="history-slot" data-hand="1">
+                            <span class="slot-number">1</span>
+                        </div>
+                        <div class="history-slot" data-hand="2">
+                            <span class="slot-number">2</span>
+                        </div>
+                        <div class="history-slot current" data-hand="3">
+                            <span class="slot-number">3</span>
+                        </div>
+                        <div class="history-slot" data-hand="4">
+                            <span class="slot-number">4</span>
+                        </div>
+                        <div class="history-slot" data-hand="5">
+                            <span class="slot-number">5</span>
+                        </div>
+                    </div>
+                    <button class="history-nav-btn next-btn" id="history-next-btn" disabled>▶</button>
+                </div>
+                
+                <!-- End Session Button -->
+                <div class="end-session-container">
+                    <button class="end-session-btn" id="end-session-btn">End Session</button>
+                </div>
+                
+                <!-- Hand Detail Panel (Hidden) -->
+                <div id="hand-detail-panel" class="hand-detail-overlay">
+                    <div class="hand-detail-content">
+                        <div class="detail-header">
+                            <h3>Hand Result</h3>
+                            <button class="close-detail-btn" id="close-detail">&times;</button>
+                        </div>
+                        <div class="detail-body">
+                            <!-- Left Side: Situation Info -->
+                            <div class="detail-situation">
+                                <div class="situation-card">
+                                    <div class="situation-title">
+                                        <h4>Hand Analysis</h4>
+                                    </div>
+                                    
+                                    <div class="situation-visual">
+                                        <div class="matchup-display">
+                                            <div class="position-vs">
+                                                <span class="hero-pos" id="detail-hero-position">BU</span>
+                                                <span class="vs-text">vs</span>
+                                                <span class="villain-pos" id="detail-villain-position">SB</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="hand-display">
+                                            <div class="hand-label">Hero's Hand</div>
+                                            <div class="hand-cards" id="detail-hero-hand">As Kh</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="actions-comparison">
+                                        <div class="action-row correct-action">
+                                            <div class="action-label">✓ Correct Action</div>
+                                            <div class="action-value" id="detail-correct-action">OR/Call</div>
+                                        </div>
+                                        <div class="action-row my-action">
+                                            <div class="action-label">🎯 My Action</div>
+                                            <div class="action-value" id="detail-my-action">OR/Call</div>
+                                        </div>
+                                        <div class="result-indicator" id="detail-result-indicator">
+                                            <span class="result-text">Correct!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Side: Range Matrix -->
+                            <div class="detail-range-table">
+                                <h4>Range for this matchup</h4>
+                                <div class="detail-hand-matrix" id="detail-hand-matrix">
+                                    <!-- Will be populated with colored range -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feedback Overlay (Hidden) -->
+                <div id="practice-feedback-overlay" class="practice-feedback-overlay">
+                    <div class="feedback-message" id="feedback-message">
+                        <span class="feedback-text">Correct!</span>
+                    </div>
+                </div>
+                
+                <!-- Session Results Panel (Hidden) -->
+                <div id="session-results-panel" class="session-results-overlay">
+                    <div class="session-results-content">
+                        <div class="results-header">
+                            <h3>Session Complete</h3>
+                            <button class="close-results-btn" id="close-results">&times;</button>
+                        </div>
+                        <div class="results-body">
+                            <div class="results-stats">
+                                <div class="stat-card">
+                                    <div class="stat-value" id="total-hands-stat">0</div>
+                                    <div class="stat-label">Total Hands</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="accuracy-stat">0%</div>
+                                    <div class="stat-label">Accuracy</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="session-time-stat">0:00</div>
+                                    <div class="stat-label">Session Time</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value" id="best-streak-stat">0</div>
+                                    <div class="stat-label">Best Streak</div>
+                                </div>
+                            </div>
+                            <div class="results-actions">
+                                <button class="results-btn secondary" id="go-to-main-btn">Go to Main Page</button>
+                                <button class="results-btn secondary" id="new-session-btn">New Session</button>
+                                <button class="results-btn primary" id="continue-session-btn">Continue Session</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Pages -->
+        <section id="preferences-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="preferences-back">← Back</button>
+                    <h2>🎛️ Preferences</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>Display Settings</h3>
+                        <div class="setting-item">
+                            <label>Theme</label>
+                            <div class="theme-switch-container">
+                                <span class="theme-label">🌙 Dark</span>
+                                <div class="theme-switch" id="theme-switch">
+                                    <div class="theme-switch-slider"></div>
+                                </div>
+                                <span class="theme-label">☀️ Light</span>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <label>Animation Speed</label>
+                            <input type="range" min="0.5" max="2" step="0.1" value="1">
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <h3>Game Settings</h3>
+                        <div class="setting-item">
+                            <label>Auto-save ranges</label>
+                            <input type="checkbox" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Show hand percentages</label>
+                            <input type="checkbox">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="import-export-page" class="page">
+            
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="import-export-back">← Back</button>
+                    <h2>📁 Import/Export</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>Export Ranges</h3>
+                        <div class="setting-item">
+                            <button class="settings-btn primary" id="export-ranges-btn">Export All Ranges</button>
+                            <p>Download all your saved ranges as a JSON file</p>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <h3>Import Ranges</h3>
+                        <div class="setting-item">
+                            <input type="file" accept=".json" style="display: none;" id="file-input">
+                            <button class="settings-btn secondary" onclick="document.getElementById('file-input').click()">Choose File</button>
+                            <p>Import ranges from a JSON file</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Pages -->
+        <section id="account-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="account-back">← Back</button>
+                    <h2>🏠 My Account</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>Account Information</h3>
+                        <div class="setting-item">
+                            <label>Username</label>
+                            <input type="text" value="Player123" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <label>Email</label>
+                            <input type="email" value="player@example.com">
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <h3>Password</h3>
+                        <div class="setting-item">
+                            <button class="settings-btn secondary">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="statistics-page" class="page">
+            
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="statistics-back">← Back</button>
+                    <h2>📊 Statistics</h2>
+                </div>
+                <div class="settings-content">
+                    <!-- Overall Statistics Summary -->
+                    <div class="stats-summary">
+                        <h3>Overall Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number" id="total-hands-practiced">0</div>
+                                <div class="stat-label">Hands Practiced</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="overall-accuracy">0%</div>
+                                <div class="stat-label">Overall Accuracy</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="total-sessions">0</div>
+                                <div class="stat-label">Sessions Completed</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="total-study-time">0h</div>
+                                <div class="stat-label">Total Study Time</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Session History -->
+                    <div class="session-history">
+                        <h3>Session History</h3>
+                        <div class="session-history-container">
+                            <div id="session-history-list" class="session-list">
+                                <!-- Session entries will be populated by JavaScript -->
+                                <div class="no-sessions-message">
+                                    <p>No practice sessions yet. Start practicing to see your session history!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
