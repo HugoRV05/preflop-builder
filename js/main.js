@@ -19,6 +19,9 @@ let isDragging = false;
 let dragAction = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
+    // Initialize mobile splash screen first
+    initializeMobileSplashScreen();
+    
     try {
         initializeApp();
         generateHandMatrix();
@@ -51,6 +54,51 @@ document.addEventListener('DOMContentLoaded', async function() {
         registerServiceWorker();
     }
 });
+
+function initializeMobileSplashScreen() {
+    // Check if device is mobile (screen width < 768px) and splash screen exists
+    const splashScreen = document.getElementById('pwa-splash-screen');
+    const isMobile = window.innerWidth < 768;
+    
+    if (!splashScreen || !isMobile) {
+        // Remove splash screen immediately if not mobile or doesn't exist
+        if (splashScreen) {
+            splashScreen.remove();
+        }
+        return;
+    }
+    
+    // Set minimum display time and wait for page load
+    const minDisplayTime = 1500; // 1.5 seconds minimum
+    const maxDisplayTime = 2500; // 2.5 seconds maximum
+    const startTime = Date.now();
+    
+    // Function to hide splash screen
+    const hideSplashScreen = () => {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minDisplayTime - elapsedTime);
+        
+        setTimeout(() => {
+            splashScreen.classList.add('fade-out');
+            
+            // Remove element from DOM after fade animation
+            setTimeout(() => {
+                if (splashScreen && splashScreen.parentNode) {
+                    splashScreen.remove();
+                }
+            }, 500); // Match CSS transition duration
+        }, remainingTime);
+    };
+    
+    // Hide splash screen when page is fully loaded or after max time
+    if (document.readyState === 'complete') {
+        hideSplashScreen();
+    } else {
+        window.addEventListener('load', hideSplashScreen);
+        // Fallback: hide after max time regardless of load state
+        setTimeout(hideSplashScreen, maxDisplayTime);
+    }
+}
 
 function initializeApp() {
     // Navigation event listeners

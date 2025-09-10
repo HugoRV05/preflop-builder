@@ -1,4 +1,46 @@
 /* ==========================================
+   MOBILE PWA SPLASH SCREEN
+   ========================================== */
+
+/* Mobile PWA Splash Screen */
+.pwa-splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--dark-grey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.pwa-splash-screen.fade-out {
+    opacity: 0;
+}
+
+.splash-logo {
+    max-width: min(220px, 40vw);
+    height: auto;
+    animation: splashPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes splashPulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+}
+
+/* Hide splash screen on desktop (screen width >= 768px) */
+@media (min-width: 768px) {
+    .pwa-splash-screen {
+        display: none !important;
+    }
+}
+
+/* ==========================================
    GLOBAL STYLES & RESET
    ========================================== */
 
