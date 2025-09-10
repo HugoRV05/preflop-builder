@@ -1,9 +1,11 @@
 // Service Worker for Preflop Builder PWA
-// Version 1.3.0
+// Version 1.3.1
 
-const CACHE_NAME = 'preflop-builder-v1.3.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v1.3.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v1.3.0';
+const CACHE_NAME = 'preflop-builder-v1.3.1';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v1.3.1';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v1.3.1';
+const GOOGLE_FONTS_CACHE = 'google-fonts';
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
 // Essential files to cache for offline functionality
 const STATIC_ASSETS = [
@@ -89,6 +91,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
+  // Google Fonts (external) - handle with CacheFirst (1 year)
+  if (url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com') {
+    event.respondWith(googleFontsCacheFirst(request));
+    return;
+  }
+  
   // Skip external requests (fonts, etc.)
   if (url.origin !== self.location.origin) {
     return;
@@ -135,6 +143,63 @@ async function handleFetch(request) {
       statusText: 'Service Unavailable' 
     });
   }
+}
+
+// CacheFirst strategy for Google Fonts with manual 1-year expiration
+async function googleFontsCacheFirst(request) {
+  const cache = await caches.open(GOOGLE_FONTS_CACHE);
+  const cachedResponse = await cache.match(request);
+  
+  if (cachedResponse) {
+    const isExpired = await isGoogleFontEntryExpired(cache, request);
+    if (!isExpired) {
+      return cachedResponse;
+    }
+    // Try to refresh expired entry; fall back to stale cache on failure
+    try {
+      const networkResponse = await fetch(request, { cache: 'no-store' });
+      if (networkResponse && (networkResponse.ok || networkResponse.type === 'opaque')) {
+        await putWithTimestamp(cache, request, networkResponse.clone());
+        return networkResponse;
+      }
+    } catch (e) {
+      // Ignore and return stale cache
+    }
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse && (networkResponse.ok || networkResponse.type === 'opaque')) {
+      await putWithTimestamp(cache, request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (e) {
+    return new Response('', { status: 504, statusText: 'Gateway Timeout' });
+  }
+}
+
+async function isGoogleFontEntryExpired(cache, request) {
+  try {
+    const metaRequest = new Request(request.url + '::meta');
+    const metaResponse = await cache.match(metaRequest);
+    if (!metaResponse) {
+      return true;
+    }
+    const meta = await metaResponse.json();
+    return (Date.now() - (meta.timestamp || 0)) > ONE_YEAR_MS;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function putWithTimestamp(cache, request, response) {
+  await cache.put(request, response);
+  const meta = new Response(JSON.stringify({ timestamp: Date.now() }), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const metaRequest = new Request(request.url + '::meta');
+  await cache.put(metaRequest, meta);
 }
 
 // Network-first strategy: try network, fallback to cache
