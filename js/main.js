@@ -3016,7 +3016,7 @@ function registerServiceWorker() {
             try {
                 // Add version parameter to force GitHub Pages to serve latest version
                 // Update this version number when you want to force cache refresh
-                const SW_VERSION = '2.0.0';
+                const SW_VERSION = '2.1.0';
                 const swUrl = `./sw.js?v=${SW_VERSION}`;
                 const registration = await navigator.serviceWorker.register(swUrl, {
                     scope: './'
@@ -3071,6 +3071,55 @@ function registerServiceWorker() {
         
     } else {
         console.log('[PWA] Service Workers not supported in this browser');
+    }
+}
+
+// Enhanced PWA functionality for iOS standalone mode
+function enhancePWAForIOS() {
+    // Detect if running in standalone mode (iOS PWA)
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+    
+    if (isStandalone) {
+        console.log('[PWA] Running in standalone mode (iOS PWA)');
+        
+        // Add specific handling for standalone mode
+        document.documentElement.classList.add('pwa-standalone');
+        
+        // Handle navigation in standalone mode
+        document.addEventListener('click', (event) => {
+            const target = event.target.closest('a');
+            if (target && target.href && target.target !== '_blank') {
+                // Prevent default navigation that might cause issues in standalone mode
+                const url = new URL(target.href);
+                if (url.origin === window.location.origin) {
+                    event.preventDefault();
+                    
+                    // Use history API for in-app navigation
+                    if (url.hash) {
+                        window.location.hash = url.hash;
+                    } else if (url.pathname !== window.location.pathname) {
+                        window.location.href = target.href;
+                    }
+                }
+            }
+        });
+        
+        // Handle back navigation in standalone mode
+        window.addEventListener('popstate', (event) => {
+            console.log('[PWA] Navigation state changed in standalone mode');
+        });
+    }
+}
+
+// Force service worker update for existing installations
+function forceServiceWorkerUpdate() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => {
+                console.log('[PWA] Forcing service worker update');
+                registration.update();
+            });
+        });
     }
 }
 
@@ -3136,6 +3185,12 @@ function initializePWAFeatures() {
 // Call PWA initialization
 document.addEventListener('DOMContentLoaded', () => {
     initializePWAFeatures();
+    
+    // Enhanced PWA functionality for iOS
+    enhancePWAForIOS();
+    
+    // Force service worker update for existing installations
+    forceServiceWorkerUpdate();
 });
 
 // Initialize the app when the DOM is loaded

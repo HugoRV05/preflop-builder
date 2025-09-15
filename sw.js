@@ -1,9 +1,9 @@
 // Service Worker for Preflop Builder PWA
-// Version 2.0.0
+// Version 2.1.0 - Fixed GitHub Pages PWA navigation and iOS standalone mode
 
-const CACHE_NAME = 'preflop-builder-v2.0.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v2.0.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.0.0';
+const CACHE_NAME = 'preflop-builder-v2.1.0';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v2.1.0';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.1.0';
 const GOOGLE_FONTS_CACHE = 'google-fonts';
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -132,9 +132,61 @@ async function handleFetch(request) {
   } catch (error) {
     console.error('[SW] Fetch error:', error);
     
-    // Fallback for navigation requests
+    // Enhanced fallback for navigation requests (iOS PWA fix)
     if (request.mode === 'navigate') {
-      return await caches.match('./index.html');
+      console.log('[SW] Navigation request fallback triggered for:', request.url);
+      
+      // Try multiple fallback strategies for iOS standalone mode
+      const fallbackPaths = ['./index.html', './', '/index.html'];
+      
+      for (const fallbackPath of fallbackPaths) {
+        const cachedResponse = await caches.match(fallbackPath);
+        if (cachedResponse) {
+          console.log('[SW] Serving fallback from cache:', fallbackPath);
+          return cachedResponse;
+        }
+      }
+      
+      // If no cached version found, try to fetch index.html
+      try {
+        const networkResponse = await fetch('./index.html');
+        if (networkResponse.ok) {
+          console.log('[SW] Serving fallback from network: ./index.html');
+          // Cache the response for future use
+          const cache = await caches.open(STATIC_CACHE_NAME);
+          cache.put('./index.html', networkResponse.clone());
+          return networkResponse;
+        }
+      } catch (fetchError) {
+        console.error('[SW] Network fallback failed:', fetchError);
+      }
+      
+      // Last resort: return a basic HTML page
+      return new Response(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Preflop Builder</title>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body>
+          <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+            <h1>Preflop Builder</h1>
+            <p>Loading application...</p>
+            <script>
+              // Try to reload the page after a short delay
+              setTimeout(() => {
+                window.location.href = './';
+              }, 2000);
+            </script>
+          </div>
+        </body>
+        </html>
+      `, { 
+        status: 200, 
+        headers: { 'Content-Type': 'text/html' }
+      });
     }
     
     // Return error response for other requests

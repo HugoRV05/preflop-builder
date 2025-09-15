@@ -2,7 +2,7 @@
   "name": "Preflop Builder",
   "short_name": "Preflop Builder",
   "description": "Master your preflop ranges in 5-max No-Limit Hold'em",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FFF200",
