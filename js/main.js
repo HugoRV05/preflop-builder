@@ -1,6 +1,6 @@
 // ==========================================
 // PAGE NAVIGATION AND INITIALIZATION
-// Version 1.4.0 - Added PWA functionality
+// Version 1.2.8 - Fixed mobile scrolling for settings pages
 // ==========================================
 
 // Configuration - Update this path if the default ranges file moves
@@ -1205,7 +1205,8 @@ let practiceConfig = {
     villainPosition: 'Any',
     gameType: 'full-mode',
     handStart: 'both',
-    selectedHands: new Set()
+    selectedHands: new Set(),
+    onlyPlayableHands: false
 };
 
 let practiceState = {
@@ -1317,6 +1318,14 @@ function setupConfigurationPanel() {
                 cell.classList.remove('selected');
                 practiceConfig.selectedHands.delete(cell.dataset.hand);
             });
+        });
+    }
+    
+    // Toggle switch for only playable hands
+    const onlyPlayableToggle = document.getElementById('only-playable-hands');
+    if (onlyPlayableToggle) {
+        onlyPlayableToggle.addEventListener('change', () => {
+            practiceConfig.onlyPlayableHands = onlyPlayableToggle.checked;
         });
     }
 }
@@ -1625,12 +1634,24 @@ function generateAvailableHands() {
         if (range && Object.keys(range).length > 0) {
             rangesWithData++;
             practiceConfig.selectedHands.forEach(hand => {
-                if (range[hand]) {
+                if (practiceConfig.onlyPlayableHands) {
+                    // Only include hands with explicit actions (original behavior)
+                    if (range[hand]) {
+                        practiceState.availableHands.push({
+                            hero: matchup.hero,
+                            villain: matchup.villain,
+                            hand: hand,
+                            correctAction: range[hand]
+                        });
+                    }
+                } else {
+                    // Include all selected hands, defaulting to 'fold' if no action is specified
+                    const correctAction = range[hand] || 'fold';
                     practiceState.availableHands.push({
                         hero: matchup.hero,
                         villain: matchup.villain,
                         hand: hand,
-                        correctAction: range[hand]
+                        correctAction: correctAction
                     });
                 }
             });
@@ -2995,7 +3016,7 @@ function registerServiceWorker() {
             try {
                 // Add version parameter to force GitHub Pages to serve latest version
                 // Update this version number when you want to force cache refresh
-                const SW_VERSION = '1.4.0';
+                const SW_VERSION = '1.3.1';
                 const swUrl = `./sw.js?v=${SW_VERSION}`;
                 const registration = await navigator.serviceWorker.register(swUrl, {
                     scope: './'
