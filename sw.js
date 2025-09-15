@@ -1,9 +1,9 @@
 // Service Worker for Preflop Builder PWA
-// Version 1.4.0
+// Version 2.0.0
 
-const CACHE_NAME = 'preflop-builder-v1.4.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v1.4.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v1.4.0';
+const CACHE_NAME = 'preflop-builder-v2.0.0';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v2.0.0';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.0.0';
 const GOOGLE_FONTS_CACHE = 'google-fonts';
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
