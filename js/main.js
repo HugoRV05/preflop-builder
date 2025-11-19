@@ -378,7 +378,7 @@ function renderSessionsGrid() {
 }
 
 /**
- * Create a session card element
+ * Create a session card element with SVG icon buttons
  */
 function createSessionCard(session) {
     const card = document.createElement('div');
@@ -388,11 +388,25 @@ function createSessionCard(session) {
     card.innerHTML = `
         <h4 class="session-name">${session.name}</h4>
         <div class="session-actions">
-            <button class="session-btn play-btn" data-action="play">Play</button>
-            <div class="session-btn-row">
-                <button class="session-btn edit-btn" data-action="edit">Edit</button>
-                <button class="session-btn delete-btn" data-action="delete">Delete</button>
-            </div>
+            <button class="session-icon-btn play-btn" data-action="play" aria-label="Play session">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </button>
+            <button class="session-icon-btn edit-btn" data-action="edit" aria-label="Edit session">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+            </button>
+            <button class="session-icon-btn delete-btn" data-action="delete" aria-label="Delete session">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </button>
         </div>
     `;
     
@@ -3642,13 +3656,13 @@ function updateRangeDataStatus() {
     } else if (hasUserRanges && !rangeDataFromDefaults) {
         // Custom ranges (user has modified ranges)
         statusElement.classList.add('custom-ranges');
-        statusIcon.textContent = '🎯';
+        statusIcon.innerHTML = '<img src="assets/practice_icon.png" alt="" class="status-icon-img">';
         statusTitle.textContent = 'Custom Ranges';
         statusDescription.textContent = `Using custom range data. ${Object.keys(rangeData).length} position matchups configured.`;
     } else {
         // Default ranges
         statusElement.classList.add('default-ranges');
-        statusIcon.textContent = '📊';
+        statusIcon.innerHTML = '<img src="assets/ranges_icon.png" alt="" class="status-icon-img">';
         statusTitle.textContent = 'Default Ranges';
         statusDescription.textContent = `Using default preflop ranges loaded from ${DEFAULT_RANGES_PATH}. ${Object.keys(defaultRanges).length} matchups available.`;
     }
