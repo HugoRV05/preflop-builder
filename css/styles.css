@@ -6027,85 +6027,93 @@ input:checked + .toggle-slider:before {
 }
 
 /* ==========================================
-   TOP-RIGHT SETTINGS BUTTON (MOBILE)
+   FLOATING SETTINGS BUTTON (MOBILE)
    ========================================== */
 
-/* Settings button in header - only visible on mobile */
-.mobile-settings-btn {
+/* Floating settings button - top-right corner, mobile only */
+.floating-settings-btn {
     display: none; /* Hidden by default (desktop) */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100; /* Above bottom nav */
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--accent-blue);
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
     padding: 0;
-    margin-left: 8px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.mobile-settings-btn svg {
+.floating-settings-btn svg {
     width: 22px;
     height: 22px;
     stroke: currentColor;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    opacity: 0.8;
 }
 
 /* Hover effect (for devices with hover) */
 @media (hover: hover) {
-    .mobile-settings-btn:hover {
-        background: rgba(0, 212, 255, 0.2);
-        border-color: var(--accent-blue);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    .floating-settings-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
     }
     
-    .mobile-settings-btn:hover svg {
-        transform: rotate(90deg);
+    .floating-settings-btn:hover svg {
+        transform: rotate(45deg);
+        opacity: 1;
     }
 }
 
 /* Active/tap state */
-.mobile-settings-btn:active {
-    transform: scale(0.95);
-    background: rgba(0, 212, 255, 0.25);
+.floating-settings-btn:active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.08);
 }
 
-/* Show on mobile, hide desktop dropdowns */
+/* Show on mobile */
 @media (max-width: 767px) {
-    .mobile-settings-btn {
+    .floating-settings-btn {
         display: flex;
     }
     
-    /* Hide desktop navigation dropdowns on mobile */
-    .header-right .dropdown {
-        display: none;
+    /* Adjust position for safe areas on iOS */
+    @supports (top: env(safe-area-inset-top)) {
+        .floating-settings-btn {
+            top: calc(20px + env(safe-area-inset-top));
+            right: calc(20px + env(safe-area-inset-right));
+        }
     }
 }
 
 /* Accessibility */
-.mobile-settings-btn:focus {
-    outline: 2px solid var(--accent-blue);
+.floating-settings-btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.3);
     outline-offset: 2px;
 }
 
-.mobile-settings-btn:focus:not(:focus-visible) {
+.floating-settings-btn:focus:not(:focus-visible) {
     outline: none;
 }
 
 /* Light theme adjustments */
-[data-theme="light"] .mobile-settings-btn {
-    background: rgba(14, 165, 233, 0.1);
-    border-color: rgba(14, 165, 233, 0.3);
-    color: var(--accent-blue);
+[data-theme="light"] .floating-settings-btn {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-secondary);
 }
 
-[data-theme="light"] .mobile-settings-btn:hover {
-    background: rgba(14, 165, 233, 0.2);
-    border-color: var(--accent-blue);
+[data-theme="light"] .floating-settings-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.12);
 }
 
 /* ==========================================

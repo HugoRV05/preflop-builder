@@ -1,9 +1,9 @@
 // Service Worker for Preflop Builder PWA
-// Version 2.1.0 - Fixed GitHub Pages PWA navigation and iOS standalone mode
+// Version 2.2.0 - Added bottom navigation and mobile settings button
 
-const CACHE_NAME = 'preflop-builder-v2.1.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v2.1.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.1.0';
+const CACHE_NAME = 'preflop-builder-v2.2.0';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v2.2.0';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.2.0';
 const GOOGLE_FONTS_CACHE = 'google-fonts';
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -21,14 +21,18 @@ const STATIC_ASSETS = [
 ];
 
 // Network-first resources (try network, fallback to cache)
+// DEVELOPMENT MODE: Using network-first for CSS/JS for instant updates
 const NETWORK_FIRST_PATHS = [
-  './assets/default-preflop-ranges-v1.json'
+  './assets/default-preflop-ranges-v1.json',
+  './css/styles.css',
+  './js/main.js'
 ];
 
 // Cache-first resources (serve from cache, update in background)
+// PRODUCTION: Move CSS/JS back here for better performance
 const CACHE_FIRST_PATHS = [
-  './css/styles.css',
-  './js/main.js'
+  // './css/styles.css',
+  // './js/main.js'
 ];
 
 // Install event - cache essential resources
