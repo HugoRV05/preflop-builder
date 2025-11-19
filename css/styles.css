@@ -5724,7 +5724,7 @@ input:checked + .toggle-slider:before {
         /* Facing positions - ultra compact with proper top spacing */
         .facing-positions {
             padding: 2px 8px; /* Further reduced padding */
-            margin: 25px 8px -45px 8px; /* Reduced top margin from 25px to 15px for more compactness */
+            margin: 25px 8px -75px 8px; /* Reduced top margin from 25px to 15px for more compactness */
         }
         
         /* Player elements - compact sizing (around table, not the table itself) */
@@ -5785,7 +5785,7 @@ input:checked + .toggle-slider:before {
 
         /* End session container */
         .end-session-container {
-            padding: 8px 0px 25px 0px; /* Further reduced padding */
+            padding: 8px 0px 45px 0px; /* Further reduced padding */
             margin: 0px 0px 5px 0px; /* Reduced margins */
         }
         .end-session-btn {

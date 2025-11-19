@@ -217,38 +217,38 @@ const MAX_SESSIONS = 6;
 const DEFAULT_SESSIONS = [
     {
         id: 'default-1',
-        name: 'Quick Start',
-        config: {
-            heroPosition: 'Any',
-            villainPosition: 'Any',
-            gameType: 'full-mode',
-            handStart: 'both',
-            selectedHands: null, // null means all hands
-            onlyPlayableHands: true
-        }
-    },
-    {
-        id: 'default-2',
         name: 'Button Play',
         config: {
             heroPosition: 'BU',
             villainPosition: 'Any',
             gameType: 'full-mode',
             handStart: 'both',
-            selectedHands: null,
-            onlyPlayableHands: true
+            selectedHands: null, // null means all hands
+            onlyPlayableHands: false
         }
     },
     {
-        id: 'default-3',
-        name: 'Blinds Defense',
+        id: 'default-2',
+        name: 'Button Play',
         config: {
             heroPosition: 'BB',
             villainPosition: 'Any',
             gameType: 'full-mode',
+            handStart: 'both',
+            selectedHands: null,
+            onlyPlayableHands: false
+        }
+    },
+    {
+        id: 'default-3',
+        name: '3Bet Practice',
+        config: {
+            heroPosition: 'Any',
+            villainPosition: 'Any',
+            gameType: 'full-mode',
             handStart: 'late-vs-early',
             selectedHands: null,
-            onlyPlayableHands: true
+            onlyPlayableHands: false
         }
     }
 ];
