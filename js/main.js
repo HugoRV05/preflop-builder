@@ -229,7 +229,7 @@ const DEFAULT_SESSIONS = [
     },
     {
         id: 'default-2',
-        name: 'Button Play',
+        name: 'BB Defense',
         config: {
             heroPosition: 'BB',
             villainPosition: 'Any',
