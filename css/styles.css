@@ -5882,3 +5882,271 @@ input:checked + .toggle-slider:before {
     }
 }
 
+/* ==========================================
+   BOTTOM NAVIGATION BAR (MOBILE)
+   ========================================== */
+
+/* Bottom navigation container - fixed to bottom of screen */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: var(--darker-grey);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0));
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Individual navigation item */
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    min-width: 70px;
+    color: var(--text-secondary);
+}
+
+/* Navigation icon */
+.bottom-nav-item .nav-icon {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navigation label */
+.bottom-nav-item .nav-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover state (for devices with hover capability) */
+@media (hover: hover) {
+    .bottom-nav-item:hover {
+        background: rgba(0, 212, 255, 0.1);
+        color: var(--accent-blue);
+        transform: translateY(-2px);
+    }
+    
+    .bottom-nav-item:hover .nav-icon {
+        transform: scale(1.1);
+    }
+}
+
+/* Active state - currently selected tab */
+.bottom-nav-item.active {
+    color: var(--accent-blue);
+    background: rgba(0, 212, 255, 0.15);
+}
+
+.bottom-nav-item.active .nav-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
+}
+
+.bottom-nav-item.active .nav-label {
+    font-weight: 600;
+}
+
+/* Tap animation (for touch devices) */
+.bottom-nav-item:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+/* Indicator dot for active state */
+.bottom-nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    width: 4px;
+    height: 4px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-blue);
+    animation: pulseIndicator 2s ease-in-out infinite;
+}
+
+@keyframes pulseIndicator {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.2);
+    }
+}
+
+/* Accessibility improvements */
+.bottom-nav-item:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+.bottom-nav-item:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Hide on desktop/tablet (only show on mobile) */
+@media (min-width: 768px) {
+    .bottom-nav {
+        display: none;
+    }
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .bottom-nav {
+    background: var(--darker-grey);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .bottom-nav-item.active {
+    color: var(--accent-blue);
+    background: rgba(14, 165, 233, 0.1);
+}
+
+/* ==========================================
+   TOP-RIGHT SETTINGS BUTTON (MOBILE)
+   ========================================== */
+
+/* Settings button in header - only visible on mobile */
+.mobile-settings-btn {
+    display: none; /* Hidden by default (desktop) */
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--accent-blue);
+    padding: 0;
+    margin-left: 8px;
+}
+
+.mobile-settings-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effect (for devices with hover) */
+@media (hover: hover) {
+    .mobile-settings-btn:hover {
+        background: rgba(0, 212, 255, 0.2);
+        border-color: var(--accent-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    }
+    
+    .mobile-settings-btn:hover svg {
+        transform: rotate(90deg);
+    }
+}
+
+/* Active/tap state */
+.mobile-settings-btn:active {
+    transform: scale(0.95);
+    background: rgba(0, 212, 255, 0.25);
+}
+
+/* Show on mobile, hide desktop dropdowns */
+@media (max-width: 767px) {
+    .mobile-settings-btn {
+        display: flex;
+    }
+    
+    /* Hide desktop navigation dropdowns on mobile */
+    .header-right .dropdown {
+        display: none;
+    }
+}
+
+/* Accessibility */
+.mobile-settings-btn:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+.mobile-settings-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .mobile-settings-btn {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: rgba(14, 165, 233, 0.3);
+    color: var(--accent-blue);
+}
+
+[data-theme="light"] .mobile-settings-btn:hover {
+    background: rgba(14, 165, 233, 0.2);
+    border-color: var(--accent-blue);
+}
+
+/* ==========================================
+   MAIN CONTENT PADDING FOR BOTTOM NAV
+   ========================================== */
+
+/* Add padding to main content to prevent overlap with bottom nav */
+@media (max-width: 767px) {
+    .main-content {
+        padding-bottom: calc(70px + env(safe-area-inset-bottom, 0));
+    }
+    
+    /* Ensure landing page footer isn't hidden */
+    .landing-footer {
+        margin-bottom: 20px;
+    }
+    
+    /* Adjust practice page end session button positioning */
+    #practice-page .end-session-container {
+        margin-bottom: 20px;
+    }
+}
+
+/* Smooth page transitions */
+.page {
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page.entering {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.page.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page.exiting {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+

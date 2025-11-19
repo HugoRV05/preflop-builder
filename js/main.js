@@ -197,8 +197,76 @@ function setupMobileNavigation() {
         });
     }
     
+    // Setup bottom navigation bar
+    setupBottomNavigation();
+    
+    // Setup top-right settings button
+    setupMobileSettingsButton();
+    
     // Setup mobile config panel reordering fallback
     setupMobileConfigPanelFallback();
+}
+
+// ==========================================
+// BOTTOM NAVIGATION BAR
+// ==========================================
+
+function setupBottomNavigation() {
+    // Get all bottom nav items
+    const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+    
+    if (!bottomNavItems.length) return;
+    
+    // Add click event listeners to each nav item
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const targetPage = item.getAttribute('data-page');
+            
+            if (!targetPage) return;
+            
+            // Navigate to the target page
+            showPage(targetPage);
+            
+            // Update active state in bottom nav
+            updateBottomNavActiveState(targetPage);
+        });
+    });
+}
+
+/**
+ * Updates the active state of bottom navigation items
+ * @param {string} pageId - The ID of the currently active page
+ */
+function updateBottomNavActiveState(pageId) {
+    const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+    
+    bottomNavItems.forEach(item => {
+        const itemPage = item.getAttribute('data-page');
+        
+        // Remove active class from all items
+        item.classList.remove('active');
+        
+        // Add active class to the current page's nav item
+        if (itemPage === pageId) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// ==========================================
+// TOP-RIGHT SETTINGS BUTTON
+// ==========================================
+
+function setupMobileSettingsButton() {
+    const settingsBtn = document.getElementById('mobile-settings-btn');
+    
+    if (!settingsBtn) return;
+    
+    // Add click event listener to settings button
+    settingsBtn.addEventListener('click', () => {
+        // Open the Preferences page
+        showPage('preferences-page');
+    });
 }
 
 function setupMobileConfigPanelFallback() {
@@ -327,6 +395,9 @@ function showPage(pageId) {
         
         // Update header navigation
         updateHeaderNavigation(pageId);
+        
+        // Update bottom navigation active state (mobile)
+        updateBottomNavActiveState(pageId);
         
         // Update current page tracking
         currentPageId = pageId;

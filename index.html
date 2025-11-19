@@ -82,6 +82,16 @@
                         <a href="#" id="logout-link">🚪 Logout</a>
                     </div>
                 </div>
+                
+                <!-- Top-right Settings Button (Mobile) -->
+                <button class="mobile-settings-btn" id="mobile-settings-btn" aria-label="Settings">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6"></path>
+                        <path d="M19.07 4.93l-4.24 4.24m0 5.66l4.24 4.24"></path>
+                        <path d="M4.93 4.93l4.24 4.24m0 5.66l-4.24 4.24"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -101,9 +111,9 @@
                 <div class="floating-shape floating-shape-6"></div>
                 <div class="floating-shape floating-shape-7"></div>
                 
-                                  <div class="landing-header">
+                <div class="landing-header">
                      <h2>Welcome to<br>Preflop Builder</h2>
-                     <p>Master your preflop ranges with us in 5-max No-Limit Hold'em</p>
+                     <p>Master your preflop ranges</p>
                   </div>
                 
                 <div class="mobile-landing-content">
@@ -120,7 +130,7 @@
                             <div class="btn-icon">🎯</div>
                             <div class="btn-text">
                                 <h3>Practice</h3>
-                                <p>Test your decisions with saved ranges</p>
+                                <p>Test your decisions</p>
                             </div>
                         </button>
                     </div>
@@ -454,7 +464,7 @@
         <!-- Practice Page -->
         <section id="practice-page" class="page">
             <!-- Practice Configuration Panel -->
-            <div id="practice-config-panel" class="practice-config-overlay">
+            <div id="practice-config-panel" class="practice-config-overlay hidden">
                 <div class="practice-config-content">
                     <h2>Practice Configuration</h2>
                     
@@ -947,6 +957,34 @@
         </section>
 
     </main>
+
+    <!-- Bottom Navigation Bar (Mobile) -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <button class="bottom-nav-item" id="bottom-nav-practice" data-page="practice-page" aria-label="Practice">
+            <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+            <span class="nav-label">Practice</span>
+        </button>
+        
+        <button class="bottom-nav-item active" id="bottom-nav-home" data-page="landing-page" aria-label="Home">
+            <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span class="nav-label">Home</span>
+        </button>
+        
+        <button class="bottom-nav-item" id="bottom-nav-profile" data-page="statistics-page" aria-label="Profile">
+            <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="nav-label">Profile</span>
+        </button>
+    </nav>
 
     <script src="js/main.js"></script>
 </body>
