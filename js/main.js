@@ -449,7 +449,7 @@ function playSession(session) {
     setTimeout(() => {
         // Navigate to practice page (config panel will be skipped via flag)
         showPage('practice-page');
-    }, 400); // 0.4 second delay for smooth transition
+    }, 600); // 0.6 second delay for smooth transition (prevents seeing scrolled-down config panel)
 }
 
 /**
@@ -789,7 +789,7 @@ function setupQuickPracticeButton() {
         setTimeout(() => {
             // Navigate to practice page (config panel will be skipped via flag)
             showPage('practice-page');
-        }, 400); // 0.4 second delay for smooth transition
+        }, 600); // 0.6 second delay for smooth transition (prevents seeing scrolled-down config panel)
     });
 }
 

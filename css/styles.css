@@ -4670,36 +4670,44 @@ input:checked + .toggle-slider:before {
     .mobile-floating-header {
         display: flex !important;
         align-items: center;
+        justify-content: space-between; /* Logo+title on left, settings on right */
+        width: 100%; /* Full width for proper spacing */
         margin-bottom: 16px; /* Reduced from 24px */
-        margin-left: -40%;
     }
-
-    .floating-logo {
+    
+    /* Group logo and title together on the left */
+    .mobile-floating-header .floating-logo {
         width: 40px;
         height: 40px;
         object-fit: contain;
         filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
         flex-shrink: 0;
+        margin-right: 8px; /* Space between logo and title */
     }
 
-    .floating-title {
+    .mobile-floating-header .floating-title {
         font-size: 20px;
         font-weight: 800;
         color: var(--text-primary);
         letter-spacing: -0.4px;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        flex: 1; /* Push settings button to the right */
         line-height: 1.2;
+        flex-shrink: 0;
+        margin-right: auto; /* Push settings button to the right */
     }
 
-    .floating-settings-btn {
+    /* Settings button inside the mobile header - must override the standalone fixed button */
+    .mobile-floating-header .floating-settings-btn {
+        position: relative !important; /* Override position: fixed from standalone button */
+        top: auto !important;
+        right: auto !important;
         background: rgba(52, 54, 60, 0.7);
         border: 1px solid rgba(255, 255, 255, 0.15);
         color: var(--text-primary);
         width: 40px;
         height: 40px;
         border-radius: 12px;
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: center;
         cursor: pointer;
@@ -4707,10 +4715,11 @@ input:checked + .toggle-slider:before {
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         flex-shrink: 0;
-        margin-right: 10px;
+        margin-right: 0;
+        margin-left: 8px; /* Space from title */
     }
 
-    .floating-settings-btn:active {
+    .mobile-floating-header .floating-settings-btn:active {
         transform: scale(0.95);
         background: rgba(124, 58, 237, 0.4);
         border-color: rgba(124, 58, 237, 0.6);
@@ -5038,8 +5047,8 @@ input:checked + .toggle-slider:before {
         width: 90%;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         animation: modalSlideIn 0.3s ease-out;
-        /* Move modal higher on screen */
-        margin-bottom: 25vh;
+        /* Move modal higher on screen - aligned with session naming modal */
+        margin-bottom: 15vh;
     }
 
     @keyframes modalSlideIn {
@@ -5150,6 +5159,8 @@ input:checked + .toggle-slider:before {
         width: 90%;
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
         animation: sessionModalSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        /* Align with delete modal height */
+        margin-bottom: 15vh;
     }
 
     @keyframes sessionModalSlideIn {
@@ -6389,7 +6400,7 @@ input:checked + .toggle-slider:before {
 
     #practice-page .facing-positions {
         padding: 2px 8px;
-        margin: 8px 8px -20px 8px;
+        margin: 18px 8px -25px 8px; /* Increased top margin, increased negative bottom to reduce gap with table */
     }
 
     #practice-page #current-matchup {
@@ -6414,7 +6425,7 @@ input:checked + .toggle-slider:before {
 
     #practice-page .end-session-container {
         padding: 6px 0 6px 0;
-        margin: 0;
+        margin: 0 0 20px 0; /* Added bottom margin */
         flex-shrink: 0;
     }
 
