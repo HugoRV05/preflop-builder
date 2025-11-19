@@ -445,11 +445,22 @@ function playSession(session) {
     // Set flag to skip config panel
     skipPracticeConfig = true;
     
+    // Pre-hide the config panel and scroll to top BEFORE navigation
+    const configPanel = document.getElementById('practice-config-panel');
+    const configLayout = document.querySelector('.config-layout');
+    
+    if (configPanel) {
+        configPanel.classList.add('hidden');
+    }
+    if (configLayout) {
+        configLayout.scrollTop = 0;
+    }
+    
     // Add loading delay for smoother transition
     setTimeout(() => {
         // Navigate to practice page (config panel will be skipped via flag)
         showPage('practice-page');
-    }, 600); // 0.6 second delay for smooth transition (prevents seeing scrolled-down config panel)
+    }, 600); // 0.6 second delay for smooth transition
 }
 
 /**
@@ -785,11 +796,22 @@ function setupQuickPracticeButton() {
         // Set flag to skip config panel
         skipPracticeConfig = true;
         
+        // Pre-hide the config panel and scroll to top BEFORE navigation
+        const configPanel = document.getElementById('practice-config-panel');
+        const configLayout = document.querySelector('.config-layout');
+        
+        if (configPanel) {
+            configPanel.classList.add('hidden');
+        }
+        if (configLayout) {
+            configLayout.scrollTop = 0;
+        }
+        
         // Add loading delay for smoother transition
         setTimeout(() => {
             // Navigate to practice page (config panel will be skipped via flag)
             showPage('practice-page');
-        }, 600); // 0.6 second delay for smooth transition (prevents seeing scrolled-down config panel)
+        }, 600); // 0.6 second delay for smooth transition
     });
 }
 

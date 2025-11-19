@@ -4651,15 +4651,16 @@ input:checked + .toggle-slider:before {
         margin-bottom: 40px;
     }
 
-    /* Mobile landing container - full viewport height */
+    /* Mobile landing container - allow scrolling */
     .landing-container {
         min-height: 100vh;
         padding: 20px 20px 10px 20px; /* Reduced top padding from 40px to 20px, bottom from 20px to 10px */
-        justify-content: space-between;
+        justify-content: flex-start; /* Allow content to flow naturally */
         align-items: center;
         display: flex;
         flex-direction: column;
         gap: 0;
+        overflow-y: visible; /* Allow scrolling */
     }
 
     /* ==========================================
@@ -5723,7 +5724,7 @@ input:checked + .toggle-slider:before {
         /* Facing positions - ultra compact with proper top spacing */
         .facing-positions {
             padding: 2px 8px; /* Further reduced padding */
-            margin: 15px 8px -25px 8px; /* Reduced top margin from 25px to 15px for more compactness */
+            margin: 25px 8px -45px 8px; /* Reduced top margin from 25px to 15px for more compactness */
         }
         
         /* Player elements - compact sizing (around table, not the table itself) */
@@ -5784,8 +5785,8 @@ input:checked + .toggle-slider:before {
 
         /* End session container */
         .end-session-container {
-            padding: 8px 0px 5px 0px; /* Further reduced padding */
-            margin: 10px 0px 5px 0px; /* Reduced margins */
+            padding: 8px 0px 25px 0px; /* Further reduced padding */
+            margin: 0px 0px 5px 0px; /* Reduced margins */
         }
         .end-session-btn {
             margin-top: 15px;
@@ -6359,12 +6360,20 @@ input:checked + .toggle-slider:before {
         min-height: 100%;
         overflow: hidden;
     }
+    
+    /* Landing page: allow vertical scroll */
+    #landing-page {
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
 
-    /* Landing page: fit all content without vertical scroll */
+    /* Landing page container: allow content to expand and scroll */
     #landing-page .landing-container {
-        height: 100%;
-        min-height: 100%;
-        justify-content: space-between;
+        min-height: 100%; /* At least full height */
+        height: auto; /* Allow it to grow beyond viewport */
+        justify-content: flex-start; /* Start from top, not space-between */
+        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); /* Extra padding for bottom nav */
     }
 
     /* Slightly tighter primary button to guarantee fit */
