@@ -3750,9 +3750,7 @@ input:checked + .toggle-slider:before {
     transform: translateY(-2px);
 }
 
-.practice-home-btn {
-    display: none;
-}
+/* Practice home button removed */
 
 /* ==========================================
    FACING POSITIONS DISPLAY
@@ -4609,7 +4607,6 @@ input:checked + .toggle-slider:before {
    ========================================== */
 
 /* Hide mobile-only elements on desktop by default */
-.mobile-home-btn,
 .mobile-floating-header,
 .mobile-dashboard-content {
     display: none !important;
@@ -4673,9 +4670,8 @@ input:checked + .toggle-slider:before {
     .mobile-floating-header {
         display: flex !important;
         align-items: center;
-        padding: max(env(safe-area-inset-top), 16px) 20px 0 20px; /* Respect iOS safe area for top notch */
         margin-bottom: 16px; /* Reduced from 24px */
-        margin-left: -30%;
+        margin-left: -40%;
     }
 
     .floating-logo {
@@ -4712,7 +4708,6 @@ input:checked + .toggle-slider:before {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         flex-shrink: 0;
         margin-right: 10px;
-        margin-top: 10px;
     }
 
     .floating-settings-btn:active {
@@ -5043,6 +5038,8 @@ input:checked + .toggle-slider:before {
         width: 90%;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         animation: modalSlideIn 0.3s ease-out;
+        /* Move modal higher on screen */
+        margin-bottom: 25vh;
     }
 
     @keyframes modalSlideIn {
@@ -5113,6 +5110,137 @@ input:checked + .toggle-slider:before {
             rgba(244, 67, 54, 0.9) 0%, 
             rgba(211, 47, 47, 1) 100%);
         transform: scale(0.97);
+    }
+
+    /* ==========================================
+       SESSION NAMING MODAL (Mobile Only)
+       ========================================== */
+    
+    .session-naming-modal-overlay {
+        display: none; /* Hidden by default, shown via JavaScript */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(10px);
+        z-index: 10001;
+        align-items: center;
+        justify-content: center;
+        /* Respect safe areas */
+        padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .session-naming-modal-overlay.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .session-naming-modal {
+        background: linear-gradient(135deg, 
+            rgba(36, 38, 43, 0.98) 0%, 
+            rgba(26, 26, 26, 0.99) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 32px 28px;
+        max-width: 360px;
+        width: 90%;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+        animation: sessionModalSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes sessionModalSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .session-naming-modal h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0 0 20px 0;
+        text-align: center;
+        letter-spacing: -0.3px;
+    }
+
+    .session-name-input {
+        width: 100%;
+        background: rgba(52, 54, 60, 0.7);
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 14px 16px;
+        font-size: 16px;
+        color: var(--text-primary);
+        font-family: inherit;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+        box-sizing: border-box;
+    }
+
+    .session-name-input:focus {
+        outline: none;
+        border-color: rgba(124, 58, 237, 0.6);
+        background: rgba(52, 54, 60, 0.9);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+
+    .session-name-input::placeholder {
+        color: rgba(236, 240, 241, 0.5);
+    }
+
+    .session-naming-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .session-naming-btn {
+        flex: 1;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        min-height: 50px;
+        font-family: inherit;
+    }
+
+    .session-naming-btn.cancel-btn {
+        background: rgba(52, 54, 60, 0.8);
+        color: var(--text-primary);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .session-naming-btn.cancel-btn:active {
+        background: rgba(52, 54, 60, 1);
+        transform: scale(0.97);
+    }
+
+    .session-naming-btn.save-btn {
+        background: linear-gradient(135deg, 
+            rgba(124, 58, 237, 0.9) 0%, 
+            rgba(99, 46, 190, 1) 100%);
+        color: white;
+        border: 1px solid rgba(124, 58, 237, 0.6);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .session-naming-btn.save-btn:active {
+        background: linear-gradient(135deg, 
+            rgba(124, 58, 237, 1) 0%, 
+            rgba(99, 46, 190, 1) 100%);
+        transform: scale(0.97);
+        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
     }
 
     /* Mobile landing content wrapper */
@@ -5258,46 +5386,8 @@ input:checked + .toggle-slider:before {
                    box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
-    /* Mobile Practice Page Home Button (in-flow, mobile-only) */
-    .practice-home-btn {
-        display: none; /* Hidden by default, shown only on mobile */
-        background: linear-gradient(135deg, 
-            rgba(52, 54, 60, 0.9) 0%, 
-            rgba(36, 38, 43, 0.95) 100%);
-        border: 1px solid rgba(124, 58, 237, 0.4);
-        color: var(--text-primary);
-        padding: 12px 16px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 14px;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(15px);
-        box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.3),
-            0 1px 0 rgba(255, 255, 255, 0.1) inset;
-        min-height: 44px; /* Ensure minimum touch target */
-        min-width: 44px;
-        margin-bottom: 16px;
-        align-self: flex-start;
-    }
-
-    .practice-home-btn:hover {
-        background: linear-gradient(135deg, 
-            rgba(124, 58, 237, 0.4) 0%, 
-            rgba(55, 48, 163, 0.5) 100%);
-        border-color: rgba(124, 58, 237, 0.8);
-        transform: translateY(-2px);
-        box-shadow: 
-            0 12px 32px rgba(124, 58, 237, 0.3),
-            0 1px 0 rgba(255, 255, 255, 0.2) inset;
-    }
-
-    /* Show practice home button on mobile only */
+    /* Mobile Practice Page - Removed home button */
     @media (max-width: 430px) {
-        .practice-home-btn {
-            display: block;
-        }
         
         /* ==========================================
            MOBILE PRACTICE CONFIG PANEL REDESIGN
@@ -5470,12 +5560,6 @@ input:checked + .toggle-slider:before {
             min-height: 44px; /* Ensure tappable area */
         }
         
-        
-        /* Practice Home button mobile - fix margins */
-        .practice-home-btn {
-            margin: 10px 20px 8px 20px; /* Reduced top and bottom margins for compactness */
-            align-self: flex-start; /* Align to top-left when in flex container */
-        }
         
         /* Practice layout mobile - ensure proper container spacing */
         .practice-layout {
@@ -6022,23 +6106,6 @@ input:checked + .toggle-slider:before {
                    box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
-    /* Light theme practice home button */
-    [data-theme="light"] .practice-home-btn {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border: 1px solid #cbd5e1;
-        color: #1e293b;
-        box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.1),
-            0 1px 0 rgba(255, 255, 255, 0.8) inset;
-    }
-
-    [data-theme="light"] .practice-home-btn:hover {
-        background: linear-gradient(135deg, 
-            rgba(14, 165, 233, 0.1) 0%, 
-            rgba(59, 130, 246, 0.15) 100%);
-        border-color: rgba(14, 165, 233, 0.4);
-        box-shadow: 0 12px 32px rgba(14, 165, 233, 0.2);
-    }
 }
 
 /* ==========================================

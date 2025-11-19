@@ -186,17 +186,6 @@ function setupMobileNavigation() {
         });
     }
     
-    // Mobile Home button for Practice page only -> reuse desktop home-btn handler
-    const mobileHomeBtn = document.getElementById('mobile-home-btn');
-    
-    if (mobileHomeBtn) {
-        mobileHomeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Call the same function as desktop home button: showPage('landing-page')
-            showPage('landing-page');
-        });
-    }
-    
     // Setup bottom navigation bar
     setupBottomNavigation();
     
@@ -289,6 +278,9 @@ function setupMobileDashboard() {
     
     // Setup delete modal
     setupDeleteModal();
+    
+    // Setup session naming modal
+    setupSessionNamingModal();
 }
 
 /**
@@ -453,8 +445,11 @@ function playSession(session) {
     // Set flag to skip config panel
     skipPracticeConfig = true;
     
-    // Navigate to practice page (config panel will be skipped via flag)
-    showPage('practice-page');
+    // Add loading delay for smoother transition
+    setTimeout(() => {
+        // Navigate to practice page (config panel will be skipped via flag)
+        showPage('practice-page');
+    }, 400); // 0.4 second delay for smooth transition
 }
 
 /**
@@ -531,7 +526,7 @@ function deleteSession(session) {
 }
 
 /**
- * Add a new session
+ * Add a new session - opens custom naming modal
  */
 function addNewSession() {
     const sessions = getSessions();
@@ -541,12 +536,56 @@ function addNewSession() {
         return;
     }
     
-    // Prompt for session name
-    const sessionName = prompt('Enter session name:');
+    // Open session naming modal
+    showSessionNamingModal();
+}
+
+/**
+ * Show session naming modal
+ */
+function showSessionNamingModal() {
+    const modal = document.getElementById('session-naming-modal-overlay');
+    const input = document.getElementById('session-name-input');
     
+    if (!modal || !input) return;
+    
+    // Clear previous input
+    input.value = '';
+    
+    // Show modal
+    modal.classList.add('active');
+    
+    // Focus input after animation
+    setTimeout(() => {
+        input.focus();
+    }, 100);
+}
+
+/**
+ * Hide session naming modal
+ */
+function hideSessionNamingModal() {
+    const modal = document.getElementById('session-naming-modal-overlay');
+    
+    if (!modal) return;
+    
+    modal.classList.remove('active');
+}
+
+/**
+ * Create new session with provided name
+ */
+let isCreatingSession = false; // Flag to prevent double creation
+function createSessionWithName(sessionName) {
     if (!sessionName || sessionName.trim() === '') {
-        return; // User cancelled or entered empty name
+        return; // No name provided
     }
+    
+    // Prevent double creation
+    if (isCreatingSession) {
+        return;
+    }
+    isCreatingSession = true;
     
     // Create new session with default config
     const newSession = {
@@ -563,11 +602,59 @@ function addNewSession() {
     };
     
     // Add to sessions
+    const sessions = getSessions();
     sessions.push(newSession);
     saveSessions(sessions);
     
     // Re-render grid
     renderSessionsGrid();
+    
+    // Hide modal
+    hideSessionNamingModal();
+    
+    // Reset flag after a short delay
+    setTimeout(() => {
+        isCreatingSession = false;
+    }, 500);
+}
+
+/**
+ * Setup session naming modal event listeners
+ */
+function setupSessionNamingModal() {
+    const modal = document.getElementById('session-naming-modal-overlay');
+    const cancelBtn = document.getElementById('session-naming-cancel-btn');
+    const saveBtn = document.getElementById('session-naming-save-btn');
+    const input = document.getElementById('session-name-input');
+    
+    if (!modal || !cancelBtn || !saveBtn || !input) return;
+    
+    // Cancel button
+    cancelBtn.addEventListener('click', () => {
+        hideSessionNamingModal();
+    });
+    
+    // Save button
+    saveBtn.addEventListener('click', () => {
+        const sessionName = input.value;
+        createSessionWithName(sessionName);
+    });
+    
+    // Enter key to save
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent form submission
+            const sessionName = input.value;
+            createSessionWithName(sessionName);
+        }
+    });
+    
+    // Click outside to close
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideSessionNamingModal();
+        }
+    });
 }
 
 /**
@@ -698,8 +785,11 @@ function setupQuickPracticeButton() {
         // Set flag to skip config panel
         skipPracticeConfig = true;
         
-        // Navigate to practice page (config panel will be skipped via flag)
-        showPage('practice-page');
+        // Add loading delay for smoother transition
+        setTimeout(() => {
+            // Navigate to practice page (config panel will be skipped via flag)
+            showPage('practice-page');
+        }, 400); // 0.4 second delay for smooth transition
     });
 }
 
@@ -3405,6 +3495,14 @@ function initializePracticePage() {
         } else {
             // Show config panel (normal behavior when clicking "Practice" from nav)
             configPanel.classList.remove('hidden');
+            
+            // Scroll the config-layout (the actual scrollable container) to top
+            setTimeout(() => {
+                const configLayout = document.querySelector('.config-layout');
+                if (configLayout) {
+                    configLayout.scrollTop = 0;
+                }
+            }, 100); // Delay to ensure DOM is ready
         }
     }
     

@@ -432,6 +432,25 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Session Naming Modal (Mobile Only) -->
+            <div class="session-naming-modal-overlay" id="session-naming-modal-overlay">
+                <div class="session-naming-modal">
+                    <h3>Name your session</h3>
+                    <input 
+                        type="text" 
+                        id="session-name-input" 
+                        class="session-name-input" 
+                        placeholder="Enter session name"
+                        maxlength="30"
+                        autocomplete="off"
+                    >
+                    <div class="session-naming-modal-actions">
+                        <button class="session-naming-btn cancel-btn" id="session-naming-cancel-btn">Cancel</button>
+                        <button class="session-naming-btn save-btn" id="session-naming-save-btn">Save</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Edit Ranges Page -->
@@ -597,9 +616,6 @@
             </div>
             
             <div class="practice-layout">
-                <!-- Mobile Home Button (in-flow, mobile only) -->
-                <button class="practice-home-btn" id="mobile-home-btn" aria-label="Home">🏠 Home</button>
-                
                 <!-- Facing Positions Display -->
                 <div class="facing-positions" id="facing-positions">    
                     <span class="facing-text-mobile">Now facing:</span>
