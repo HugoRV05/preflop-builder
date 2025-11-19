@@ -267,6 +267,10 @@ const DEFAULT_SESSIONS = [
 // Global variable to track session being deleted
 let sessionToDelete = null;
 
+// Global flag to control whether to show practice config panel
+// When true, practice starts immediately without showing config panel
+let skipPracticeConfig = false;
+
 /**
  * Initialize mobile dashboard on page load
  */
@@ -432,17 +436,11 @@ function playSession(session) {
     // Save as last used config
     saveLastPracticeConfig(practiceConfig);
     
-    // Navigate to practice page
+    // Set flag to skip config panel
+    skipPracticeConfig = true;
+    
+    // Navigate to practice page (config panel will be skipped via flag)
     showPage('practice-page');
-    
-    // Hide config panel immediately to skip configuration screen
-    const configPanel = document.getElementById('practice-config-panel');
-    if (configPanel) {
-        configPanel.classList.add('hidden');
-    }
-    
-    // Apply configuration and start practice immediately
-    applyPracticeConfiguration();
 }
 
 /**
@@ -683,17 +681,11 @@ function setupQuickPracticeButton() {
         // Save current config as last used
         saveLastPracticeConfig(practiceConfig);
         
-        // Navigate to practice page
+        // Set flag to skip config panel
+        skipPracticeConfig = true;
+        
+        // Navigate to practice page (config panel will be skipped via flag)
         showPage('practice-page');
-        
-        // Hide config panel immediately to skip configuration screen
-        const configPanel = document.getElementById('practice-config-panel');
-        if (configPanel) {
-            configPanel.classList.add('hidden');
-        }
-        
-        // Apply configuration and start immediately
-        applyPracticeConfiguration();
     });
 }
 
@@ -3383,10 +3375,23 @@ function formatActionName(action) {
 
 // Update the practice page initialization in the showPage function
 function initializePracticePage() {
-    // Show config panel when entering practice page
+    // Show or hide config panel based on skipPracticeConfig flag
     const configPanel = document.getElementById('practice-config-panel');
     if (configPanel) {
-        configPanel.classList.remove('hidden');
+        if (skipPracticeConfig) {
+            // Skip config panel - hide it and start practice immediately
+            configPanel.classList.add('hidden');
+            // Reset flag for next time
+            skipPracticeConfig = false;
+            
+            // Start practice immediately
+            setTimeout(() => {
+                applyPracticeConfiguration();
+            }, 50);
+        } else {
+            // Show config panel (normal behavior when clicking "Practice" from nav)
+            configPanel.classList.remove('hidden');
+        }
     }
     
     // Reset practice state

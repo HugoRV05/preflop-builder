@@ -4616,26 +4616,21 @@ input:checked + .toggle-slider:before {
        MOBILE FLOATING HEADER (Logo + Name + Settings)
        ========================================== */
     
-    /* Mobile Floating Header - no bar background, just floating elements */
+    /* Mobile Floating Header - logo and name on left, settings button on right */
     .mobile-floating-header {
         display: flex !important;
         align-items: center;
-        justify-content: space-between;
-        padding: max(env(safe-area-inset-top), 20px) 20px 0 20px; /* Respect iOS safe area for top notch */
-        margin-bottom: 24px;
-    }
-
-    .floating-header-brand {
-        display: flex;
-        align-items: center;
         gap: 12px;
+        padding: max(env(safe-area-inset-top), 16px) 20px 0 20px; /* Respect iOS safe area for top notch */
+        margin-bottom: 16px; /* Reduced from 24px */
     }
 
     .floating-logo {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         object-fit: contain;
         filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+        flex-shrink: 0;
     }
 
     .floating-title {
@@ -4644,14 +4639,16 @@ input:checked + .toggle-slider:before {
         color: var(--text-primary);
         letter-spacing: -0.4px;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        flex: 1; /* Push settings button to the right */
+        line-height: 1.2;
     }
 
     .floating-settings-btn {
         background: rgba(52, 54, 60, 0.7);
         border: 1px solid rgba(255, 255, 255, 0.15);
         color: var(--text-primary);
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -4660,6 +4657,7 @@ input:checked + .toggle-slider:before {
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        flex-shrink: 0;
     }
 
     .floating-settings-btn:active {
@@ -4670,8 +4668,8 @@ input:checked + .toggle-slider:before {
     }
 
     .floating-settings-btn svg {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
     }
 
     /* ==========================================
