@@ -205,6 +205,581 @@ function setupMobileNavigation() {
     
     // Setup mobile config panel reordering fallback
     setupMobileConfigPanelFallback();
+    
+    // Setup mobile dashboard functionality
+    setupMobileDashboard();
+}
+
+// ==========================================
+// MOBILE DASHBOARD FUNCTIONALITY
+// ==========================================
+
+/**
+ * Session Management for Mobile Dashboard
+ * Handles pre-made practice sessions with localStorage persistence
+ */
+
+// Session storage key
+const SESSIONS_STORAGE_KEY = 'preflopBuilder_practiceSessions';
+const LAST_CONFIG_STORAGE_KEY = 'preflopBuilder_lastPracticeConfig';
+const MAX_SESSIONS = 6;
+
+// Default sessions - 3 pre-filled sessions
+const DEFAULT_SESSIONS = [
+    {
+        id: 'default-1',
+        name: 'Quick Start',
+        config: {
+            heroPosition: 'Any',
+            villainPosition: 'Any',
+            gameType: 'full-mode',
+            handStart: 'both',
+            selectedHands: null, // null means all hands
+            onlyPlayableHands: true
+        }
+    },
+    {
+        id: 'default-2',
+        name: 'Button Play',
+        config: {
+            heroPosition: 'BU',
+            villainPosition: 'Any',
+            gameType: 'full-mode',
+            handStart: 'both',
+            selectedHands: null,
+            onlyPlayableHands: true
+        }
+    },
+    {
+        id: 'default-3',
+        name: 'Blinds Defense',
+        config: {
+            heroPosition: 'BB',
+            villainPosition: 'Any',
+            gameType: 'full-mode',
+            handStart: 'late-vs-early',
+            selectedHands: null,
+            onlyPlayableHands: true
+        }
+    }
+];
+
+// Global variable to track session being deleted
+let sessionToDelete = null;
+
+/**
+ * Initialize mobile dashboard on page load
+ */
+function setupMobileDashboard() {
+    // Initialize sessions if not exists
+    initializeSessions();
+    
+    // Render sessions grid
+    renderSessionsGrid();
+    
+    // Setup Quick Practice button
+    setupQuickPracticeButton();
+    
+    // Setup topbar settings button
+    setupTopbarSettings();
+    
+    // Setup delete modal
+    setupDeleteModal();
+}
+
+/**
+ * Initialize sessions in localStorage with defaults if needed
+ */
+function initializeSessions() {
+    const existingSessions = localStorage.getItem(SESSIONS_STORAGE_KEY);
+    
+    if (!existingSessions) {
+        // First time - save default sessions
+        localStorage.setItem(SESSIONS_STORAGE_KEY, JSON.stringify(DEFAULT_SESSIONS));
+    }
+}
+
+/**
+ * Get all sessions from localStorage
+ */
+function getSessions() {
+    const sessionsJson = localStorage.getItem(SESSIONS_STORAGE_KEY);
+    return sessionsJson ? JSON.parse(sessionsJson) : DEFAULT_SESSIONS;
+}
+
+/**
+ * Save sessions to localStorage
+ */
+function saveSessions(sessions) {
+    localStorage.setItem(SESSIONS_STORAGE_KEY, JSON.stringify(sessions));
+}
+
+/**
+ * Get last used practice configuration
+ */
+function getLastPracticeConfig() {
+    const configJson = localStorage.getItem(LAST_CONFIG_STORAGE_KEY);
+    if (configJson) {
+        const config = JSON.parse(configJson);
+        // Convert selectedHands array back to Set if it exists
+        if (config.selectedHands && Array.isArray(config.selectedHands)) {
+            config.selectedHands = new Set(config.selectedHands);
+        }
+        return config;
+    }
+    return null;
+}
+
+/**
+ * Save last used practice configuration
+ */
+function saveLastPracticeConfig(config) {
+    // Convert Set to Array for JSON serialization
+    const configToSave = {...config};
+    if (configToSave.selectedHands instanceof Set) {
+        configToSave.selectedHands = Array.from(configToSave.selectedHands);
+    }
+    localStorage.setItem(LAST_CONFIG_STORAGE_KEY, JSON.stringify(configToSave));
+}
+
+/**
+ * Render the sessions grid on the mobile dashboard
+ */
+function renderSessionsGrid() {
+    const sessionsGrid = document.getElementById('sessions-grid');
+    const sessionsMaxMessage = document.getElementById('sessions-max-message');
+    
+    if (!sessionsGrid) return;
+    
+    // Clear existing grid
+    sessionsGrid.innerHTML = '';
+    
+    // Get current sessions
+    const sessions = getSessions();
+    
+    // Render each session card
+    sessions.forEach(session => {
+        const sessionCard = createSessionCard(session);
+        sessionsGrid.appendChild(sessionCard);
+    });
+    
+    // Add "Add Session" card if less than max sessions
+    if (sessions.length < MAX_SESSIONS) {
+        const addSessionCard = createAddSessionCard();
+        sessionsGrid.appendChild(addSessionCard);
+        sessionsMaxMessage.style.display = 'none';
+    } else {
+        sessionsMaxMessage.style.display = 'block';
+    }
+}
+
+/**
+ * Create a session card element
+ */
+function createSessionCard(session) {
+    const card = document.createElement('div');
+    card.className = 'session-card';
+    card.dataset.sessionId = session.id;
+    
+    card.innerHTML = `
+        <h4 class="session-name">${session.name}</h4>
+        <div class="session-actions">
+            <button class="session-btn play-btn" data-action="play">Play</button>
+            <div class="session-btn-row">
+                <button class="session-btn edit-btn" data-action="edit">Edit</button>
+                <button class="session-btn delete-btn" data-action="delete">Delete</button>
+            </div>
+        </div>
+    `;
+    
+    // Add event listeners to action buttons
+    const playBtn = card.querySelector('[data-action="play"]');
+    const editBtn = card.querySelector('[data-action="edit"]');
+    const deleteBtn = card.querySelector('[data-action="delete"]');
+    
+    playBtn.addEventListener('click', () => playSession(session));
+    editBtn.addEventListener('click', () => editSession(session));
+    deleteBtn.addEventListener('click', () => showDeleteConfirmation(session));
+    
+    return card;
+}
+
+/**
+ * Create "Add Session" card
+ */
+function createAddSessionCard() {
+    const card = document.createElement('div');
+    card.className = 'session-card add-session-card';
+    
+    card.innerHTML = `
+        <div class="add-session-icon">+</div>
+        <div class="add-session-text">Add Session</div>
+    `;
+    
+    card.addEventListener('click', addNewSession);
+    
+    return card;
+}
+
+/**
+ * Play a session - start practice with session config
+ * Goes directly to Practice without showing Configuration panel
+ */
+function playSession(session) {
+    // Load session config into practiceConfig
+    applySessionConfigToPracticeConfig(session.config);
+    
+    // Save as last used config
+    saveLastPracticeConfig(practiceConfig);
+    
+    // Navigate to practice page
+    showPage('practice-page');
+    
+    // Hide config panel immediately to skip configuration screen
+    const configPanel = document.getElementById('practice-config-panel');
+    if (configPanel) {
+        configPanel.classList.add('hidden');
+    }
+    
+    // Apply configuration and start practice immediately
+    applyPracticeConfiguration();
+}
+
+/**
+ * Edit a session - open practice config with session settings
+ */
+function editSession(session) {
+    // Load session config into practiceConfig
+    applySessionConfigToPracticeConfig(session.config);
+    
+    // Store which session is being edited
+    window.currentEditingSession = session;
+    
+    // Navigate to practice page (config panel will show)
+    showPage('practice-page');
+    
+    // Override the apply button to save back to session
+    const applyBtn = document.getElementById('practice-apply');
+    if (applyBtn) {
+        // Remove existing listeners
+        const newApplyBtn = applyBtn.cloneNode(true);
+        applyBtn.parentNode.replaceChild(newApplyBtn, applyBtn);
+        
+        // Add new listener for saving to session
+        newApplyBtn.addEventListener('click', () => {
+            // Validate that at least one hand is selected
+            if (practiceConfig.selectedHands.size === 0) {
+                alert('Please select at least one hand to practice with.');
+                return;
+            }
+            
+            // Update session config
+            session.config = {...practiceConfig};
+            // Convert Set to Array for storage
+            if (session.config.selectedHands instanceof Set) {
+                session.config.selectedHands = Array.from(session.config.selectedHands);
+            }
+            
+            // Save sessions
+            const sessions = getSessions();
+            const sessionIndex = sessions.findIndex(s => s.id === session.id);
+            if (sessionIndex !== -1) {
+                sessions[sessionIndex] = session;
+                saveSessions(sessions);
+            }
+            
+            // Clear editing session
+            window.currentEditingSession = null;
+            
+            // Start practice with updated config
+            applyPracticeConfiguration();
+        });
+    }
+}
+
+/**
+ * Show delete confirmation modal
+ */
+function showDeleteConfirmation(session) {
+    sessionToDelete = session;
+    const modal = document.getElementById('delete-modal-overlay');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+/**
+ * Delete a session
+ */
+function deleteSession(session) {
+    const sessions = getSessions();
+    const filteredSessions = sessions.filter(s => s.id !== session.id);
+    saveSessions(filteredSessions);
+    renderSessionsGrid();
+}
+
+/**
+ * Add a new session
+ */
+function addNewSession() {
+    const sessions = getSessions();
+    
+    if (sessions.length >= MAX_SESSIONS) {
+        alert('Maximum number of sessions reached!');
+        return;
+    }
+    
+    // Prompt for session name
+    const sessionName = prompt('Enter session name:');
+    
+    if (!sessionName || sessionName.trim() === '') {
+        return; // User cancelled or entered empty name
+    }
+    
+    // Create new session with default config
+    const newSession = {
+        id: 'session-' + Date.now(),
+        name: sessionName.trim(),
+        config: {
+            heroPosition: 'Any',
+            villainPosition: 'Any',
+            gameType: 'full-mode',
+            handStart: 'both',
+            selectedHands: null,
+            onlyPlayableHands: true
+        }
+    };
+    
+    // Add to sessions
+    sessions.push(newSession);
+    saveSessions(sessions);
+    
+    // Re-render grid
+    renderSessionsGrid();
+}
+
+/**
+ * Apply session config to global practiceConfig
+ */
+function applySessionConfigToPracticeConfig(sessionConfig) {
+    // Copy all config properties
+    practiceConfig.heroPosition = sessionConfig.heroPosition;
+    practiceConfig.villainPosition = sessionConfig.villainPosition;
+    practiceConfig.gameType = sessionConfig.gameType;
+    practiceConfig.handStart = sessionConfig.handStart;
+    practiceConfig.onlyPlayableHands = sessionConfig.onlyPlayableHands;
+    
+    // Handle selectedHands - if null, select all hands
+    if (sessionConfig.selectedHands === null || !sessionConfig.selectedHands) {
+        // Select all hands
+        const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+        practiceConfig.selectedHands = new Set();
+        
+        for (let row = 0; row < 13; row++) {
+            for (let col = 0; col < 13; col++) {
+                let handText;
+                if (row === col) {
+                    handText = ranks[row] + ranks[col];
+                } else if (col > row) {
+                    handText = ranks[col] + ranks[row] + 's';
+                } else {
+                    handText = ranks[col] + ranks[row] + 'o';
+                }
+                practiceConfig.selectedHands.add(handText);
+            }
+        }
+    } else {
+        // Convert array back to Set
+        if (Array.isArray(sessionConfig.selectedHands)) {
+            practiceConfig.selectedHands = new Set(sessionConfig.selectedHands);
+        } else {
+            practiceConfig.selectedHands = sessionConfig.selectedHands;
+        }
+    }
+    
+    // Update UI to reflect loaded config
+    updateConfigUIFromPracticeConfig();
+}
+
+/**
+ * Update configuration UI to reflect current practiceConfig
+ */
+function updateConfigUIFromPracticeConfig() {
+    // Update hero position buttons
+    document.querySelectorAll('#config-hero-positions .config-position-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.position === practiceConfig.heroPosition);
+    });
+    
+    // Update villain position buttons
+    document.querySelectorAll('#config-villain-positions .config-position-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.position === practiceConfig.villainPosition);
+    });
+    
+    // Update game type buttons
+    document.querySelectorAll('#game-type-buttons .config-option-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.value === practiceConfig.gameType);
+    });
+    
+    // Update hand start buttons
+    document.querySelectorAll('#hand-start-buttons .config-option-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.value === practiceConfig.handStart);
+    });
+    
+    // Update only playable hands toggle
+    const onlyPlayableToggle = document.getElementById('only-playable-hands');
+    if (onlyPlayableToggle) {
+        onlyPlayableToggle.checked = practiceConfig.onlyPlayableHands;
+    }
+    
+    // Update hand matrix selection
+    document.querySelectorAll('.config-hand-cell').forEach(cell => {
+        if (practiceConfig.selectedHands.has(cell.dataset.hand)) {
+            cell.classList.add('selected');
+        } else {
+            cell.classList.remove('selected');
+        }
+    });
+}
+
+/**
+ * Setup Quick Practice button
+ * Starts practice immediately with last used settings or default settings
+ * Goes directly to Practice without showing Configuration panel
+ */
+function setupQuickPracticeButton() {
+    const quickPracticeBtn = document.getElementById('quick-practice-btn');
+    
+    if (!quickPracticeBtn) return;
+    
+    quickPracticeBtn.addEventListener('click', () => {
+        // Get last used config or use default
+        const lastConfig = getLastPracticeConfig();
+        
+        if (lastConfig) {
+            // Use last config
+            practiceConfig.heroPosition = lastConfig.heroPosition;
+            practiceConfig.villainPosition = lastConfig.villainPosition;
+            practiceConfig.gameType = lastConfig.gameType;
+            practiceConfig.handStart = lastConfig.handStart;
+            practiceConfig.onlyPlayableHands = lastConfig.onlyPlayableHands;
+            
+            // Handle selectedHands
+            if (lastConfig.selectedHands && lastConfig.selectedHands.size > 0) {
+                practiceConfig.selectedHands = lastConfig.selectedHands;
+            } else {
+                // Select all hands as fallback
+                selectAllHandsForPractice();
+            }
+        } else {
+            // Use default config (Any vs Any, full mode, both, all hands)
+            practiceConfig.heroPosition = 'Any';
+            practiceConfig.villainPosition = 'Any';
+            practiceConfig.gameType = 'full-mode';
+            practiceConfig.handStart = 'both';
+            practiceConfig.onlyPlayableHands = false;
+            selectAllHandsForPractice();
+        }
+        
+        // Save current config as last used
+        saveLastPracticeConfig(practiceConfig);
+        
+        // Navigate to practice page
+        showPage('practice-page');
+        
+        // Hide config panel immediately to skip configuration screen
+        const configPanel = document.getElementById('practice-config-panel');
+        if (configPanel) {
+            configPanel.classList.add('hidden');
+        }
+        
+        // Apply configuration and start immediately
+        applyPracticeConfiguration();
+    });
+}
+
+/**
+ * Helper function to select all hands
+ */
+function selectAllHandsForPractice() {
+    const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+    practiceConfig.selectedHands = new Set();
+    
+    for (let row = 0; row < 13; row++) {
+        for (let col = 0; col < 13; col++) {
+            let handText;
+            if (row === col) {
+                handText = ranks[row] + ranks[col];
+            } else if (col > row) {
+                handText = ranks[col] + ranks[row] + 's';
+            } else {
+                handText = ranks[col] + ranks[row] + 'o';
+            }
+            practiceConfig.selectedHands.add(handText);
+        }
+    }
+}
+
+/**
+ * Setup floating settings button to show settings/preferences page
+ */
+function setupTopbarSettings() {
+    const floatingSettingsBtn = document.getElementById('mobile-floating-settings');
+    
+    if (!floatingSettingsBtn) return;
+    
+    // Navigate to preferences page when clicked
+    floatingSettingsBtn.addEventListener('click', () => {
+        showPage('preferences-page');
+    });
+}
+
+/**
+ * Setup delete confirmation modal
+ */
+function setupDeleteModal() {
+    const modal = document.getElementById('delete-modal-overlay');
+    const cancelBtn = document.getElementById('delete-cancel-btn');
+    const confirmBtn = document.getElementById('delete-confirm-btn');
+    
+    if (!modal || !cancelBtn || !confirmBtn) return;
+    
+    // Cancel button - close modal
+    cancelBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        sessionToDelete = null;
+    });
+    
+    // Confirm button - delete session and close modal
+    confirmBtn.addEventListener('click', () => {
+        if (sessionToDelete) {
+            deleteSession(sessionToDelete);
+            sessionToDelete = null;
+        }
+        modal.classList.remove('active');
+    });
+    
+    // Click outside modal to close
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            sessionToDelete = null;
+        }
+    });
+}
+
+/**
+ * Override applyPracticeConfiguration to save last config
+ * This is called when the original practice config "Apply" button is clicked
+ */
+const originalApplyPracticeConfiguration = window.applyPracticeConfiguration;
+if (originalApplyPracticeConfiguration) {
+    window.applyPracticeConfiguration = function() {
+        // Save current config as last used
+        saveLastPracticeConfig(practiceConfig);
+        
+        // Call original function
+        originalApplyPracticeConfiguration.call(this);
+    };
 }
 
 // ==========================================
