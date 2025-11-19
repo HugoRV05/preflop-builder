@@ -134,6 +134,15 @@
     --landing-btn-border: rgba(203, 213, 225, 0.3);
 }
 
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    /* Modern viewport units for better mobile support */
+    min-height: 100vh;    /* fallback */
+    min-height: 100dvh;   /* dynamic viewport height - accounts for browser UI */
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -142,6 +151,11 @@ body {
     height: 100%;
     color: #1a1a1a;
     overflow-x: hidden;
+    /* Ensure body also uses full height */
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Mobile tap highlight removal for better UX */
@@ -5653,13 +5667,34 @@ input:checked + .toggle-slider:before {
 }
 
 /* ==========================================
-   PWA SPECIFIC STYLES
+   PWA SPECIFIC STYLES - iOS COMPATIBILITY
    ========================================== */
+
+/* 
+   iOS PWA Standalone Mode Fixes:
+   
+   Problem: When installed as a PWA on iOS, there's a grey margin at the bottom
+   caused by WebKit reserving space for the Home Indicator and safe areas.
+   
+   Solution Overview:
+   1. Use viewport-fit=cover in meta tag (already set in HTML)
+   2. Use modern viewport units (100dvh, 100lvh) for full screen coverage
+   3. Apply env(safe-area-inset-*) to respect iOS safe areas
+   4. Ensure bottom nav sits flush at bottom with proper padding above Home Indicator
+   
+   Key Concepts:
+   - 100vh: Classic viewport height (doesn't account for dynamic UI)
+   - 100dvh: Dynamic viewport height (accounts for browser UI showing/hiding)
+   - 100lvh: Large viewport height (uses largest possible viewport - best for standalone)
+   - env(safe-area-inset-*): CSS environment variables for iOS safe areas
+*/
 
 /* PWA standalone mode adjustments - iOS Safe Area Fix */
 @media (display-mode: standalone) {
-    /* Ensure background extends into notch area seamlessly */
-    body {
+    /* Force full screen height in standalone mode using large viewport height
+       This ensures content extends to the physical edges of the screen */
+    html, body {
+        min-height: 100lvh; /* large viewport height - uses largest possible viewport */
         background: var(--dark-grey);
         padding: 0;
         margin: 0;
@@ -5727,11 +5762,20 @@ input:checked + .toggle-slider:before {
 @supports (-webkit-touch-callout: none) {
     /* iOS specific standalone mode adjustments */
     @media (display-mode: standalone) {
+        html {
+            /* Ensure html fills entire screen on iOS */
+            width: 100%;
+            height: 100%;
+            min-height: 100lvh; /* Use largest viewport height for iOS */
+            background: var(--dark-grey);
+        }
+        
         body {
             /* Prevent iOS scroll bounce */
             position: fixed;
             width: 100%;
             height: 100%;
+            min-height: 100lvh;
             overflow: hidden;
             /* Background extends to edges for seamless notch integration */
             background: var(--dark-grey);
@@ -5883,8 +5927,25 @@ input:checked + .toggle-slider:before {
 }
 
 /* ==========================================
-   BOTTOM NAVIGATION BAR (MOBILE)
+   BOTTOM NAVIGATION BAR (MOBILE) - iOS SAFE AREA COMPATIBLE
    ========================================== */
+
+/* 
+   Bottom Navigation iOS Compatibility:
+   
+   The bottom nav must sit flush with the screen bottom while respecting
+   the iOS Home Indicator (the horizontal line at the bottom of notchless iPhones).
+   
+   Strategy:
+   1. Position fixed at bottom: 0 (truly flush with screen edge)
+   2. Add padding-bottom with env(safe-area-inset-bottom) to push content
+      above the Home Indicator area
+   3. Use ::after pseudo-element to extend background color below the nav
+      to fill the entire safe area with the nav's background color
+   
+   Result: Nav bar visually extends to screen bottom, buttons sit comfortably
+   above the Home Indicator, no grey gap visible.
+*/
 
 /* Bottom navigation container - fixed to bottom of screen */
 .bottom-nav {
@@ -5892,33 +5953,40 @@ input:checked + .toggle-slider:before {
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
     background: var(--darker-grey);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
-    padding: 0 16px env(safe-area-inset-bottom, 0);
+    /* Proper padding with safe area compensation for iOS Home Indicator */
+    padding-left: max(16px, env(safe-area-inset-left, 16px));
+    padding-right: max(16px, env(safe-area-inset-right, 16px));
     padding-top: 8px;
-    padding-bottom: max(12px, env(safe-area-inset-bottom, 0));
+    /* Bottom padding accounts for Home Indicator - ensures buttons are above it
+       env(safe-area-inset-bottom) returns 0px on non-iOS or ~34px on iOS with Home Indicator */
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     min-height: 70px;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    /* Extend background color below safe area */
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+    box-sizing: border-box;
 }
 
-/* Ensure bottom nav extends below viewport to cover safe area background */
+/* Ensure bottom nav extends below viewport to cover safe area background 
+   This creates a pseudo-element that extends the background color below the nav
+   to fill any space created by safe areas (like the Home Indicator on iOS) */
 .bottom-nav::after {
     content: '';
     position: absolute;
-    bottom: -100px;
+    bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 100px);
     left: 0;
     right: 0;
-    height: 100px;
+    height: calc(env(safe-area-inset-bottom, 0px) + 100px);
     background: var(--darker-grey);
     z-index: -1;
+    pointer-events: none;
 }
 
 /* Individual navigation item */
@@ -6031,6 +6099,23 @@ input:checked + .toggle-slider:before {
     }
 }
 
+/* Standalone mode specific adjustments for bottom nav */
+@media (display-mode: standalone) and (max-width: 767px) {
+    .bottom-nav {
+        /* Ensure bottom nav is truly at the bottom edge in standalone mode */
+        bottom: 0;
+        /* Account for safe area properly - nav sits above Home Indicator */
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+    
+    /* Ensure background extends fully on iOS devices */
+    .bottom-nav::after {
+        /* Extra extension to cover any gaps on iOS */
+        bottom: calc(-1 * max(env(safe-area-inset-bottom, 0px), 20px) - 100px);
+        height: calc(max(env(safe-area-inset-bottom, 0px), 20px) + 100px);
+    }
+}
+
 /* Light theme adjustments */
 [data-theme="light"] .bottom-nav {
     background: var(--darker-grey);
@@ -6048,8 +6133,24 @@ input:checked + .toggle-slider:before {
 }
 
 /* ==========================================
-   FLOATING SETTINGS BUTTON (MOBILE)
+   FLOATING SETTINGS BUTTON (MOBILE) - HOME PAGE ONLY
    ========================================== */
+
+/* 
+   Settings Button Visibility Logic:
+   
+   The floating settings button in the top-right corner should ONLY appear
+   on the Home/Landing page when viewed on mobile devices.
+   
+   Implementation:
+   1. Button is hidden by default (display: none)
+   2. On mobile (max-width: 767px), it shows ONLY when body has 'on-landing-page' class
+   3. JavaScript adds/removes this class via showPage() function in main.js
+   4. The class is removed when navigating to practice or statistics pages
+   
+   This ensures the button doesn't clutter other pages while remaining
+   easily accessible from the home screen.
+*/
 
 /* Floating settings button - top-right corner, mobile only */
 .floating-settings-btn {
@@ -6148,10 +6249,11 @@ input:checked + .toggle-slider:before {
    MAIN CONTENT PADDING FOR BOTTOM NAV
    ========================================== */
 
-/* Add padding to main content to prevent overlap with bottom nav */
+/* Add padding to main content to prevent overlap with bottom nav on mobile */
 @media (max-width: 767px) {
     .main-content {
-        padding-bottom: calc(82px + env(safe-area-inset-bottom, 0));
+        /* Padding accounts for bottom nav height + safe area + extra buffer */
+        padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px) + 8px);
     }
     
     /* Ensure landing page footer isn't hidden */
