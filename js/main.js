@@ -135,7 +135,7 @@ function setupNavigation() {
     });
     document.getElementById('statistics-link').addEventListener('click', (e) => {
         e.preventDefault();
-        showPage('statistics-page');
+        showPage('profile-page');
     });
     document.getElementById('logout-link').addEventListener('click', (e) => {
         e.preventDefault();
@@ -147,10 +147,19 @@ function setupNavigation() {
     document.getElementById('preferences-back').addEventListener('click', () => showPage('landing-page'));
     document.getElementById('import-export-back').addEventListener('click', () => showPage('landing-page'));
     document.getElementById('account-back').addEventListener('click', () => showPage('landing-page'));
-    document.getElementById('statistics-back').addEventListener('click', () => showPage('landing-page'));
+    
+    // Profile page back buttons
+    document.getElementById('avatar-back').addEventListener('click', () => showPage('profile-page'));
+    document.getElementById('achievements-back').addEventListener('click', () => showPage('profile-page'));
+    document.getElementById('player-dna-back').addEventListener('click', () => showPage('profile-page'));
+    document.getElementById('activity-calendar-back').addEventListener('click', () => showPage('profile-page'));
+    document.getElementById('personal-goals-back').addEventListener('click', () => showPage('profile-page'));
     
     // Import/Export functionality
     setupImportExportControls();
+    
+    // Profile page functionality
+    setupProfilePage();
     
     // Setup mobile navigation (reuse desktop handlers)
     setupMobileNavigation();
@@ -181,8 +190,8 @@ function setupMobileNavigation() {
     if (mobileStatisticsBtn && desktopStatisticsLink) {
         mobileStatisticsBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Call the same function as desktop: showPage('statistics-page')
-            showPage('statistics-page');
+            // Call the same function as desktop: showPage('profile-page')
+            showPage('profile-page');
         });
     }
     
@@ -1080,8 +1089,6 @@ function showPage(pageId) {
             loadCurrentRange();
         } else if (pageId === 'practice-page') {
             initializePracticePage();
-        } else if (pageId === 'statistics-page') {
-            loadAndDisplayStatistics();
         } else if (pageId === 'import-export-page') {
             updateRangeDataStatus();
         }
@@ -3191,11 +3198,6 @@ function saveSessionData() {
     try {
         localStorage.setItem('practiceSessionHistory', JSON.stringify(sessionHistory));
         console.log('Session data saved successfully');
-        
-        // Update statistics display if we're on the statistics page
-        if (document.getElementById('statistics-page').classList.contains('active')) {
-            loadAndDisplayStatistics();
-        }
     } catch (error) {
         console.warn('Error saving session data:', error);
     }
@@ -3785,6 +3787,219 @@ function updateRangeDataStatus() {
         statusIcon.innerHTML = '<img src="assets/ranges_icon.png" alt="" class="status-icon-img">';
         statusTitle.textContent = 'Default Ranges';
         statusDescription.textContent = `Using default preflop ranges loaded from ${DEFAULT_RANGES_PATH}. ${Object.keys(defaultRanges).length} matchups available.`;
+    }
+}
+
+// ==========================================
+// PROFILE PAGE FUNCTIONALITY
+// ==========================================
+
+function setupProfilePage() {
+    // Profile avatar click - navigate to avatar selection
+    const profileAvatar = document.getElementById('profile-avatar');
+    if (profileAvatar) {
+        profileAvatar.addEventListener('click', () => {
+            showPage('avatar-selection-page');
+        });
+    }
+    
+    // Profile edit name button
+    const editNameBtn = document.getElementById('profile-edit-name');
+    if (editNameBtn) {
+        editNameBtn.addEventListener('click', () => {
+            const profileNameEl = document.getElementById('profile-name');
+            if (!profileNameEl) return;
+            
+            const currentName = profileNameEl.textContent.trim();
+            const newName = prompt('Enter your new name:', currentName);
+            
+            if (newName && newName.trim() !== '' && newName.trim() !== currentName) {
+                profileNameEl.textContent = newName.trim();
+                // Optionally save to localStorage
+                try {
+                    localStorage.setItem('profile-name', newName.trim());
+                } catch (error) {
+                    console.warn('Could not save name to localStorage:', error);
+                }
+            }
+        });
+    }
+    
+    // Load saved name on page load
+    const profileNameEl = document.getElementById('profile-name');
+    if (profileNameEl) {
+        try {
+            const savedName = localStorage.getItem('profile-name');
+            if (savedName) {
+                profileNameEl.textContent = savedName;
+            }
+        } catch (error) {
+            console.warn('Could not load name from localStorage:', error);
+        }
+    }
+    
+    // Section cards - navigate to respective subpages
+    const achievementsPreview = document.getElementById('achievements-preview');
+    if (achievementsPreview) {
+        achievementsPreview.addEventListener('click', () => {
+            showPage('profile-achievements-page');
+        });
+    }
+    
+    const playerDnaPreview = document.getElementById('player-dna-preview');
+    if (playerDnaPreview) {
+        playerDnaPreview.addEventListener('click', () => {
+            showPage('profile-player-dna-page');
+        });
+    }
+    
+    const activityCalendarPreview = document.getElementById('activity-calendar-preview');
+    if (activityCalendarPreview) {
+        activityCalendarPreview.addEventListener('click', () => {
+            showPage('profile-activity-calendar-page');
+        });
+    }
+    
+    const personalGoalsPreview = document.getElementById('personal-goals-preview');
+    if (personalGoalsPreview) {
+        personalGoalsPreview.addEventListener('click', () => {
+            showPage('profile-personal-goals-page');
+        });
+    }
+    
+    // Calendar navigation
+    setupCalendarNavigation();
+    
+    // Badge flip functionality
+    setupBadgeFlip();
+    
+    // Personal Goals Controls
+    setupPersonalGoalsControls();
+}
+
+function setupBadgeFlip() {
+    const badgeItems = document.querySelectorAll('.badge-item.clickable');
+    
+    badgeItems.forEach(badge => {
+        // Don't allow flipping locked badges
+        if (badge.classList.contains('locked')) {
+            return;
+        }
+        
+        badge.addEventListener('click', function() {
+            this.classList.toggle('flipped');
+        });
+    });
+}
+
+function setupCalendarNavigation() {
+    let currentMonth = 10; // November (0-indexed)
+    let currentYear = 2025;
+    
+    const calendarPrevBtn = document.getElementById('calendar-prev');
+    const calendarNextBtn = document.getElementById('calendar-next');
+    const calendarMonthEl = document.getElementById('calendar-month');
+    
+    if (calendarPrevBtn) {
+        calendarPrevBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendarDisplay();
+        });
+    }
+    
+    if (calendarNextBtn) {
+        calendarNextBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendarDisplay();
+        });
+    }
+    
+    function updateCalendarDisplay() {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        if (calendarMonthEl) {
+            calendarMonthEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        }
+        
+        // In a real implementation, you would regenerate the calendar grid here
+        console.log(`Calendar updated to ${monthNames[currentMonth]} ${currentYear}`);
+    }
+}
+
+function setupPersonalGoalsControls() {
+    // Goal values (starting values)
+    let goalDays = 3; // 1-7
+    let goalHands = 100; // 10-300, step by 10
+    
+    // Days goal controls
+    const goalDaysValue = document.getElementById('goal-days-value');
+    const goalDaysBar = document.getElementById('goal-days-bar');
+    const goalDaysMinus = document.getElementById('goal-days-minus');
+    const goalDaysPlus = document.getElementById('goal-days-plus');
+    
+    if (goalDaysMinus) {
+        goalDaysMinus.addEventListener('click', () => {
+            if (goalDays > 1) {
+                goalDays--;
+                updateDaysGoal();
+            }
+        });
+    }
+    
+    if (goalDaysPlus) {
+        goalDaysPlus.addEventListener('click', () => {
+            if (goalDays < 7) {
+                goalDays++;
+                updateDaysGoal();
+            }
+        });
+    }
+    
+    function updateDaysGoal() {
+        if (goalDaysValue) goalDaysValue.textContent = goalDays;
+        // Calculate percentage for vertical bar: (goalDays - 1) / 6 * 100
+        const percentage = ((goalDays - 1) / 6) * 100;
+        if (goalDaysBar) goalDaysBar.style.height = percentage + '%';
+    }
+    
+    // Hands goal controls
+    const goalHandsValue = document.getElementById('goal-hands-value');
+    const goalHandsBar = document.getElementById('goal-hands-bar');
+    const goalHandsMinus = document.getElementById('goal-hands-minus');
+    const goalHandsPlus = document.getElementById('goal-hands-plus');
+    
+    if (goalHandsMinus) {
+        goalHandsMinus.addEventListener('click', () => {
+            if (goalHands > 10) {
+                goalHands -= 10;
+                updateHandsGoal();
+            }
+        });
+    }
+    
+    if (goalHandsPlus) {
+        goalHandsPlus.addEventListener('click', () => {
+            if (goalHands < 300) {
+                goalHands += 10;
+                updateHandsGoal();
+            }
+        });
+    }
+    
+    function updateHandsGoal() {
+        if (goalHandsValue) goalHandsValue.textContent = goalHands;
+        // Calculate percentage for vertical bar: (goalHands - 10) / 290 * 100
+        const percentage = ((goalHands - 10) / 290) * 100;
+        if (goalHandsBar) goalHandsBar.style.height = percentage + '%';
     }
 }
 

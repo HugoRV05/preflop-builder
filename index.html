@@ -82,7 +82,7 @@
                     <button class="dropdown-btn">👤 Profile</button>
                     <div class="dropdown-content">
                         <a href="#" id="account-link">🏠 My Account</a>
-                        <a href="#" id="statistics-link">📊 Statistics</a>
+                        <a href="#" id="statistics-link">👤 Profile</a>
                         <a href="#" id="logout-link">🚪 Logout</a>
                     </div>
                 </div>
@@ -969,48 +969,535 @@
             </div>
         </section>
 
-        <section id="statistics-page" class="page">
-            
-            <div class="settings-container">
-                <div class="settings-header">
-                    <button class="back-btn" id="statistics-back">← Back</button>
-                    <h2>📊 Statistics</h2>
+        <!-- Profile Page -->
+        <section id="profile-page" class="page">
+            <div class="profile-container">
+                <!-- Profile Core Section -->
+                <div class="profile-core">
+                    <div class="profile-avatar" id="profile-avatar">
+                        <img src="assets/logosinfondo500.png" alt="Avatar" class="avatar-image">
+                    </div>
+                    <div class="profile-name-section">
+                        <h2 class="profile-name" id="profile-name">Player Name</h2>
+                        <button class="profile-edit-btn" id="profile-edit-name" aria-label="Edit name">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="settings-content">
-                    <!-- Overall Statistics Summary -->
-                    <div class="stats-summary">
-                        <h3>Overall Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-number" id="total-hands-practiced">0</div>
-                                <div class="stat-label">Hands Practiced</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="overall-accuracy">0%</div>
-                                <div class="stat-label">Overall Accuracy</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="total-sessions">0</div>
-                                <div class="stat-label">Sessions Completed</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-number" id="total-study-time">0h</div>
-                                <div class="stat-label">Total Study Time</div>
-                            </div>
+
+                <!-- Skill Breakdown Section -->
+                <div class="skill-breakdown-wrapper">
+                    <h3 class="skill-breakdown-title">Quick Summary</h3>
+                    <div class="skill-breakdown-section">
+                        <div class="skill-card">
+                            <div class="skill-icon">🎯</div>
+                            <div class="skill-label">Accuracy</div>
+                            <div class="skill-value">85%</div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">⚡</div>
+                            <div class="skill-label">Speed</div>
+                            <div class="skill-value">2.3s</div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">🔥</div>
+                            <div class="skill-label">Streak</div>
+                            <div class="skill-value">12</div>
                         </div>
                     </div>
-                    
-                    <!-- Session History -->
-                    <div class="session-history">
-                        <h3>Session History</h3>
-                        <div class="session-history-container">
-                            <div id="session-history-list" class="session-list">
-                                <!-- Session entries will be populated by JavaScript -->
-                                <div class="no-sessions-message">
-                                    <p>No practice sessions yet. Start practicing to see your session history!</p>
+                </div>
+
+                <!-- Section Groups -->
+                <div class="profile-sections">
+                    <!-- Achievements Preview -->
+                    <div class="profile-section-card" id="achievements-preview">
+                        <div class="section-header">
+                            <div class="section-icon">🏆</div>
+                            <h3>Achievements</h3>
+                        </div>
+                        <div class="section-preview achievements-preview-content">
+                            <div class="achievements-count">
+                                <span class="count-number">5</span>
+                                <span class="count-label">Badges Unlocked</span>
+                            </div>
+                            <div class="last-badges-section">
+                                <h4 class="last-badges-title">Last 3 Badges</h4>
+                                <div class="preview-badges-large">
+                                    <div class="badge-preview-item">
+                                        <div class="badge-icon-large">🎖️</div>
+                                        <span class="badge-preview-name">First Win</span>
+                                    </div>
+                                    <div class="badge-preview-item">
+                                        <div class="badge-icon-large">⭐</div>
+                                        <span class="badge-preview-name">10 Sessions</span>
+                                    </div>
+                                    <div class="badge-preview-item">
+                                        <div class="badge-icon-large">💎</div>
+                                        <span class="badge-preview-name">100 Hands</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="section-arrow">→</div>
+                    </div>
+
+                    <!-- Player DNA Preview -->
+                    <div class="profile-section-card" id="player-dna-preview">
+                        <div class="section-header">
+                            <div class="section-icon">🧬</div>
+                            <h3>Player DNA</h3>
+                        </div>
+                        <div class="section-preview dna-preview-content">
+                            <div class="dna-card style-card">
+                                <div class="dna-card-icon">🎯</div>
+                                <div class="dna-card-label">Style</div>
+                                <div class="dna-card-value">Tight-Aggressive</div>
+                            </div>
+                            <div class="dna-positions-mini">
+                                <div class="position-mini strong">
+                                    <span class="position-mini-label">Best</span>
+                                    <span class="position-mini-value">BU</span>
+                                </div>
+                                <div class="position-mini weak">
+                                    <span class="position-mini-label">Weak</span>
+                                    <span class="position-mini-value">SB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-arrow">→</div>
+                    </div>
+
+                    <!-- Activity Calendar Preview -->
+                    <div class="profile-section-card" id="activity-calendar-preview">
+                        <div class="section-header">
+                            <div class="section-icon">📅</div>
+                            <h3>Activity Calendar</h3>
+                        </div>
+                        <div class="section-preview calendar-preview-content">
+                            <div class="week-circles">
+                                <div class="day-circle active">
+                                    <span class="day-number">18</span>
+                                </div>
+                                <div class="day-circle active">
+                                    <span class="day-number">19</span>
+                                </div>
+                                <div class="day-circle">
+                                    <span class="day-number">20</span>
+                                </div>
+                                <div class="day-circle active">
+                                    <span class="day-number">21</span>
+                                </div>
+                                <div class="day-circle active">
+                                    <span class="day-number">22</span>
+                                </div>
+                                <div class="day-circle active">
+                                    <span class="day-number">23</span>
+                                </div>
+                                <div class="day-circle today">
+                                    <span class="day-number">24</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-arrow">→</div>
+                    </div>
+
+                    <!-- Personal Goals Preview -->
+                    <div class="profile-section-card" id="personal-goals-preview">
+                        <div class="section-header">
+                            <div class="section-icon">🎯</div>
+                            <h3>Personal Goals</h3>
+                        </div>
+                        <div class="section-preview goals-preview-content">
+                            <div class="goal-preview-item">
+                                <div class="goal-preview-label">
+                                    <span class="goal-emoji">📅</span>
+                                    <span>Practice Days</span>
+                                </div>
+                                <div class="goal-preview-bar-thick">
+                                    <div class="goal-preview-track-thick">
+                                        <div class="goal-preview-progress-thick" style="width: 66.6%">
+                                            <span class="goal-text-inside">2/3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="goal-preview-item">
+                                <div class="goal-preview-label">
+                                    <span class="goal-emoji">🃏</span>
+                                    <span>Hands Played</span>
+                                </div>
+                                <div class="goal-preview-bar-thick">
+                                    <div class="goal-preview-track-thick">
+                                        <div class="goal-preview-progress-thick" style="width: 45%">
+                                            <span class="goal-text-inside">45/100</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-arrow">→</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Avatar Selection Page -->
+        <section id="avatar-selection-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="avatar-back">← Back</button>
+                    <h2>Choose Avatar</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="avatar-grid">
+                        <div class="avatar-option">
+                            <img src="assets/logosinfondo500.png" alt="Avatar 1">
+                        </div>
+                        <div class="avatar-option">
+                            <img src="assets/logogris1024.png" alt="Avatar 2">
+                        </div>
+                        <div class="avatar-option">
+                            <img src="assets/logoamarillo1024.png" alt="Avatar 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Achievements Page -->
+        <section id="profile-achievements-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="achievements-back">← Back</button>
+                    <h2>🏆 Achievements</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="achievements-section">
+                        <h3>Badges</h3>
+                        <div class="badges-grid">
+                            <div class="badge-item clickable" data-badge="first-win">
+                                <div class="badge-flip-card">
+                                    <div class="badge-flip-front">
+                                        <div class="badge-large">🎖️</div>
+                                        <span>First Win</span>
+                                    </div>
+                                    <div class="badge-flip-back">
+                                        <p>Complete your first practice session with at least 80% accuracy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-item clickable" data-badge="10-sessions">
+                                <div class="badge-flip-card">
+                                    <div class="badge-flip-front">
+                                        <div class="badge-large">⭐</div>
+                                        <span>10 Sessions</span>
+                                    </div>
+                                    <div class="badge-flip-back">
+                                        <p>Complete 10 practice sessions to earn this badge</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-item clickable" data-badge="100-hands">
+                                <div class="badge-flip-card">
+                                    <div class="badge-flip-front">
+                                        <div class="badge-large">💎</div>
+                                        <span>100 Hands</span>
+                                    </div>
+                                    <div class="badge-flip-back">
+                                        <p>Practice 100 hands to unlock this achievement</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-item clickable locked" data-badge="perfectionist">
+                                <div class="badge-flip-card">
+                                    <div class="badge-flip-front">
+                                        <div class="badge-large">🏅</div>
+                                        <span>Perfectionist</span>
+                                    </div>
+                                    <div class="badge-flip-back">
+                                        <p>Complete a session with 100% accuracy (25+ hands)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-section">
+                        <h3>Timeline</h3>
+                        <div class="timeline-list">
+                            <div class="timeline-item">
+                                <div class="timeline-date">Nov 20, 2025</div>
+                                <div class="timeline-content">Earned "First Win" badge</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">Nov 18, 2025</div>
+                                <div class="timeline-content">Completed 10th session</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">Nov 15, 2025</div>
+                                <div class="timeline-content">Started journey</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Player DNA Page -->
+        <section id="profile-player-dna-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="player-dna-back">← Back</button>
+                    <h2>🧬 Player DNA</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="dna-section">
+                        <h3>Playing Style</h3>
+                        <div class="style-indicator">
+                            <div class="style-bar">
+                                <div class="style-label-left">Tight</div>
+                                <div class="style-track">
+                                    <div class="style-marker" style="left: 65%"></div>
+                                </div>
+                                <div class="style-label-right">Loose</div>
+                            </div>
+                            <div class="style-bar">
+                                <div class="style-label-left">Passive</div>
+                                <div class="style-track">
+                                    <div class="style-marker" style="left: 75%"></div>
+                                </div>
+                                <div class="style-label-right">Aggressive</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="positions-stats-section">
+                        <h3>Position Stats</h3>
+                        <div class="positions-table">
+                            <div class="position-row">
+                                <span class="position-name">BU</span>
+                                <div class="position-bar">
+                                    <div class="position-fill" style="width: 92%"></div>
+                                </div>
+                                <span class="position-value">92%</span>
+                            </div>
+                            <div class="position-row">
+                                <span class="position-name">CO</span>
+                                <div class="position-bar">
+                                    <div class="position-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="position-value">85%</span>
+                            </div>
+                            <div class="position-row">
+                                <span class="position-name">MP</span>
+                                <div class="position-bar">
+                                    <div class="position-fill" style="width: 78%"></div>
+                                </div>
+                                <span class="position-value">78%</span>
+                            </div>
+                            <div class="position-row">
+                                <span class="position-name">BB</span>
+                                <div class="position-bar">
+                                    <div class="position-fill" style="width: 72%"></div>
+                                </div>
+                                <span class="position-value">72%</span>
+                            </div>
+                            <div class="position-row">
+                                <span class="position-name">SB</span>
+                                <div class="position-bar">
+                                    <div class="position-fill" style="width: 65%"></div>
+                                </div>
+                                <span class="position-value">65%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="charts-placeholder">
+                        <p>📊 Advanced charts coming soon</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Activity Calendar Page -->
+        <section id="profile-activity-calendar-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="activity-calendar-back">← Back</button>
+                    <h2>📅 Activity Calendar</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="calendar-navigation">
+                        <button class="calendar-nav-btn" id="calendar-prev">←</button>
+                        <h3 id="calendar-month">November 2025</h3>
+                        <button class="calendar-nav-btn" id="calendar-next">→</button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                        
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day active">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day active">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day active">6</div>
+                        <div class="calendar-day">7</div>
+                        <div class="calendar-day">8</div>
+                        <div class="calendar-day active">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day active">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day">14</div>
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day">21</div>
+                        <div class="calendar-day">22</div>
+                        <div class="calendar-day today">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28</div>
+                        <div class="calendar-day">29</div>
+                        <div class="calendar-day">30</div>
+                    </div>
+                    <div class="activity-stats">
+                        <div class="activity-stat-item">
+                            <span class="activity-stat-label">Sessions this week:</span>
+                            <span class="activity-stat-value">5</span>
+                        </div>
+                        <div class="activity-stat-item">
+                            <span class="activity-stat-label">Hands played:</span>
+                            <span class="activity-stat-value">250</span>
+                        </div>
+                        <div class="activity-stat-item">
+                            <span class="activity-stat-label">Best streak:</span>
+                            <span class="activity-stat-value">12 days</span>
+                        </div>
+                        <div class="activity-stat-item">
+                            <span class="activity-stat-label">Current streak:</span>
+                            <span class="activity-stat-value">3 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Personal Goals Page -->
+        <section id="profile-personal-goals-page" class="page">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <button class="back-btn" id="personal-goals-back">← Back</button>
+                    <h2>🎯 Personal Goals</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="goals-section-vertical">
+                        <h3>Weekly Goals</h3>
+                        
+                        <div class="goals-grid-vertical">
+                            <!-- Days Goal Vertical -->
+                            <div class="goal-item-vertical">
+                                <div class="goal-vertical-header">
+                                    <span class="goal-vertical-icon">📅</span>
+                                    <span class="goal-vertical-title">Practice Days</span>
+                                </div>
+                                
+                                <div class="goal-vertical-controls">
+                                    <button class="goal-btn-vertical plus" id="goal-days-plus">+</button>
+                                    <div class="goal-vertical-value" id="goal-days-value">3</div>
+                                    <button class="goal-btn-vertical minus" id="goal-days-minus">−</button>
+                                </div>
+                                
+                                <div class="goal-vertical-bar-container">
+                                    <div class="goal-vertical-scale">
+                                        <span>7</span>
+                                        <span>6</span>
+                                        <span>5</span>
+                                        <span>4</span>
+                                        <span>3</span>
+                                        <span>2</span>
+                                        <span>1</span>
+                                    </div>
+                                    <div class="goal-vertical-bars">
+                                        <div class="goal-vertical-bar-track">
+                                            <div class="goal-vertical-bar-goal" id="goal-days-bar" style="height: 42.8%"></div>
+                                            <div class="goal-vertical-bar-progress" style="height: 28.5%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="goal-vertical-stats">
+                                    <div class="goal-stat-row">
+                                        <span class="goal-stat-label">Current:</span>
+                                        <span class="goal-stat-value days">2 days</span>
+                                    </div>
+                                    <div class="goal-stat-row">
+                                        <span class="goal-stat-label">Target:</span>
+                                        <span class="goal-stat-value target">3 days</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hands Goal Vertical -->
+                            <div class="goal-item-vertical">
+                                <div class="goal-vertical-header">
+                                    <span class="goal-vertical-icon">🃏</span>
+                                    <span class="goal-vertical-title">Hands Played</span>
+                                </div>
+                                
+                                <div class="goal-vertical-controls">
+                                    <button class="goal-btn-vertical plus" id="goal-hands-plus">+</button>
+                                    <div class="goal-vertical-value" id="goal-hands-value">100</div>
+                                    <button class="goal-btn-vertical minus" id="goal-hands-minus">−</button>
+                                </div>
+                                
+                                <div class="goal-vertical-bar-container">
+                                    <div class="goal-vertical-scale">
+                                        <span>300</span>
+                                        <span>250</span>
+                                        <span>200</span>
+                                        <span>150</span>
+                                        <span>100</span>
+                                        <span>50</span>
+                                        <span>10</span>
+                                    </div>
+                                    <div class="goal-vertical-bars">
+                                        <div class="goal-vertical-bar-track">
+                                            <div class="goal-vertical-bar-goal" id="goal-hands-bar" style="height: 31%"></div>
+                                            <div class="goal-vertical-bar-progress" style="height: 14%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="goal-vertical-stats">
+                                    <div class="goal-stat-row">
+                                        <span class="goal-stat-label">Current:</span>
+                                        <span class="goal-stat-value hands">45 hands</span>
+                                    </div>
+                                    <div class="goal-stat-row">
+                                        <span class="goal-stat-label">Target:</span>
+                                        <span class="goal-stat-value target">100 hands</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="goals-tip">
+                        <p>💡 Tip: Consistent practice leads to better results. Set realistic goals and track your progress!</p>
                     </div>
                 </div>
             </div>
@@ -1037,7 +1524,7 @@
             <span class="nav-label">Home</span>
         </button>
         
-        <button class="bottom-nav-item" id="bottom-nav-profile" data-page="statistics-page" aria-label="Profile">
+        <button class="bottom-nav-item" id="bottom-nav-profile" data-page="profile-page" aria-label="Profile">
             <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>

@@ -6811,3 +6811,1145 @@ input:checked + .toggle-slider:before {
     transform: translateY(-10px);
 }
 
+/* ==========================================
+   PROFILE PAGE STYLES
+   ========================================== */
+
+/* Profile Container */
+.profile-container {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 20px 16px 100px;
+    background: var(--background);
+}
+
+@media (min-width: 768px) {
+    .profile-container {
+        max-width: 600px;
+        padding: 30px 20px 40px;
+    }
+}
+
+/* Profile Core Section */
+.profile-core {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 24px 16px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-name-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.profile-edit-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.profile-edit-btn:hover {
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.profile-edit-btn:active {
+    transform: scale(0.95);
+}
+
+.profile-edit-btn svg {
+    stroke: var(--text-primary);
+}
+
+/* Skill Breakdown Section */
+.skill-breakdown-wrapper {
+    margin-bottom: 24px;
+}
+
+.skill-breakdown-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 12px 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+.skill-breakdown-section {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 0 4px 8px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.skill-card {
+    flex: 1;
+    min-width: 100px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.skill-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.15);
+}
+
+.skill-icon {
+    font-size: 28px;
+}
+
+.skill-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.skill-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Profile Sections */
+.profile-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-section-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+}
+
+.profile-section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 212, 255, 0.15);
+    border-color: var(--primary);
+}
+
+.profile-section-card:active {
+    transform: translateY(0);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.section-icon {
+    font-size: 28px;
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.section-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.preview-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.preview-label {
+    color: var(--text-secondary);
+}
+
+.preview-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Achievements Preview Styles */
+.achievements-preview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.achievements-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.count-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFD700;
+    line-height: 1;
+}
+
+.count-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.last-badges-section {
+    width: 100%;
+}
+
+.last-badges-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 12px 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+.preview-badges-large {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.badge-preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-icon-large {
+    font-size: 40px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.badge-preview-name {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 70px;
+    line-height: 1.2;
+}
+
+.preview-badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.badge-icon {
+    font-size: 24px;
+}
+
+/* Player DNA Preview Styles */
+.dna-preview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dna-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 8px;
+}
+
+.dna-card-icon {
+    font-size: 32px;
+}
+
+.dna-card-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dna-card-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.dna-positions-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.position-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.position-mini.strong {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.position-mini.weak {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.position-mini-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.position-mini-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Activity Calendar Preview Styles */
+.calendar-preview-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.week-circles {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.day-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.day-circle.active {
+    background: linear-gradient(135deg, #ff9500 0%, #ff6b00 100%);
+    box-shadow: 0 2px 6px rgba(255, 149, 0, 0.3);
+}
+
+.day-circle.today {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+    box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.day-number {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.day-circle.active .day-number,
+.day-circle.today .day-number {
+    color: #ffffff;
+}
+
+.mini-calendar {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.day-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s ease;
+}
+
+.day-dot.active {
+    background: #ff9500;
+}
+
+/* Personal Goals Preview Styles */
+.goals-preview-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.goal-preview-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.goal-preview-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.goal-emoji {
+    font-size: 18px;
+}
+
+.goal-preview-bar-thick {
+    width: 100%;
+}
+
+.goal-preview-track-thick {
+    position: relative;
+    height: 24px;
+    background: var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.goal-preview-progress-thick {
+    position: relative;
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #66BB6A);
+    border-radius: 12px;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.goal-text-inside {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.preview-progress {
+    margin-top: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.section-arrow {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--primary);
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.profile-section-card:hover .section-arrow {
+    transform: translateY(-50%) translateX(4px);
+    opacity: 1;
+}
+
+/* Avatar Selection Page */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 16px;
+    padding: 20px 0;
+}
+
+.avatar-option {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.avatar-option:hover {
+    transform: scale(1.05);
+    border-color: var(--primary);
+}
+
+.avatar-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Achievements Page */
+.achievements-section,
+.timeline-section {
+    margin-bottom: 32px;
+}
+
+.achievements-section h3,
+.timeline-section h3 {
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 16px;
+}
+
+.badge-item {
+    perspective: 1000px;
+    cursor: pointer;
+    min-height: 120px;
+}
+
+.badge-item.clickable .badge-flip-card {
+    cursor: pointer;
+}
+
+.badge-flip-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.badge-item.flipped .badge-flip-card {
+    transform: rotateY(180deg);
+}
+
+.badge-flip-front,
+.badge-flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.badge-flip-front {
+    z-index: 2;
+}
+
+.badge-flip-back {
+    transform: rotateY(180deg);
+    padding: 12px;
+}
+
+.badge-flip-back p {
+    margin: 0;
+    font-size: 11px;
+    text-align: center;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.badge-item:hover .badge-flip-card {
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.badge-item.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.badge-item.locked .badge-flip-card {
+    cursor: not-allowed;
+}
+
+.badge-large {
+    font-size: 40px;
+}
+
+.badge-flip-front span {
+    font-size: 11px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.timeline-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+}
+
+.timeline-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.timeline-content {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+/* Player DNA Page */
+.dna-section,
+.positions-stats-section,
+.charts-placeholder {
+    margin-bottom: 32px;
+}
+
+.dna-section h3,
+.positions-stats-section h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.style-indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.style-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.style-label-left,
+.style-label-right {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.style-track {
+    position: relative;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.style-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 3px solid var(--card-bg);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4);
+}
+
+.style-bar {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+}
+
+.positions-table {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.position-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 50px;
+    align-items: center;
+    gap: 12px;
+}
+
+.position-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.position-bar {
+    height: 24px;
+    background: var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.position-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #00ffff);
+    border-radius: 12px;
+    transition: width 0.3s ease;
+}
+
+.position-value {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.charts-placeholder {
+    padding: 40px 20px;
+    text-align: center;
+    background: var(--card-bg);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    color: var(--text-secondary);
+}
+
+/* Activity Calendar Page */
+.calendar-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-nav-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.calendar-nav-btn:hover {
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.calendar-nav-btn:active {
+    transform: scale(0.95);
+}
+
+#calendar-month {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 8px 0;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.calendar-day.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.calendar-day.active {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+.calendar-day.today {
+    background: var(--primary);
+    color: var(--background);
+    font-weight: 700;
+}
+
+.calendar-day:not(.empty):hover {
+    transform: scale(1.1);
+}
+
+.activity-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.activity-stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.activity-stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.activity-stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Personal Goals Page - Vertical Bars */
+.goals-section-vertical {
+    margin-bottom: 32px;
+}
+
+.goals-section-vertical h3 {
+    margin-bottom: 24px;
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.goals-grid-vertical {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.goal-item-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.goal-vertical-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.goal-vertical-icon {
+    font-size: 32px;
+}
+
+.goal-vertical-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.goal-vertical-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.goal-btn-vertical {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    color: #4CAF50;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.goal-btn-vertical:hover {
+    background: rgba(76, 175, 80, 0.1);
+    border-color: #4CAF50;
+    transform: scale(1.1);
+}
+
+.goal-btn-vertical:active {
+    transform: scale(0.95);
+}
+
+.goal-vertical-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #FFD700;
+}
+
+.goal-vertical-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 12px;
+    height: 200px;
+}
+
+.goal-vertical-scale {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-secondary);
+    height: 100%;
+    padding: 4px 0;
+}
+
+.goal-vertical-bars {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.goal-vertical-bar-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.goal-vertical-bar-goal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, #FFD700, #FFA000);
+    border-radius: 8px 8px 0 0;
+    transition: height 0.3s ease;
+    opacity: 0.6;
+}
+
+.goal-vertical-bar-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, #4CAF50, #2E7D32);
+    border-radius: 8px 8px 0 0;
+    transition: height 0.3s ease;
+    z-index: 1;
+}
+
+.goal-vertical-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.goal-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.goal-stat-label {
+    color: var(--text-secondary);
+}
+
+.goal-stat-value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.goal-stat-value.days {
+    color: #4CAF50;
+}
+
+.goal-stat-value.hands {
+    color: #4CAF50;
+}
+
+.goal-stat-value.target {
+    color: #FFD700;
+}
+
+.progress-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    display: block;
+}
+
+.goals-tip {
+    padding: 16px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+}
+
+.goals-tip p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 430px) {
+    .profile-container {
+        padding: 16px 12px 100px;
+    }
+    
+    .skill-breakdown-section {
+        gap: 8px;
+    }
+    
+    .skill-card {
+        min-width: 90px;
+        padding: 12px 8px;
+    }
+    
+    .profile-section-card {
+        padding: 16px;
+    }
+    
+    .section-header h3 {
+        font-size: 16px;
+    }
+    
+    .calendar-grid {
+        gap: 4px;
+    }
+    
+    .calendar-day {
+        font-size: 12px;
+    }
+    
+    .activity-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .goals-grid-vertical {
+        grid-template-columns: 1fr;
+    }
+    
+    .goal-vertical-bar-container {
+        height: 160px;
+    }
+}
+
