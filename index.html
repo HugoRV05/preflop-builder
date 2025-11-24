@@ -1019,10 +1019,6 @@
                             <h3>Achievements</h3>
                         </div>
                         <div class="section-preview achievements-preview-content">
-                            <div class="achievements-count">
-                                <span class="count-number">5</span>
-                                <span class="count-label">Badges Unlocked</span>
-                            </div>
                             <div class="last-badges-section">
                                 <h4 class="last-badges-title">Last 3 Badges</h4>
                                 <div class="preview-badges-large">
@@ -1050,20 +1046,41 @@
                             <div class="section-icon">🧬</div>
                             <h3>Player DNA</h3>
                         </div>
-                        <div class="section-preview dna-preview-content">
-                            <div class="dna-card style-card">
-                                <div class="dna-card-icon">🎯</div>
-                                <div class="dna-card-label">Style</div>
-                                <div class="dna-card-value">Tight-Aggressive</div>
-                            </div>
-                            <div class="dna-positions-mini">
-                                <div class="position-mini strong">
-                                    <span class="position-mini-label">Best</span>
-                                    <span class="position-mini-value">BU</span>
+                        <div class="section-preview dna-preview-redesign">
+                            <div class="dna-spectrum">
+                                <div class="spectrum-bar tight-loose">
+                                    <div class="spectrum-labels">
+                                        <span class="spectrum-label-left">Tight</span>
+                                        <span class="spectrum-label-right">Loose</span>
+                                    </div>
+                                    <div class="spectrum-track">
+                                        <div class="spectrum-indicator" style="left: 35%">
+                                            <span class="indicator-value">35%</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="position-mini weak">
-                                    <span class="position-mini-label">Weak</span>
-                                    <span class="position-mini-value">SB</span>
+                                <div class="spectrum-bar passive-aggressive">
+                                    <div class="spectrum-labels">
+                                        <span class="spectrum-label-left">Passive</span>
+                                        <span class="spectrum-label-right">Aggressive</span>
+                                    </div>
+                                    <div class="spectrum-track">
+                                        <div class="spectrum-indicator aggressive" style="left: 75%">
+                                            <span class="indicator-value">75%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dna-positions-badges">
+                                <div class="position-badge best">
+                                    <span class="position-badge-emoji">🌟</span>
+                                    <span class="position-badge-label">Best</span>
+                                    <span class="position-badge-value">BU</span>
+                                </div>
+                                <div class="position-badge worst">
+                                    <span class="position-badge-emoji">⚠️</span>
+                                    <span class="position-badge-label">Weak</span>
+                                    <span class="position-badge-value">SB</span>
                                 </div>
                             </div>
                         </div>
@@ -1078,22 +1095,22 @@
                         </div>
                         <div class="section-preview calendar-preview-content">
                             <div class="week-circles">
-                                <div class="day-circle active">
+                                <div class="day-circle active completed">
                                     <span class="day-number">18</span>
                                 </div>
-                                <div class="day-circle active">
+                                <div class="day-circle active completed">
                                     <span class="day-number">19</span>
                                 </div>
                                 <div class="day-circle">
                                     <span class="day-number">20</span>
                                 </div>
-                                <div class="day-circle active">
+                                <div class="day-circle active completed">
                                     <span class="day-number">21</span>
                                 </div>
-                                <div class="day-circle active">
+                                <div class="day-circle active completed">
                                     <span class="day-number">22</span>
                                 </div>
-                                <div class="day-circle active">
+                                <div class="day-circle active completed">
                                     <span class="day-number">23</span>
                                 </div>
                                 <div class="day-circle today">
@@ -1116,12 +1133,9 @@
                                     <span class="goal-emoji">📅</span>
                                     <span>Practice Days</span>
                                 </div>
-                                <div class="goal-preview-bar-thick">
-                                    <div class="goal-preview-track-thick">
-                                        <div class="goal-preview-progress-thick" style="width: 66.6%">
-                                            <span class="goal-text-inside">2/3</span>
-                                        </div>
-                                    </div>
+                                <div class="goal-preview-bar-full">
+                                    <div class="goal-preview-progress-full" style="width: 66.6%"></div>
+                                    <span class="goal-text-centered">2/3</span>
                                 </div>
                             </div>
                             <div class="goal-preview-item">
@@ -1129,12 +1143,9 @@
                                     <span class="goal-emoji">🃏</span>
                                     <span>Hands Played</span>
                                 </div>
-                                <div class="goal-preview-bar-thick">
-                                    <div class="goal-preview-track-thick">
-                                        <div class="goal-preview-progress-thick" style="width: 45%">
-                                            <span class="goal-text-inside">45/100</span>
-                                        </div>
-                                    </div>
+                                <div class="goal-preview-bar-full">
+                                    <div class="goal-preview-progress-full" style="width: 45%"></div>
+                                    <span class="goal-text-centered">45/100</span>
                                 </div>
                             </div>
                         </div>
