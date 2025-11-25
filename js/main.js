@@ -101,11 +101,31 @@ function initializeMobileSplashScreen() {
 }
 
 function initializeApp() {
+    setHoverCapabilityClass();
+    
     // Navigation event listeners
     setupNavigation();
     
     // Show landing page by default
     showPage('landing-page');
+}
+
+function setHoverCapabilityClass() {
+    const hoverMediaQuery = window.matchMedia('(hover: hover)');
+    
+    const updateHoverClass = () => {
+        if (!document.body) return;
+        document.body.classList.toggle('has-hover', hoverMediaQuery.matches);
+        document.body.classList.toggle('no-hover', !hoverMediaQuery.matches);
+    };
+    
+    updateHoverClass();
+    
+    if (typeof hoverMediaQuery.addEventListener === 'function') {
+        hoverMediaQuery.addEventListener('change', updateHoverClass);
+    } else if (typeof hoverMediaQuery.addListener === 'function') {
+        hoverMediaQuery.addListener(updateHoverClass);
+    }
 }
 
 function setupNavigation() {
@@ -3940,6 +3960,25 @@ function setupPersonalGoalsControls() {
     let goalDays = 3; // 1-7
     let goalHands = 100; // 10-300, step by 10
     
+    function attachGoalButtonFeedback(button) {
+        if (!button) return;
+        
+        button.addEventListener('click', () => {
+            button.classList.add('touch-feedback');
+            
+            if (button.dataset.feedbackTimeoutId) {
+                clearTimeout(Number(button.dataset.feedbackTimeoutId));
+            }
+            
+            const timeoutId = window.setTimeout(() => {
+                button.classList.remove('touch-feedback');
+                delete button.dataset.feedbackTimeoutId;
+            }, 1000);
+            
+            button.dataset.feedbackTimeoutId = timeoutId;
+        });
+    }
+    
     // Days goal controls
     const goalDaysValue = document.getElementById('goal-days-value');
     const goalDaysBar = document.getElementById('goal-days-bar');
@@ -3976,6 +4015,11 @@ function setupPersonalGoalsControls() {
     const goalHandsBar = document.getElementById('goal-hands-bar');
     const goalHandsMinus = document.getElementById('goal-hands-minus');
     const goalHandsPlus = document.getElementById('goal-hands-plus');
+    
+    attachGoalButtonFeedback(goalDaysMinus);
+    attachGoalButtonFeedback(goalDaysPlus);
+    attachGoalButtonFeedback(goalHandsMinus);
+    attachGoalButtonFeedback(goalHandsPlus);
     
     if (goalHandsMinus) {
         goalHandsMinus.addEventListener('click', () => {

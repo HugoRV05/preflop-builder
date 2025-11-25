@@ -7793,11 +7793,12 @@ input:checked + .toggle-slider:before {
 }
 
 .goal-vertical-icon {
-    font-size: 32px;
+    margin-top: -4px;
+    font-size: 24px;
 }
 
 .goal-vertical-title {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--text-primary);
     text-align: center;
@@ -7823,17 +7824,25 @@ input:checked + .toggle-slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.goal-btn-vertical:hover {
+.has-hover .goal-btn-vertical:hover {
     background: rgba(76, 175, 80, 0.1);
     border-color: #4CAF50;
     transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(76, 175, 80, 0.12);
 }
 
 .goal-btn-vertical:active {
     transform: scale(0.95);
+}
+
+.goal-btn-vertical.touch-feedback {
+    background: rgba(76, 175, 80, 0.1);
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 8px rgba(76, 175, 80, 0.12);
+    transform: scale(1.05);
 }
 
 .goal-vertical-value {
@@ -7991,11 +8000,57 @@ input:checked + .toggle-slider:before {
     }
     
     .goals-grid-vertical {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        flex-wrap: nowrap;
+    }
+    
+    .goal-item-vertical {
+        flex: 1 1 50%;
+        min-width: 0;
+        padding: 16px 12px;
+    }
+    
+    .goal-vertical-header {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .goal-vertical-title {
+        margin-left: 4px;
+        font-size: 14px;
+    }
+    
+    .goal-vertical-controls {
+        flex-direction: row;
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .goal-vertical-value {
+        font-size: 28px;
     }
     
     .goal-vertical-bar-container {
-        height: 160px;
+        height: 140px;
+        gap: 8px;
+    }
+    
+    .goal-vertical-scale {
+        font-size: 9px;
+    }
+    
+    .goal-vertical-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px 12px;
+    }
+    
+    .goal-stat-row {
+        flex: 1 1 45%;
+        font-size: 11px;
     }
 }
 
