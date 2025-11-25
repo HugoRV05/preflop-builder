@@ -3202,7 +3202,7 @@ body.on-landing-page .header-right {
    ========================================== */
 
 .practice-layout {
-    height: calc(100vh - var(--header-height));
+    height: 95svh;
     display: flex;
     flex-direction: column;
     background: var(--dark-grey);
