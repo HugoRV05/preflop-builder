@@ -3987,13 +3987,103 @@ function setupBadgeFlip() {
 }
 
 function setupCalendarNavigation() {
-    let currentMonth = 10; // November (0-indexed)
-    let currentYear = 2025;
+    const today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
     
     const calendarPrevBtn = document.getElementById('calendar-prev');
     const calendarNextBtn = document.getElementById('calendar-next');
     const calendarMonthEl = document.getElementById('calendar-month');
+    const calendarYearEl = document.getElementById('calendar-year');
+    const calendarDaysGrid = document.getElementById('calendar-days-grid');
+    const calendarContainer = document.getElementById('calendar-container');
     
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    function generateCalendarDays(month, year) {
+        if (!calendarDaysGrid) return;
+        
+        // Clear existing days
+        calendarDaysGrid.innerHTML = '';
+        
+        // Get first day of month and number of days
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        
+        // Add empty cells for days before the first day of the month
+        for (let i = 0; i < startingDayOfWeek; i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.className = 'calendar-day empty';
+            calendarDaysGrid.appendChild(emptyDay);
+        }
+        
+        // Add days of the month
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            dayElement.textContent = day;
+            
+            // Check if this is today
+            const currentDate = new Date(year, month, day);
+            const isToday = currentDate.toDateString() === today.toDateString();
+            
+            if (isToday) {
+                dayElement.classList.add('today');
+            }
+            
+            // In a real implementation, you would check if this day has activity
+            // For now, we'll randomly mark some days as active for demo purposes
+            // Remove this in production and replace with actual activity data
+            const randomActive = Math.random() > 0.7;
+            if (randomActive && !isToday) {
+                dayElement.classList.add('active');
+            }
+            
+            calendarDaysGrid.appendChild(dayElement);
+        }
+    }
+    
+    function updateCalendarDisplay(direction) {
+        // Update month and year display
+        if (calendarMonthEl) {
+            calendarMonthEl.textContent = monthNames[currentMonth];
+        }
+        if (calendarYearEl) {
+            calendarYearEl.textContent = currentYear;
+        }
+        
+        // Generate calendar days first
+        generateCalendarDays(currentMonth, currentYear);
+        
+        // Add slide animation class after a brief delay to ensure DOM is updated
+        if (calendarContainer && direction) {
+            // Reset animation
+            calendarContainer.className = 'calendar-container';
+            void calendarContainer.offsetWidth; // Trigger reflow
+            
+            // Apply animation based on direction
+            if (direction === 'prev') {
+                calendarContainer.classList.add('slide-right');
+            } else if (direction === 'next') {
+                calendarContainer.classList.add('slide-left');
+            }
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                if (calendarContainer) {
+                    calendarContainer.className = 'calendar-container';
+                }
+            }, 600);
+        }
+    }
+    
+    // Initialize calendar
+    updateCalendarDisplay();
+    
+    // Previous month button
     if (calendarPrevBtn) {
         calendarPrevBtn.addEventListener('click', () => {
             currentMonth--;
@@ -4001,10 +4091,11 @@ function setupCalendarNavigation() {
                 currentMonth = 11;
                 currentYear--;
             }
-            updateCalendarDisplay();
+            updateCalendarDisplay('prev');
         });
     }
     
+    // Next month button
     if (calendarNextBtn) {
         calendarNextBtn.addEventListener('click', () => {
             currentMonth++;
@@ -4012,21 +4103,25 @@ function setupCalendarNavigation() {
                 currentMonth = 0;
                 currentYear++;
             }
-            updateCalendarDisplay();
+            updateCalendarDisplay('next');
         });
     }
     
-    function updateCalendarDisplay() {
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                          'July', 'August', 'September', 'October', 'November', 'December'];
+    // Update stats (placeholder - replace with actual data)
+    function updateStats() {
+        const sessionsThisWeek = document.getElementById('sessions-this-week');
+        const handsPlayed = document.getElementById('hands-played');
+        const currentStreak = document.getElementById('current-streak');
+        const bestStreak = document.getElementById('best-streak');
         
-        if (calendarMonthEl) {
-            calendarMonthEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
-        }
-        
-        // In a real implementation, you would regenerate the calendar grid here
-        console.log(`Calendar updated to ${monthNames[currentMonth]} ${currentYear}`);
+        // Placeholder values - replace with actual data
+        if (sessionsThisWeek) sessionsThisWeek.textContent = '5';
+        if (handsPlayed) handsPlayed.textContent = '250';
+        if (currentStreak) currentStreak.textContent = '3';
+        if (bestStreak) bestStreak.textContent = '12';
     }
+    
+    updateStats();
 }
 
 function setupPersonalGoalsControls() {

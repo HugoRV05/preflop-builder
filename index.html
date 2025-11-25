@@ -730,7 +730,11 @@
                 
                 <!-- History Tracker -->
                 <div class="practice-history-tracker">
-                    <button class="history-nav-btn prev-btn" id="history-prev-btn" disabled>◀</button>
+                    <button class="history-nav-btn prev-btn" id="history-prev-btn" disabled aria-label="Previous">
+                        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
                     <div class="history-slots">
                         <div class="history-slot" data-hand="1">
                             <span class="slot-number">1</span>
@@ -748,7 +752,11 @@
                             <span class="slot-number">5</span>
                         </div>
                     </div>
-                    <button class="history-nav-btn next-btn" id="history-next-btn" disabled>▶</button>
+                    <button class="history-nav-btn next-btn" id="history-next-btn" disabled aria-label="Next">
+                        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
                 </div>
                 
                 <!-- End Session Button -->
@@ -863,8 +871,12 @@
         <section id="settings-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="settings-back">← Back</button>
-                    <h2>⚙️ Settings</h2>
+                    <button class="back-btn" id="settings-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>Settings</h2>
                 </div>
                 <div class="settings-content">
                     <div class="setting-group">
@@ -939,8 +951,12 @@
             
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="import-export-back">← Back</button>
-                    <h2>📁 Import/Export</h2>
+                    <button class="back-btn" id="import-export-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>Import/Export</h2>
                 </div>
                 <div class="settings-content">
                     <div class="setting-group">
@@ -980,8 +996,12 @@
         <section id="account-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="account-back">← Back</button>
-                    <h2>🏠 My Account</h2>
+                    <button class="back-btn" id="account-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>My Account</h2>
                 </div>
                 <div class="settings-content">
                     <div class="setting-group">
@@ -1073,7 +1093,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="section-arrow">→</div>
+                        <div class="section-arrow">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
                     </div>
 
                     <!-- Player DNA Preview -->
@@ -1120,7 +1144,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="section-arrow">→</div>
+                        <div class="section-arrow">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
                     </div>
 
                     <!-- Activity Calendar Preview -->
@@ -1154,7 +1182,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="section-arrow">→</div>
+                        <div class="section-arrow">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
                     </div>
 
                     <!-- Personal Goals Preview -->
@@ -1185,7 +1217,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="section-arrow">→</div>
+                        <div class="section-arrow">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1195,7 +1231,11 @@
         <section id="avatar-selection-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="avatar-back">← Back</button>
+                    <button class="back-btn" id="avatar-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
                     <h2>Choose Avatar</h2>
                 </div>
                 <div class="settings-content">
@@ -1218,8 +1258,12 @@
         <section id="profile-achievements-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="achievements-back">← Back</button>
-                    <h2>🏆 Achievements</h2>
+                    <button class="back-btn" id="achievements-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>Achievements</h2>
                 </div>
                 <div class="settings-content">
                     <div class="achievements-section">
@@ -1296,8 +1340,12 @@
         <section id="profile-player-dna-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="player-dna-back">← Back</button>
-                    <h2>🧬 Player DNA</h2>
+                    <button class="back-btn" id="player-dna-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>Player DNA</h2>
                 </div>
                 <div class="settings-content">
                     <div class="dna-section">
@@ -1368,75 +1416,100 @@
 
         <!-- Profile Activity Calendar Page -->
         <section id="profile-activity-calendar-page" class="page">
-            <div class="settings-container">
+            <div class="calendar-page-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="activity-calendar-back">← Back</button>
-                    <h2>📅 Activity Calendar</h2>
+                    <button class="back-btn" id="activity-calendar-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>Activity Calendar</h2>
                 </div>
-                <div class="settings-content">
-                    <div class="calendar-navigation">
-                        <button class="calendar-nav-btn" id="calendar-prev">←</button>
-                        <h3 id="calendar-month">November 2025</h3>
-                        <button class="calendar-nav-btn" id="calendar-next">→</button>
+                
+                <div class="calendar-wrapper">
+                    <!-- Calendar Navigation Header -->
+                    <div class="calendar-header">
+                        <button class="calendar-nav-btn" id="calendar-prev" aria-label="Previous month">
+                            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <div class="calendar-month-year">
+                            <h3 id="calendar-month" class="month-name"></h3>
+                            <span id="calendar-year" class="year-name"></span>
+                        </div>
+                        <button class="calendar-nav-btn" id="calendar-next" aria-label="Next month">
+                            <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
                     </div>
-                    <div class="calendar-grid">
-                        <div class="calendar-day-header">Sun</div>
-                        <div class="calendar-day-header">Mon</div>
-                        <div class="calendar-day-header">Tue</div>
-                        <div class="calendar-day-header">Wed</div>
-                        <div class="calendar-day-header">Thu</div>
-                        <div class="calendar-day-header">Fri</div>
-                        <div class="calendar-day-header">Sat</div>
-                        
-                        <div class="calendar-day empty"></div>
-                        <div class="calendar-day empty"></div>
-                        <div class="calendar-day empty"></div>
-                        <div class="calendar-day">1</div>
-                        <div class="calendar-day active">2</div>
-                        <div class="calendar-day">3</div>
-                        <div class="calendar-day active">4</div>
-                        <div class="calendar-day">5</div>
-                        <div class="calendar-day active">6</div>
-                        <div class="calendar-day">7</div>
-                        <div class="calendar-day">8</div>
-                        <div class="calendar-day active">9</div>
-                        <div class="calendar-day">10</div>
-                        <div class="calendar-day active">11</div>
-                        <div class="calendar-day">12</div>
-                        <div class="calendar-day">13</div>
-                        <div class="calendar-day">14</div>
-                        <div class="calendar-day">15</div>
-                        <div class="calendar-day">16</div>
-                        <div class="calendar-day">17</div>
-                        <div class="calendar-day">18</div>
-                        <div class="calendar-day">19</div>
-                        <div class="calendar-day">20</div>
-                        <div class="calendar-day">21</div>
-                        <div class="calendar-day">22</div>
-                        <div class="calendar-day today">24</div>
-                        <div class="calendar-day">25</div>
-                        <div class="calendar-day">26</div>
-                        <div class="calendar-day">27</div>
-                        <div class="calendar-day">28</div>
-                        <div class="calendar-day">29</div>
-                        <div class="calendar-day">30</div>
+
+                    <!-- Calendar Container with Slide Animation -->
+                    <div class="calendar-container-wrapper">
+                        <div class="calendar-container" id="calendar-container">
+                            <div class="calendar-grid-wrapper">
+                                <div class="calendar-weekdays">
+                                    <div class="weekday">S</div>
+                                    <div class="weekday">M</div>
+                                    <div class="weekday">T</div>
+                                    <div class="weekday">W</div>
+                                    <div class="weekday">T</div>
+                                    <div class="weekday">F</div>
+                                    <div class="weekday">S</div>
+                                </div>
+                                <div class="calendar-days-grid" id="calendar-days-grid">
+                                    <!-- Calendar days will be generated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="activity-stats">
-                        <div class="activity-stat-item">
-                            <span class="activity-stat-label">Sessions this week:</span>
-                            <span class="activity-stat-value">5</span>
+
+                    <!-- Activity Stats Cards -->
+                    <div class="calendar-stats-grid">
+                        <div class="calendar-stat-card">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="sessions-this-week">0</div>
+                                <div class="stat-label">Sessions this week</div>
+                            </div>
                         </div>
-                        <div class="activity-stat-item">
-                            <span class="activity-stat-label">Hands played:</span>
-                            <span class="activity-stat-value">250</span>
+                        <div class="calendar-stat-card">
+                            <div class="stat-icon">🃏</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="hands-played">0</div>
+                                <div class="stat-label">Hands played</div>
+                            </div>
                         </div>
-                        <div class="activity-stat-item">
-                            <span class="activity-stat-label">Best streak:</span>
-                            <span class="activity-stat-value">12 days</span>
+                        <div class="calendar-stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="current-streak">0</div>
+                                <div class="stat-label">Current streak</div>
+                            </div>
                         </div>
-                        <div class="activity-stat-item">
-                            <span class="activity-stat-label">Current streak:</span>
-                            <span class="activity-stat-value">3 days</span>
+                        <div class="calendar-stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-content">
+                                <div class="stat-value" id="best-streak">0</div>
+                                <div class="stat-label">Best streak</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-color today-color"></div>
+                            <span>Today</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color active-color"></div>
+                            <span>Practice day</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color empty-color"></div>
+                            <span>No activity</span>
                         </div>
                     </div>
                 </div>
@@ -1447,8 +1520,12 @@
         <section id="profile-personal-goals-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="personal-goals-back">← Back</button>
-                    <h2>🎯 Personal Goals</h2>
+                    <button class="back-btn" id="personal-goals-back" aria-label="Back">
+                        <svg class="back-arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2>Personal Goals</h2>
                 </div>
                 <div class="settings-content">
                     <div class="goals-section-vertical">
