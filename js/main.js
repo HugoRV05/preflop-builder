@@ -14,6 +14,10 @@ let rangeData = {}; // Store all range data for different matchups
 let lastEditedRangeKey = null; // Track the last edited range for paste functionality
 let defaultRanges = {}; // Store default ranges from assets file
 
+const LANGUAGE_STORAGE_KEY = 'preflop-builder-language';
+const SOUND_STORAGE_KEY = 'preflop-builder-sound-enabled';
+const NOTIFICATION_STORAGE_KEY = 'preflop-builder-notifications-enabled';
+
 // Drag painting state
 let isDragging = false;
 let dragAction = null;
@@ -33,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         // Initialize theme last
         initializeTheme();
+        initializeSettingsControls();
         
         // Provide user feedback about default ranges loading
         if (defaultsLoaded) {
@@ -49,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Continue with initialization even if there's an error
         initializeRangeData();
         initializeTheme();
+        initializeSettingsControls();
         
         // Still try to register service worker even if there's an error
         registerServiceWorker();
@@ -139,9 +145,9 @@ function setupNavigation() {
     document.getElementById('landing-practice').addEventListener('click', () => showPage('practice-page'));
     
     // Settings dropdown links
-    document.getElementById('preferences-link').addEventListener('click', (e) => {
+    document.getElementById('settings-link').addEventListener('click', (e) => {
         e.preventDefault();
-        showPage('preferences-page');
+        showPage('settings-page');
     });
     document.getElementById('import-export-link').addEventListener('click', (e) => {
         e.preventDefault();
@@ -164,7 +170,7 @@ function setupNavigation() {
     });
     
     // Back buttons for all settings/profile pages
-    document.getElementById('preferences-back').addEventListener('click', () => showPage('landing-page'));
+    document.getElementById('settings-back').addEventListener('click', () => showPage('landing-page'));
     document.getElementById('import-export-back').addEventListener('click', () => showPage('landing-page'));
     document.getElementById('account-back').addEventListener('click', () => showPage('landing-page'));
     
@@ -185,7 +191,7 @@ function setupNavigation() {
     setupMobileNavigation();
     
     // Theme switch (will be initialized separately)
-    // This ensures the theme switch works even if preferences page isn't visited first
+    // This ensures the theme switch works even if the settings page isn't visited first
 }
 
 function setupMobileNavigation() {
@@ -867,16 +873,16 @@ function selectAllHandsForPractice() {
 }
 
 /**
- * Setup floating settings button to show settings/preferences page
+ * Setup floating settings button to show the Settings page
  */
 function setupTopbarSettings() {
     const floatingSettingsBtn = document.getElementById('mobile-floating-settings');
     
     if (!floatingSettingsBtn) return;
     
-    // Navigate to preferences page when clicked
+    // Navigate to settings page when clicked
     floatingSettingsBtn.addEventListener('click', () => {
-        showPage('preferences-page');
+        showPage('settings-page');
     });
 }
 
@@ -986,8 +992,8 @@ function setupMobileSettingsButton() {
     
     // Add click event listener to settings button
     settingsBtn.addEventListener('click', () => {
-        // Open the Preferences page
-        showPage('preferences-page');
+        // Open the Settings page
+        showPage('settings-page');
     });
 }
 
@@ -1185,8 +1191,76 @@ function updateThemeSwitchUI(theme) {
     
     // Update label states
     themeLabels.forEach((label, index) => {
-        const isActive = (theme === 'dark' && index === 0) || (theme === 'light' && index === 1);
+        const isActive = (theme === 'light' && index === 0) || (theme === 'dark' && index === 1);
         label.classList.toggle('active', isActive);
+    });
+}
+
+// ==========================================
+// SETTINGS STATE MANAGEMENT
+// ==========================================
+
+function initializeSettingsControls() {
+    initializeLanguageSetting();
+    initializeSoundAndNotificationSettings();
+}
+
+function initializeLanguageSetting() {
+    const languageSelect = document.getElementById('language-select');
+    const currentLanguageDisplay = document.getElementById('current-language');
+    
+    if (!languageSelect || !currentLanguageDisplay) return;
+    
+    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'en';
+    languageSelect.value = savedLanguage;
+    updateLanguageDisplay(savedLanguage);
+    
+    languageSelect.addEventListener('change', (event) => {
+        const selectedLanguage = event.target.value;
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, selectedLanguage);
+        updateLanguageDisplay(selectedLanguage);
+    });
+}
+
+function updateLanguageDisplay(languageCode) {
+    const currentLanguageDisplay = document.getElementById('current-language');
+    if (currentLanguageDisplay) {
+        currentLanguageDisplay.textContent = languageCode === 'es' ? 'Español' : 'English';
+    }
+    
+    const htmlElement = document.documentElement;
+    if (htmlElement) {
+        htmlElement.setAttribute('lang', languageCode === 'es' ? 'es' : 'en');
+    }
+}
+
+function initializeSoundAndNotificationSettings() {
+    setupSettingsToggle('sound-toggle', SOUND_STORAGE_KEY, 'soundEnabled');
+    setupSettingsToggle('notifications-toggle', NOTIFICATION_STORAGE_KEY, 'notificationsEnabled');
+}
+
+function setupSettingsToggle(toggleId, storageKey, dataAttribute) {
+    const toggle = document.getElementById(toggleId);
+    if (!toggle) return;
+    
+    const savedValue = localStorage.getItem(storageKey);
+    if (savedValue !== null) {
+        toggle.checked = savedValue === 'true';
+    } else {
+        localStorage.setItem(storageKey, String(toggle.checked));
+    }
+    
+    if (document.body) {
+        document.body.dataset[dataAttribute] = toggle.checked ? 'true' : 'false';
+    }
+    
+    toggle.addEventListener('change', (event) => {
+        const isEnabled = event.target.checked;
+        localStorage.setItem(storageKey, String(isEnabled));
+        
+        if (document.body) {
+            document.body.dataset[dataAttribute] = isEnabled ? 'true' : 'false';
+        }
     });
 }
 

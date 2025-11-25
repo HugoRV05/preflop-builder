@@ -74,7 +74,7 @@
                 <div class="dropdown">
                     <button class="dropdown-btn">⚙️ Settings</button>
                     <div class="dropdown-content">
-                        <a href="#" id="preferences-link">🎛️ Preferences</a>
+                        <a href="#" id="settings-link">⚙️ Settings</a>
                         <a href="#" id="import-export-link">📁 Import/Export</a>
                     </div>
                 </div>
@@ -860,39 +860,75 @@
         </section>
 
         <!-- Settings Pages -->
-        <section id="preferences-page" class="page">
+        <section id="settings-page" class="page">
             <div class="settings-container">
                 <div class="settings-header">
-                    <button class="back-btn" id="preferences-back">← Back</button>
-                    <h2>🎛️ Preferences</h2>
+                    <button class="back-btn" id="settings-back">← Back</button>
+                    <h2>⚙️ Settings</h2>
                 </div>
                 <div class="settings-content">
                     <div class="setting-group">
-                        <h3>Display Settings</h3>
-                        <div class="setting-item">
-                            <label>Theme</label>
-                            <div class="theme-switch-container">
-                                <span class="theme-label">🌙 Dark</span>
-                                <div class="theme-switch" id="theme-switch">
-                                    <div class="theme-switch-slider"></div>
-                                </div>
-                                <span class="theme-label">☀️ Light</span>
+                        <h3>Language</h3>
+                        <div class="setting-item language-row">
+                            <div class="setting-copy">
+                                <label for="language-select">App language</label>
+                                <p>Currently: <span class="current-language-label" id="current-language">English</span></p>
+                            </div>
+                            <div class="language-select-wrapper">
+                                <select id="language-select" aria-label="Select language">
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="setting-item">
-                            <label>Animation Speed</label>
-                            <input type="range" min="0.5" max="2" step="0.1" value="1">
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Sound & Notifications</h3>
+                        <div class="setting-item toggle-row">
+                            <div class="setting-copy">
+                                <label for="sound-toggle">Enable Sound</label>
+                                <p>Hear prompts and feedback while you practice.</p>
+                            </div>
+                            <label class="toggle-switch" aria-label="Enable sound">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-row">
+                            <div class="setting-copy">
+                                <label for="notifications-toggle">Enable Notifications</label>
+                                <p>Get reminded about training streaks and new ranges.</p>
+                            </div>
+                            <label class="toggle-switch" aria-label="Enable notifications">
+                                <input type="checkbox" id="notifications-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
                     </div>
+
                     <div class="setting-group">
-                        <h3>Game Settings</h3>
-                        <div class="setting-item">
-                            <label>Auto-save ranges</label>
-                            <input type="checkbox" checked>
+                        <h3>Theme</h3>
+                        <div class="setting-item theme-row">
+                            <div class="setting-copy">
+                                <p class="setting-label">Day / Night Mode</p>
+                                <p>Choose the look that feels best for long study sessions.</p>
+                            </div>
+                            <div class="theme-switch-container" role="group" aria-label="Theme toggle">
+                                <span class="theme-label">🌞 Day Mode</span>
+                                <button class="theme-switch" id="theme-switch" type="button">
+                                    <div class="theme-switch-slider"></div>
+                                </button>
+                                <span class="theme-label">🌙 Night Mode</span>
+                            </div>
                         </div>
-                        <div class="setting-item">
-                            <label>Show hand percentages</label>
-                            <input type="checkbox">
+                    </div>
+
+                    <div class="setting-group about-group">
+                        <h3>About</h3>
+                        <div class="setting-item stacked">
+                            <p class="setting-label">Preflop Builder</p>
+                            <p class="setting-note">Version 2.0.4 · Training companion for confident preflop decisions.</p>
                         </div>
                     </div>
                 </div>
