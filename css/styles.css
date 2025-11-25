@@ -6592,7 +6592,13 @@ input:checked + .toggle-slider:before {
         margin-bottom: -40px;
     }
 
-    /* Practice page: compress top/bottom utilities and prevent page scroll */
+    /* Practice page: full viewport height layout */
+    #practice-page {
+        height: 100svh;
+        min-height: 100svh;
+        overflow: hidden;
+    }
+    
     #practice-page .practice-layout {
         height: 100%;
         min-height: 100%;
