@@ -6290,19 +6290,22 @@ input:checked + .toggle-slider:before {
         }
         
         body {
-            /* Prevent iOS scroll bounce */
-            position: fixed;
+            /* Allow document-level scrolling while still respecting safe areas */
+            position: relative;
             width: 100%;
-            height: 100%;
             min-height: 100lvh;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             /* Background extends to edges for seamless notch integration */
             background: var(--dark-grey);
         }
         
         .main-content {
-            height: 100vh;
-            overflow-y: auto;
+            min-height: calc(100lvh - var(--header-height, 0px));
+            height: auto;
+            overflow-x: visible;
+            overflow-y: visible;
             -webkit-overflow-scrolling: touch;
             /* iOS: Only use the safe area top inset, don't add extra spacing */
             padding-top: env(safe-area-inset-top, 0);
@@ -6339,26 +6342,35 @@ input:checked + .toggle-slider:before {
 /* Standalone PWA on small screens: enforce no-page-scroll and tighter layout */
 @media (display-mode: standalone) and (max-width: 430px) {
     html, body {
-        height: 100%;
-        overflow: hidden;
+        min-height: 100svh;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body {
+        position: relative;
     }
 
     .main-content {
-        height: 100svh;
-        min-height: 100svh;
+        min-height: auto;
+        height: auto;
         margin: 0 !important;
-        overflow: hidden; /* No external scroll */
+        overflow-x: visible;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
         padding-top: env(safe-area-inset-top, 0);
         padding-bottom: env(safe-area-inset-bottom, 0);
         padding-left: env(safe-area-inset-left, 0);
         padding-right: env(safe-area-inset-right, 0);
     }
 
-    /* Ensure each page section does not create its own scroll */
+    /* Allow each page section to define its own scrollable height */
     .page {
-        height: 100%;
-        min-height: 100%;
-        overflow: hidden;
+        height: auto;
+        min-height: auto;
+        overflow: visible;
     }
     
     /* Landing page: allow vertical scroll */
