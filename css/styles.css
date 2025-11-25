@@ -3465,7 +3465,7 @@ body.on-landing-page .header-right {
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
-    margin-top: -30px;
+    margin-top: -50px;
     margin-bottom: 0px;
         
 }
@@ -7389,7 +7389,7 @@ input:checked + .toggle-slider:before {
 .indicator-value {
     font-size: 8px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--darker-grey);
     white-space: nowrap;
 }
 
