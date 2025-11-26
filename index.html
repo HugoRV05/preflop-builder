@@ -826,41 +826,79 @@
                 <!-- Feedback Overlay (Hidden) -->
                 <div id="practice-feedback-overlay" class="practice-feedback-overlay">
                     <div class="feedback-message" id="feedback-message">
-                        <span class="feedback-text">Correct!</span>
+                        <div class="feedback-main-text">Correct!</div>
+                        <div class="feedback-secondary-text"></div>
+                    </div>
+                    <div class="feedback-particles" id="feedback-particles"></div>
+                </div>
+                
+                <!-- Mid-Session Event Popup -->
+                <div id="mid-session-event" class="mid-session-event">
+                    <div class="mid-session-bubble">
+                        <span class="mid-session-text"></span>
                     </div>
                 </div>
                 
                 <!-- Session Results Panel (Hidden) -->
                 <div id="session-results-panel" class="session-results-overlay">
                     <div class="session-results-content">
-                        <div class="results-header">
-                            <h3>Session Complete</h3>
-                            <button class="close-results-btn" id="close-results">&times;</button>
+                        <button class="close-results-btn" id="close-results">&times;</button>
+                        
+                        <!-- Dynamic Title -->
+                        <div class="results-dynamic-title" id="results-dynamic-title">
+                            🔥 Session on Fire!
                         </div>
-                        <div class="results-body">
-                            <div class="results-stats">
-                                <div class="stat-card">
-                                    <div class="stat-value" id="total-hands-stat">0</div>
-                                    <div class="stat-label">Total Hands</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="accuracy-stat">0%</div>
-                                    <div class="stat-label">Accuracy</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="session-time-stat">0:00</div>
-                                    <div class="stat-label">Session Time</div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-value" id="best-streak-stat">0</div>
-                                    <div class="stat-label">Best Streak</div>
+                        
+                        <!-- Progress Ring Section -->
+                        <div class="results-progress-section">
+                            <div class="progress-ring-container">
+                                <svg class="progress-ring" width="160" height="160">
+                                    <circle class="progress-ring-circle-bg" cx="80" cy="80" r="70" stroke-width="12" fill="none"></circle>
+                                    <circle class="progress-ring-circle" id="progress-ring-circle" cx="80" cy="80" r="70" stroke-width="12" fill="none" stroke-dasharray="439.8" stroke-dashoffset="439.8"></circle>
+                                </svg>
+                                <div class="progress-ring-text">
+                                    <div class="progress-ring-value" id="accuracy-stat">0%</div>
+                                    <div class="progress-ring-label">Accuracy</div>
                                 </div>
                             </div>
-                            <div class="results-actions">
-                                <button class="results-btn secondary" id="go-to-main-btn">Go to Main Page</button>
-                                <button class="results-btn secondary" id="new-session-btn">New Session</button>
-                                <button class="results-btn primary" id="continue-session-btn">Continue Session</button>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="results-quick-stats">
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-icon">🃏</div>
+                                <div class="quick-stat-value" id="total-hands-stat">0</div>
+                                <div class="quick-stat-label">Hands</div>
                             </div>
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-icon">⏱️</div>
+                                <div class="quick-stat-value" id="session-time-stat">0:00</div>
+                                <div class="quick-stat-label">Time</div>
+                            </div>
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-icon">🔥</div>
+                                <div class="quick-stat-value" id="best-streak-stat">0</div>
+                                <div class="quick-stat-label">Streak</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Micro Achievements -->
+                        <div class="results-achievements">
+                            <div class="achievements-title">Session Highlights</div>
+                            <div class="achievements-badges" id="session-badges">
+                                <!-- Badges will be dynamically added here -->
+                            </div>
+                        </div>
+                        
+                        <!-- CTA Button -->
+                        <div class="results-cta">
+                            <button class="results-cta-btn" id="results-cta-btn">Do 5 more hands?</button>
+                        </div>
+                        
+                        <!-- Secondary Actions -->
+                        <div class="results-secondary-actions">
+                            <button class="results-link-btn" id="go-to-main-btn">← Back to Home</button>
+                            <button class="results-link-btn" id="new-session-btn">New Session</button>
                         </div>
                     </div>
                 </div>
@@ -1031,7 +1069,7 @@
                 <!-- Profile Core Section -->
                 <div class="profile-core">
                     <div class="profile-avatar" id="profile-avatar">
-                        <img src="assets/logosinfondo500.png" alt="Avatar" class="avatar-image">
+                        <img src="assets/avatarejemplo.png" alt="Avatar" class="avatar-image">
                     </div>
                     <div class="profile-name-section">
                         <h2 class="profile-name" id="profile-name">Player Name</h2>

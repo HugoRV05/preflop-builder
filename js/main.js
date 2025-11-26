@@ -2420,6 +2420,11 @@ function applyPracticeConfiguration() {
         sessionStartTime = Date.now();
     }
     
+    // Initialize feedback timing variables
+    lastDecisionTime = Date.now();
+    midSessionEventLastShown = 0;
+    midSessionEventCount = 0;
+    
     // Generate available hands for practice
     generateAvailableHands();
     
@@ -2951,6 +2956,10 @@ function handlePracticeAction(actionClass) {
     let isCorrect = false;
     let userAction = actionClass;
     
+    // Calculate decision time
+    const decisionTime = Date.now() - lastDecisionTime;
+    lastDecisionTime = Date.now();
+    
     if (practiceConfig.gameType === 'fold-no-fold') {
         // In fold/no-fold mode, check if hand should be played or folded
         const correctAction = practiceState.currentHand.correctAction;
@@ -2977,12 +2986,16 @@ function handlePracticeAction(actionClass) {
         currentStreak = 0;
     }
     
+    // Check for mid-session events
+    checkMidSessionEvents(isCorrect, decisionTime);
+    
     // Store hand in history
     const handRecord = {
         ...practiceState.currentHand,
         userAction: userAction,
         isCorrect: isCorrect,
-        handNumber: handsPlayed
+        handNumber: handsPlayed,
+        decisionTime: decisionTime
     };
     practiceState.handHistory.push(handRecord);
     
@@ -2996,24 +3009,177 @@ function handlePracticeAction(actionClass) {
     }, 1500);
 }
 
+// Mid-Session Event System
+function checkMidSessionEvents(isCorrect, decisionTime) {
+    // Limit to one event every 10 hands minimum
+    if (handsPlayed - midSessionEventLastShown < 10) return;
+    
+    let eventMessage = null;
+    
+    // Check for streak events
+    if (currentStreak >= 3 && isCorrect) {
+        eventMessage = "🔥 Streak mode!";
+    } else if (!isCorrect && handsPlayed >= 3) {
+        // Check for 3 wrong in a row
+        const recentHands = practiceState.handHistory.slice(-2);
+        const allWrong = recentHands.every(hand => !hand.isCorrect);
+        if (allWrong) {
+            eventMessage = "Shake it off — next one.";
+        }
+    }
+    
+    // Check for speed events (only if no streak event)
+    if (!eventMessage && handsPlayed > 1) {
+        if (decisionTime < 1000) {
+            eventMessage = "⚡ Lightning speed!";
+        } else if (decisionTime > 8000) {
+            eventMessage = "Taking your time… nice.";
+        }
+    }
+    
+    // Show event if we have one
+    if (eventMessage) {
+        showMidSessionEvent(eventMessage);
+        midSessionEventLastShown = handsPlayed;
+        midSessionEventCount++;
+    }
+}
+
+function showMidSessionEvent(message) {
+    const eventContainer = document.getElementById('mid-session-event');
+    const eventText = eventContainer.querySelector('.mid-session-text');
+    
+    if (!eventContainer || !eventText) return;
+    
+    eventText.textContent = message;
+    eventContainer.classList.add('show');
+    
+    // Hide after 1.5 seconds
+    setTimeout(() => {
+        eventContainer.classList.remove('show');
+    }, 1500);
+}
+
+// Enhanced Feedback System
+const feedbackMessages = {
+    correct: [
+        "Clean hit.",
+        "You crushed it.",
+        "Nasty good call.",
+        "Perfect range.",
+        "Sharp!",
+        "Locked in."
+    ],
+    wrong: [
+        "Close, but no.",
+        "Spot tricky.",
+        "Almost — solver said no.",
+        "Next one you got it.",
+        "Hard one."
+    ]
+};
+
+let lastDecisionTime = Date.now();
+let midSessionEventLastShown = 0;
+let midSessionEventCount = 0;
+
 function showFeedback(isCorrect) {
     const feedbackOverlay = document.getElementById('practice-feedback-overlay');
     const feedbackMessage = document.getElementById('feedback-message');
-    const feedbackText = feedbackMessage.querySelector('.feedback-text');
+    const mainText = feedbackMessage.querySelector('.feedback-main-text');
+    const secondaryText = feedbackMessage.querySelector('.feedback-secondary-text');
     
-    if (!feedbackOverlay || !feedbackMessage || !feedbackText) return;
+    if (!feedbackOverlay || !feedbackMessage || !mainText || !secondaryText) return;
     
-    // Update message
-    feedbackText.textContent = isCorrect ? 'Correct!' : 'Wrong!';
+    // Update main message
+    mainText.textContent = isCorrect ? 'Correct' : 'Wrong';
+    
+    // Select random secondary message
+    const messagePool = isCorrect ? feedbackMessages.correct : feedbackMessages.wrong;
+    const randomMessage = messagePool[Math.floor(Math.random() * messagePool.length)];
+    secondaryText.textContent = randomMessage;
+    
+    // Apply styling
     feedbackMessage.className = `feedback-message ${isCorrect ? 'correct' : 'incorrect'}`;
     
     // Show overlay
     feedbackOverlay.classList.add('visible');
     
+    // Create visual effects
+    if (isCorrect) {
+        createParticles(true);
+        addGlowEffect(true);
+    } else {
+        addShakeEffect();
+        addGlowEffect(false);
+    }
+    
     // Hide after delay
     setTimeout(() => {
         feedbackOverlay.classList.remove('visible');
-    }, 1200);
+        clearParticles();
+    }, 1400);
+}
+
+function createParticles(isCorrect) {
+    const particlesContainer = document.getElementById('feedback-particles');
+    if (!particlesContainer) return;
+    
+    // Clear existing particles
+    particlesContainer.innerHTML = '';
+    
+    if (isCorrect) {
+        // Create 8-12 particles for correct answer
+        const particleCount = 8 + Math.floor(Math.random() * 5);
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random position around center
+            const angle = (Math.PI * 2 * i) / particleCount;
+            const distance = 50 + Math.random() * 100;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            
+            particle.style.setProperty('--tx', `${x}px`);
+            particle.style.setProperty('--ty', `${y}px`);
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.animationDelay = `${i * 0.05}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+    }
+}
+
+function clearParticles() {
+    const particlesContainer = document.getElementById('feedback-particles');
+    if (particlesContainer) {
+        particlesContainer.innerHTML = '';
+    }
+}
+
+function addGlowEffect(isCorrect) {
+    const feedbackMessage = document.getElementById('feedback-message');
+    if (!feedbackMessage) return;
+    
+    const glowClass = isCorrect ? 'glow-correct' : 'glow-wrong';
+    feedbackMessage.classList.add(glowClass);
+    
+    setTimeout(() => {
+        feedbackMessage.classList.remove(glowClass);
+    }, 600);
+}
+
+function addShakeEffect() {
+    const feedbackMessage = document.getElementById('feedback-message');
+    if (!feedbackMessage) return;
+    
+    feedbackMessage.classList.add('shake');
+    
+    setTimeout(() => {
+        feedbackMessage.classList.remove('shake');
+    }, 500);
 }
 
 function updateHistoryTracker(isCorrect, handNumber) {
@@ -3145,16 +3311,157 @@ function endSession() {
 }
 
 function updateSessionResults(totalHands, accuracy, duration, streak) {
-    // Update stat values
-    const totalHandsStat = document.getElementById('total-hands-stat');
+    // Update dynamic title based on performance
+    const titleElement = document.getElementById('results-dynamic-title');
+    if (titleElement) {
+        titleElement.textContent = getSessionTitle(accuracy);
+        titleElement.classList.add('title-animate');
+    }
+    
+    // Update accuracy with progress ring
     const accuracyStat = document.getElementById('accuracy-stat');
+    const progressCircle = document.getElementById('progress-ring-circle');
+    
+    if (accuracyStat) accuracyStat.textContent = `${accuracy}%`;
+    
+    if (progressCircle) {
+        const circumference = 439.8; // 2 * PI * 70
+        const offset = circumference - (accuracy / 100) * circumference;
+        
+        // Animate the progress ring
+        setTimeout(() => {
+            progressCircle.style.strokeDashoffset = offset;
+            
+            // Add color class based on accuracy
+            if (accuracy >= 80) {
+                progressCircle.classList.add('high-accuracy');
+            } else if (accuracy >= 60) {
+                progressCircle.classList.add('medium-accuracy');
+            } else {
+                progressCircle.classList.add('low-accuracy');
+            }
+        }, 300);
+    }
+    
+    // Update quick stats
+    const totalHandsStat = document.getElementById('total-hands-stat');
     const sessionTimeStat = document.getElementById('session-time-stat');
     const bestStreakStat = document.getElementById('best-streak-stat');
     
     if (totalHandsStat) totalHandsStat.textContent = totalHands;
-    if (accuracyStat) accuracyStat.textContent = `${accuracy}%`;
     if (sessionTimeStat) sessionTimeStat.textContent = formatDuration(duration);
     if (bestStreakStat) bestStreakStat.textContent = streak;
+    
+    // Generate micro-achievements badges
+    generateSessionBadges(totalHands, accuracy, duration, streak);
+    
+    // Update CTA button
+    updateCTAButton(accuracy, totalHands, duration);
+}
+
+function getSessionTitle(accuracy) {
+    if (accuracy >= 80) {
+        const highTitles = [
+            "🔥 Session on Fire!",
+            "You locked in."
+        ];
+        return highTitles[Math.floor(Math.random() * highTitles.length)];
+    } else if (accuracy >= 60) {
+        const mediumTitles = [
+            "Solid grind.",
+            "Learning sharp."
+        ];
+        return mediumTitles[Math.floor(Math.random() * mediumTitles.length)];
+    } else {
+        const lowTitles = [
+            "Good effort.",
+            "Lots learned."
+        ];
+        return lowTitles[Math.floor(Math.random() * lowTitles.length)];
+    }
+}
+
+function generateSessionBadges(totalHands, accuracy, duration, streak) {
+    const badgesContainer = document.getElementById('session-badges');
+    if (!badgesContainer) return;
+    
+    badgesContainer.innerHTML = '';
+    const badges = [];
+    
+    // Check for streak achievement
+    if (streak >= 3) {
+        badges.push({ icon: '🔥', text: 'Streak mode!' });
+    }
+    
+    // Check for improvement (mock for now - would need previous session data)
+    if (accuracy >= 75 && totalHands >= 5) {
+        badges.push({ icon: '📈', text: 'Progress!' });
+    }
+    
+    // Check for consistency (long session)
+    const minutes = Math.floor(duration / 60000);
+    if (minutes >= 5) {
+        badges.push({ icon: '⏱️', text: 'Consistency' });
+    }
+    
+    // Check for speed (fast decisions)
+    const avgDecisionTime = practiceState.handHistory.reduce((sum, hand) => sum + (hand.decisionTime || 0), 0) / practiceState.handHistory.length;
+    if (avgDecisionTime < 2000 && totalHands >= 5) {
+        badges.push({ icon: '⚡', text: 'Lightning speed' });
+    }
+    
+    // If no specific badges, add a general positive one
+    if (badges.length === 0) {
+        if (accuracy >= 70) {
+            badges.push({ icon: '⭐', text: 'Well played' });
+        } else {
+            badges.push({ icon: '🎯', text: 'Good practice' });
+        }
+    }
+    
+    // Limit to 3 badges
+    badges.slice(0, 3).forEach((badge, index) => {
+        const badgeEl = document.createElement('div');
+        badgeEl.className = 'achievement-badge';
+        badgeEl.style.animationDelay = `${(index + 1) * 0.15}s`;
+        badgeEl.innerHTML = `
+            <span class="badge-icon">${badge.icon}</span>
+            <span class="badge-text">${badge.text}</span>
+        `;
+        badgesContainer.appendChild(badgeEl);
+    });
+}
+
+function updateCTAButton(accuracy, totalHands, duration) {
+    const ctaButton = document.getElementById('results-cta-btn');
+    if (!ctaButton) return;
+    
+    const minutes = Math.floor(duration / 60000);
+    
+    // Determine CTA text based on session performance
+    let ctaText = "Do 5 more hands?";
+    
+    if (accuracy < 60) {
+        ctaText = "Try a redemption round?";
+    } else if (minutes >= 10) {
+        ctaText = "Save energy for later.";
+        ctaButton.classList.add('cta-rest');
+    } else if (accuracy >= 80) {
+        ctaText = "Do 5 more hands?";
+    }
+    
+    ctaButton.textContent = ctaText;
+    
+    // Update click handler
+    ctaButton.onclick = () => {
+        if (minutes >= 10) {
+            // Long session - go to main
+            goToMainPage();
+        } else {
+            // Continue session
+            continueSession();
+        }
+    };
 }
 
 function formatDuration(milliseconds) {
@@ -3188,6 +3495,9 @@ function startNewSession() {
     currentStreak = 0;
     bestStreak = 0;
     sessionStartTime = null;
+    lastDecisionTime = Date.now();
+    midSessionEventLastShown = 0;
+    midSessionEventCount = 0;
     practiceState.currentHandIndex = 0;
     practiceState.handHistory = [];
     practiceState.historyViewStart = 0;
