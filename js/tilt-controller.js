@@ -135,10 +135,19 @@ class TiltController {
         }
         
         if (this.isActive) {
+            console.log('[Tilt] Already active, skipping start');
             return true;
         }
         
-        window.addEventListener('deviceorientation', this.boundOrientationHandler, true);
+        // Add a one-time test listener to verify events are coming through
+        const testHandler = (e) => {
+            console.log('[Tilt] TEST EVENT RECEIVED! gamma:', e.gamma, 'beta:', e.beta, 'alpha:', e.alpha);
+            window.removeEventListener('deviceorientation', testHandler);
+        };
+        window.addEventListener('deviceorientation', testHandler);
+        
+        // Use false (bubble) instead of true (capture) - more reliable across browsers
+        window.addEventListener('deviceorientation', this.boundOrientationHandler, false);
         this.isActive = true;
         this.config.enabled = true;
         
@@ -146,7 +155,8 @@ class TiltController {
             this.onStateChange(true);
         }
         
-        console.log('[Tilt] Started listening');
+        console.log('[Tilt] Started listening - handler attached to window.deviceorientation');
+        console.log('[Tilt] Current state:', this.getState());
         return true;
     }
     
@@ -158,7 +168,7 @@ class TiltController {
             return;
         }
         
-        window.removeEventListener('deviceorientation', this.boundOrientationHandler, true);
+        window.removeEventListener('deviceorientation', this.boundOrientationHandler, false);
         this.isActive = false;
         
         if (this.onStateChange) {
@@ -198,13 +208,24 @@ class TiltController {
         if (!this.config.enabled) return;
         
         const gamma = event.gamma; // Left/right tilt: -90 (left) to 90 (right)
+        const beta = event.beta;   // Front/back tilt: -180 to 180
+        const alpha = event.alpha; // Compass direction: 0 to 360
         
-        if (gamma === null) return;
+        // Debug: Log raw orientation data periodically (every 60 calls ~ 1 second at 60fps)
+        if (!this._debugCounter) this._debugCounter = 0;
+        this._debugCounter++;
+        if (this._debugCounter % 60 === 1) {
+            console.log(`[Tilt] Raw orientation data - alpha: ${alpha?.toFixed(1) ?? 'null'}, beta: ${beta?.toFixed(1) ?? 'null'}, gamma: ${gamma?.toFixed(1) ?? 'null'}`);
+        }
+        
+        // Update debug panel with raw values even if gamma is null (for diagnostics)
+        updateTiltDebugPanel(gamma, this.hasReturnedToNeutral, beta, alpha);
+        
+        if (gamma === null || gamma === undefined) {
+            return;
+        }
         
         this.currentGamma = gamma;
-        
-        // Update debug panel if visible
-        updateTiltDebugPanel(gamma, this.hasReturnedToNeutral);
         
         // Check if we've returned to neutral zone
         if (Math.abs(gamma) < this.config.neutralZone) {
@@ -612,7 +633,7 @@ let tiltDebugMode = true;
 /**
  * Update the tilt debug panel with current values
  */
-function updateTiltDebugPanel(gamma, isNeutral) {
+function updateTiltDebugPanel(gamma, isNeutral, beta, alpha) {
     const debugPanel = document.getElementById('tilt-debug-panel');
     const gammaValue = document.getElementById('tilt-gamma-value');
     const statusValue = document.getElementById('tilt-status');
@@ -624,17 +645,29 @@ function updateTiltDebugPanel(gamma, isNeutral) {
         debugPanel.classList.add('visible');
     }
     
-    // Update gamma value
-    gammaValue.textContent = `γ: ${gamma.toFixed(1)}°`;
-    
-    // Update status
-    if (isNeutral) {
-        statusValue.textContent = 'Ready';
-        statusValue.className = 'active';
+    // Update gamma value (handle null case)
+    if (gamma === null || gamma === undefined) {
+        gammaValue.textContent = `γ: null`;
+        statusValue.textContent = 'No data (gamma null)';
+        statusValue.className = 'warning';
     } else {
-        statusValue.textContent = gamma < 0 ? '← Tilting' : 'Tilting →';
-        statusValue.className = 'active';
+        gammaValue.textContent = `γ: ${gamma.toFixed(1)}°`;
+        
+        // Update status
+        if (isNeutral) {
+            statusValue.textContent = 'Ready';
+            statusValue.className = 'active';
+        } else {
+            statusValue.textContent = gamma < 0 ? '← Tilting' : 'Tilting →';
+            statusValue.className = 'active';
+        }
     }
+    
+    // Update additional debug info if elements exist
+    const betaValue = document.getElementById('tilt-beta-value');
+    const alphaValue = document.getElementById('tilt-alpha-value');
+    if (betaValue) betaValue.textContent = `β: ${beta?.toFixed(1) ?? 'null'}°`;
+    if (alphaValue) alphaValue.textContent = `α: ${alpha?.toFixed(1) ?? 'null'}°`;
 }
 
 /**

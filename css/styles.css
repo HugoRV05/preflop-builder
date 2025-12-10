@@ -3557,8 +3557,9 @@ body.on-landing-page .header-right {
    ========================================== */
 
 .practice-config-overlay {
-    position: fixed;
-    top: 0;
+    position: absolute;
+    height: 80svh;
+    top: calc(env(safe-area-inset-top, 20px) + 20px);
     left: 0;
     right: 0;
     bottom: 0;
@@ -4089,8 +4090,9 @@ input:checked + .toggle-slider:before {
    ========================================== */
 
 .hand-detail-overlay {
-    position: fixed;
-    top: 0;
+    position: absolute;
+    height: 80svh;
+    top: calc(env(safe-area-inset-top, 20px) + 20px);
     left: 0;
     right: 0;
     bottom: 0;
@@ -7247,6 +7249,9 @@ input:checked + .toggle-slider:before {
     /* Ensure only the config panel can scroll internally when open */
     #practice-config-panel.practice-config-overlay {
         overflow: hidden; /* Overlay itself doesn't scroll */
+        position: absolute;
+        height: 80svh;
+        top: calc(env(safe-area-inset-top, 20px) + 20px);
     }
     #practice-config-panel .practice-config-content {
         max-height: 80svh; /* Keep within viewport */
@@ -7257,6 +7262,7 @@ input:checked + .toggle-slider:before {
         overflow-y: auto; /* Internal scroll only */
         -webkit-overflow-scrolling: touch;
     }
+    
 }
 
 /* ==========================================
@@ -9190,7 +9196,7 @@ input:checked + .toggle-slider:before {
 /* Voice Control Button */
 .voice-control-btn {
     position: fixed;
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 0px);
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 70px);
     right: 20px;
     width: 56px;
     height: 56px;
@@ -9364,7 +9370,7 @@ input:checked + .toggle-slider:before {
     .voice-control-btn {
         width: 52px;
         height: 52px;
-        bottom: calc(var(--bottom-nav-height-mobile, 70px) + 16px);
+        bottom: calc(var(--bottom-nav-height-mobile, 70px) + 70px);
         right: 16px;
     }
     
@@ -9651,6 +9657,11 @@ input:checked + .toggle-slider:before {
     animation: debug-flash 0.3s ease;
 }
 
+#tilt-status.warning {
+    color: #ff5722;
+    font-weight: bold;
+}
+
 @keyframes debug-flash {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
@@ -9911,7 +9922,7 @@ input:checked + .toggle-slider:before {
 /* ---- Poki Chat Icon (Profile Page - Fixed Bottom Right) ---- */
 .poki-chat-icon {
     position: fixed;
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 0px);
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 70px);
     right: 20px;
     width: 60px;
     height: 60px;
