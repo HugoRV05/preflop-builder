@@ -1199,7 +1199,6 @@ body.on-landing-page .header-right {
     max-width: 1400px;
     margin: 0 auto;
     opacity: 0;
-    transform: scale(0.98);
     transition: all 0.3s ease-out;
     position: absolute;
     top: 0;
@@ -1216,7 +1215,6 @@ body.on-landing-page .header-right {
 .page.active {
     display: block;
     opacity: 1;
-    transform: scale(1);
     position: relative;
 }
 
@@ -3205,7 +3203,7 @@ body.on-landing-page .header-right {
    ========================================== */
 
 .practice-layout {
-    height: 90svh;
+    height: 100svh;
     display: flex;
     flex-direction: column;
     background: var(--dark-grey);
@@ -6354,7 +6352,7 @@ input:checked + .toggle-slider:before {
         
         /* Practice layout mobile - ensure proper container spacing */
         .practice-layout {
-            padding: 0; /* Remove any default padding that might cause gaps */
+            height: 85svh;
         }
         
         /* ==========================================
@@ -7611,7 +7609,6 @@ input:checked + .toggle-slider:before {
 
 .page.active {
     opacity: 1;
-    transform: translateY(0);
 }
 
 .page.exiting {
@@ -9193,7 +9190,7 @@ input:checked + .toggle-slider:before {
 /* Voice Control Button */
 .voice-control-btn {
     position: fixed;
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 20px);
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 0px);
     right: 20px;
     width: 56px;
     height: 56px;
@@ -9678,6 +9675,7 @@ input:checked + .toggle-slider:before {
    ========================================== */
 
 /* ---- Poki Help Button (Top Right, Practice Page) ---- */
+/* ---- Poki Help Button (Top Right, Practice Page) ---- */
 .poki-help-btn {
     position: fixed;
     top: calc(env(safe-area-inset-top, 20px) + 100px);
@@ -9685,26 +9683,65 @@ input:checked + .toggle-slider:before {
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    border: 3px solid rgba(255, 255, 255, 0.2);
+    /* Clean, professional solid color */
+    background: var(--accent-purple, #7c3aed);
+    /* Subtle 1px border */
+    border: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5);
+    /* Standard professional drop shadow */
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     z-index: 100;
-    transition: all 0.3s ease;
-    animation: poki-float 3s ease-in-out infinite;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Entrance animation only */
+    animation: poki-pop-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Entrance bounce animation for Poki button */
+@keyframes poki-entrance {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-5px);
+    }
+    75% {
+        transform: scale(0.9) translateY(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 @keyframes poki-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
+    0%, 100% { 
+        transform: translateY(0);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(34, 211, 238, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% { 
+        transform: translateY(-6px);
+        box-shadow: 
+            0 15px 40px rgba(91, 33, 182, 0.3),
+            0 0 0 2px rgba(34, 211, 238, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
 }
 
 .poki-help-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 25px rgba(124, 58, 237, 0.6);
+    box-shadow: 
+        0 6px 30px rgba(124, 58, 237, 0.7),
+        0 0 0 3px rgba(34, 211, 238, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(34, 211, 238, 0.9);
 }
 
 .poki-help-btn:active {
@@ -9716,10 +9753,6 @@ input:checked + .toggle-slider:before {
     height: 36px;
 }
 
-/* ---- Move Voice Button Lower ---- */
-.voice-control-btn {
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 100px) !important;
-}
 
 /* ---- Poki Hint Modal (Centered) ---- */
 .poki-modal-overlay {
@@ -9878,30 +9911,52 @@ input:checked + .toggle-slider:before {
 /* ---- Poki Chat Icon (Profile Page - Fixed Bottom Right) ---- */
 .poki-chat-icon {
     position: fixed;
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 24px);
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 0px);
     right: 20px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    border: 3px solid rgba(255, 255, 255, 0.2);
+    /* Clean, professional solid color */
+    background: var(--dark-grey);
+    border: 2.5px solid rgb(168 90 255);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.5);
+    /* Standard professional drop shadow */
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     z-index: 100;
-    transition: all 0.3s ease;
-    animation: poki-pulse 3s ease-in-out infinite;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    /* Hidden initially, animated in by JS adding the class */
+    transform: scale(0);
+    opacity: 0;
 }
 
-@keyframes poki-pulse {
-    0%, 100% { box-shadow: 0 6px 24px rgba(124, 58, 237, 0.5); }
-    50% { box-shadow: 0 6px 32px rgba(124, 58, 237, 0.7), 0 0 0 10px rgba(124, 58, 237, 0.1); }
+/* Class added by JS to trigger entrance */
+.poki-animate-enter {
+    animation: poki-pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Simple Pop-in Animation */
+@keyframes poki-pop-in {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .poki-chat-icon:hover {
-    transform: scale(1.1);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        0 20px 40px rgba(91, 33, 182, 0.4),
+        0 0 0 2px rgba(34, 211, 238, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(34, 211, 238, 0.4);
 }
 
 .poki-chat-icon:active {
@@ -9909,9 +9964,27 @@ input:checked + .toggle-slider:before {
 }
 
 .poki-icon-svg {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
+
+/* Coloring Profile Page SVGs */
+.section-arrow svg,
+.back-btn svg,
+.back-arrow-icon {
+    stroke: var(--accent-cyan, #22d3ee) !important;
+    filter: drop-shadow(0 0 2px rgba(34, 211, 238, 0.3));
+    transition: all 0.3s ease;
+}
+
+.section-arrow:hover svg,
+.back-btn:hover svg {
+    stroke: var(--accent-purple, #a855f7) !important;
+    transform: translateX(3px);
+    filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.5));
+}
+
 
 /* ---- Poki Chat Panel (Large Modal) ---- */
 .poki-chat-overlay {
@@ -10198,6 +10271,23 @@ input:checked + .toggle-slider:before {
     width: 28px;
     height: 28px;
     color: var(--primary);
+    transition: color 0.3s ease;
+}
+
+/* ---- Colored Skill Icons ---- */
+.accuracy-card .skill-icon svg {
+    color: #ff0000; /* Vibrant Red */
+    filter: drop-shadow(0 2px 4px rgba(255, 51, 51, 0.2));
+}
+
+.speed-card .skill-icon svg {
+    color: #ffd700; /* Yellow */
+    filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.2));
+}
+
+.streak-card .skill-icon svg {
+    color: #ff7500; /* Orange Fire */
+    filter: drop-shadow(0 2px 4px rgba(255, 69, 0, 0.2));
 }
 
 /* ---- Light Theme Adjustments ---- */
@@ -10246,9 +10336,12 @@ input:checked + .toggle-slider:before {
     }
     
     .poki-chat-panel {
-        height: 90vh;
+        height: 80svh;
         max-height: none;
-        border-radius: 20px 20px 0 0;
+        border-radius: 20px;
+        position: absolute;
+        top: calc(env(safe-area-inset-top, 20px) + 20px);
+        width: 90%;
     }
     
     .poki-modal {

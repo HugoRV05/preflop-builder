@@ -19,6 +19,9 @@ class VoiceCommandManager {
         this.timeoutId = null;
         this.TIMEOUT_MS = 5000; // 5 second timeout
         
+        // Persistent toggle state - stays on until user explicitly clicks off
+        this.userEnabledVoice = false;
+        
         // Callback functions
         this.onResult = null;
         this.onError = null;
@@ -38,6 +41,24 @@ class VoiceCommandManager {
             'full': 'fold',
             'fall': 'fold',
             'folk': 'fold',
+            // Additional fold variations
+            'phone': 'fold',
+            'fast': 'fold',
+            'old': 'fold',
+            'hold': 'fold',
+            'mold': 'fold',
+            'told': 'fold',
+            'sold': 'fold',
+            'bold': 'fold',
+            'gold': 'fold',
+            'false': 'fold',
+            'fort': 'fold',
+            'food': 'fold',
+            'four': 'fold',
+            'for': 'fold',
+            'fog': 'fold',
+            'fought': 'fold',
+            'foam': 'fold',
             
             // NO-FOLD (for fold-no-fold mode)
             'no fold': 'no-fold',
@@ -58,6 +79,25 @@ class VoiceCommandManager {
             'cool': 'call',    // Misrecognition
             'cold': 'call',    // Misrecognition
             'car': 'call',     // Misrecognition
+            // Additional call variations
+            'caught': 'call',
+            'paul': 'call',
+            'ball': 'call',
+            'tall': 'call',
+            'hall': 'call',
+            'wall': 'call',
+            'mall': 'call',
+            'core': 'call',
+            'cor': 'call',
+            'caw': 'call',
+            'cal': 'call',
+            'carl': 'call',
+            'coal': 'call',
+            'cow': 'call',
+            'cause': 'call',
+            'cost': 'call',
+            'col': 'call',
+            'kyle': 'call',
             
             // Open raise variations
             'open': 'or-fold',
@@ -89,7 +129,7 @@ class VoiceCommandManager {
         };
         
         // Words that sound like "fold" (for fuzzy matching)
-        this.foldVariations = ['fold', 'fault', 'ford', 'folds', 'folding', 'fuck', 'foe', 'full', 'fall', 'folk', 'false', 'fort', 'food'];
+        this.foldVariations = ['fold', 'fault', 'ford', 'folds', 'folding', 'fuck', 'foe', 'full', 'fall', 'folk', 'false', 'fort', 'food', 'phone', 'fast', 'old', 'hold', 'mold', 'told', 'sold', 'bold', 'gold', 'four', 'for', 'fog', 'fought', 'foam'];
         
         // Words that indicate "no fold" / "play"
         this.noFoldVariations = ['no', 'play', 'stay', 'continue', 'keep', 'raise', 'bet', 'don\'t'];
@@ -127,6 +167,20 @@ class VoiceCommandManager {
             this.isListening = false;
             this.isStarting = false; // Clear starting flag
             this.clearTimeout();
+            
+            // Auto-restart if user has voice enabled (persistent toggle)
+            if (this.userEnabledVoice) {
+                console.log('[Voice] Recognition ended, auto-restarting...');
+                // Small delay before restarting to avoid rapid fire
+                setTimeout(() => {
+                    if (this.userEnabledVoice && !this.isListening && !this.isStarting) {
+                        this.startListening();
+                    }
+                }, 300);
+                // Keep UI showing as "listening" since we're restarting
+                return;
+            }
+            
             if (this.onStateChange) {
                 this.onStateChange(false);
             }
@@ -324,13 +378,20 @@ class VoiceCommandManager {
     
     /**
      * Toggle listening state
+     * Sets persistent flag so voice stays on until explicitly toggled off
      * @returns {boolean} - New listening state
      */
     toggle() {
-        if (this.isListening) {
+        if (this.isListening || this.userEnabledVoice) {
+            // User is turning voice OFF
+            this.userEnabledVoice = false;
             this.stopListening();
+            console.log('[Voice] User disabled voice control');
             return false;
         } else {
+            // User is turning voice ON
+            this.userEnabledVoice = true;
+            console.log('[Voice] User enabled voice control (persistent)');
             return this.startListening();
         }
     }
@@ -421,7 +482,10 @@ function updateVoiceButtonState(isListening) {
     const voiceBtn = document.getElementById('voice-toggle-btn');
     if (!voiceBtn) return;
     
-    if (isListening) {
+    // Check both current listening state AND user's persistent toggle state
+    const shouldShowActive = isListening || (voiceManager && voiceManager.userEnabledVoice);
+    
+    if (shouldShowActive) {
         voiceBtn.classList.add('listening');
         voiceBtn.setAttribute('aria-pressed', 'true');
     } else {
@@ -543,10 +607,14 @@ function showVoiceToast(message, type = 'info') {
 
 /**
  * Stop voice recognition (called when leaving practice page)
+ * Also clears persistent toggle state
  */
 function stopVoiceRecognition() {
-    if (voiceManager && voiceManager.isListening) {
-        voiceManager.stopListening();
+    if (voiceManager) {
+        voiceManager.userEnabledVoice = false; // Clear persistent state
+        if (voiceManager.isListening) {
+            voiceManager.stopListening();
+        }
     }
 }
 

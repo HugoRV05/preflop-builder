@@ -73,24 +73,50 @@ class TiltController {
      * Must be called from a user gesture (e.g., button click)
      */
     async requestPermission() {
+        const statusValue = document.getElementById('tilt-status');
+        
         if (!this.isSupported) {
             console.warn('[Tilt] Device orientation not supported');
+            if (statusValue) statusValue.textContent = 'Not Supported';
             return false;
         }
         
         if (!this.requiresPermission) {
             this.hasPermission = true;
+            if (statusValue) statusValue.textContent = 'Active - tilt device!';
             return true;
         }
         
         try {
+            if (statusValue) statusValue.textContent = 'Requesting...';
+            console.log('[Tilt] Requesting permission...');
+            
             const permission = await DeviceOrientationEvent.requestPermission();
             this.hasPermission = (permission === 'granted');
-            console.log(`[Tilt] Permission ${this.hasPermission ? 'granted' : 'denied'}`);
+            
+            if (this.hasPermission) {
+                console.log('[Tilt] Permission granted');
+                if (statusValue) statusValue.textContent = 'Active - tilt device!';
+            } else {
+                console.log('[Tilt] Permission denied');
+                if (statusValue) statusValue.textContent = 'Permission Denied';
+            }
+            
             return this.hasPermission;
         } catch (error) {
             console.error('[Tilt] Permission request failed:', error);
-            return false;
+            
+            // Some devices throw even though they don't need permission
+            // Try to start anyway as a fallback
+            console.log('[Tilt] Trying fallback - start without permission');
+            if (statusValue) statusValue.textContent = 'Trying fallback...';
+            
+            // Set permission to true and try to start - if it works, data will come through
+            this.hasPermission = true;
+            this.requiresPermission = false;
+            
+            if (statusValue) statusValue.textContent = 'Active - tilt device!';
+            return true;
         }
     }
     
@@ -700,6 +726,13 @@ async function requestAllSensorPermissions() {
         tilt: false
     };
     
+    const statusValue = document.getElementById('tilt-status');
+    
+    // Initialize tilt controller if not already done
+    if (!tiltController) {
+        initializeTiltControls();
+    }
+    
     // Request microphone permission
     try {
         console.log('[Permissions] Requesting microphone...');
@@ -713,17 +746,39 @@ async function requestAllSensorPermissions() {
         results.microphone = false;
     }
     
-    // Request device orientation permission (iOS 13+)
-    if (tiltController && tiltController.requiresPermission) {
-        console.log('[Permissions] Requesting device orientation...');
-        const granted = await requestTiltPermission();
-        results.tilt = granted;
-        console.log('[Permissions] Device orientation:', granted ? 'granted' : 'denied');
-    } else if (tiltController) {
-        // No permission required, just start
-        tiltController.start();
-        results.tilt = true;
-        console.log('[Permissions] Device orientation: auto-granted (no permission required)');
+    // Request device orientation permission
+    if (tiltController) {
+        if (tiltController.requiresPermission) {
+            console.log('[Permissions] Requesting device orientation...');
+            if (statusValue) statusValue.textContent = 'Requesting...';
+            
+            const granted = await requestTiltPermission();
+            results.tilt = granted;
+            
+            if (granted) {
+                console.log('[Permissions] Device orientation: granted');
+                if (statusValue) statusValue.textContent = 'Active - tilt device!';
+            } else {
+                console.log('[Permissions] Device orientation: denied');
+                if (statusValue) statusValue.textContent = 'Permission Denied';
+            }
+        } else {
+            // No permission required, just start
+            console.log('[Permissions] Device orientation: no permission needed, starting...');
+            const started = tiltController.start();
+            results.tilt = started;
+            
+            if (started) {
+                if (statusValue) statusValue.textContent = 'Active - tilt device!';
+                console.log('[Permissions] Device orientation: auto-granted (no permission required)');
+            } else {
+                if (statusValue) statusValue.textContent = 'Start Failed';
+                console.warn('[Permissions] Device orientation: failed to start');
+            }
+        }
+    } else {
+        if (statusValue) statusValue.textContent = 'Not Initialized';
+        console.warn('[Permissions] Tilt controller not available');
     }
     
     // Show debug panel if tilt is now active

@@ -1241,6 +1241,33 @@ function showPage(pageId) {
         if (pageId !== 'practice-page' && typeof stopTiltControls === 'function') {
             stopTiltControls();
         }
+
+        // Poki Entrance Animations
+        // Profile Page Icon
+        const pokiProfileBtn = document.getElementById('profile-assistant-btn');
+        if (pokiProfileBtn) {
+            if (pageId === 'profile-page') {
+                pokiProfileBtn.classList.remove('poki-animate-enter');
+                void pokiProfileBtn.offsetWidth; // Force reflow
+                pokiProfileBtn.classList.add('poki-animate-enter');
+            } else {
+                pokiProfileBtn.classList.remove('poki-animate-enter');
+            }
+        }
+        
+        // Practice Page Button (ensure it animates every time too)
+        const pokiPracticeBtn = document.querySelector('.poki-help-btn');
+        if (pokiPracticeBtn) {
+            // Note: This button uses 'poki-pop-in' directly in CSS animation property currently, 
+            // but toggling the class ensures it restarts if we move to a class-based approach or if display none/block doesn't trigger it on some browsers.
+            // For now, let's leave it as CSS-driven or we can enforce it here if needed.
+            // Let's force it for consistency if it has the class.
+             if (pageId === 'practice-page') {
+                pokiPracticeBtn.style.animation = 'none';
+                pokiPracticeBtn.offsetHeight; /* trigger reflow */
+                pokiPracticeBtn.style.animation = null; 
+            }
+        }
         
         // Reset transition state
         setTimeout(() => {
