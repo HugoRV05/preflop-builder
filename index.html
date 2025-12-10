@@ -453,6 +453,25 @@
             </div>
         </section>
 
+        <!-- Profile Name Edit Modal -->
+        <div class="profile-name-edit-modal-overlay" id="profile-name-edit-modal-overlay">
+            <div class="profile-name-edit-modal">
+                <h3>Edit Profile Name</h3>
+                <input 
+                    type="text" 
+                    id="profile-name-edit-input" 
+                    class="profile-name-edit-input" 
+                    placeholder="Enter your name"
+                    maxlength="30"
+                    autocomplete="off"
+                >
+                <div class="profile-name-edit-modal-actions">
+                    <button class="profile-name-edit-btn cancel-btn" id="profile-name-edit-cancel-btn">Cancel</button>
+                    <button class="profile-name-edit-btn save-btn" id="profile-name-edit-save-btn">Save</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Edit Ranges Page -->
         <section id="edit-ranges-page" class="page">
             <div class="edit-ranges-layout">
@@ -726,7 +745,19 @@
                     <button class="practice-action-btn three-bet-fold">3Bet/Fold</button>
                     <button class="practice-action-btn three-bet-call">3Bet/Call</button>
                     <button class="practice-action-btn three-bet-push">3Bet/Push</button>
+                    
+                    <!-- Voice Control Button -->
+                    <button class="voice-control-btn" id="voice-toggle-btn" aria-label="Toggle voice commands" aria-pressed="false">
+                        <svg class="mic-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0">
+                            <rect x="9" y="2" width="6" height="11" rx="3" ry="3"></rect>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                            <line x1="12" x2="12" y1="19" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                            <line x1="8" x2="16" y1="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+                        </svg>
+                    </button>
+
                 </div>
+
                 
                 <!-- History Tracker -->
                 <div class="practice-history-tracker">
@@ -759,10 +790,33 @@
                     </button>
                 </div>
                 
+                <!-- Sensor Permissions Banner (shows if permissions needed) -->
+                <div id="sensor-permission-banner" class="sensor-permission-banner" style="display: none;">
+                    <div class="permission-content">
+                        <div class="permission-icon">🎤📱</div>
+                        <div class="permission-text">
+                            <strong>Enable Hands-Free Controls</strong>
+                            <span>Voice commands & tilt gestures</span>
+                        </div>
+                        <button id="grant-permissions-btn" class="grant-permissions-btn">Enable</button>
+                        <button id="dismiss-permissions-btn" class="dismiss-permissions-btn" aria-label="Dismiss">×</button>
+                    </div>
+                </div>
+                
+                <!-- Debug Panel for Tilt (hidden by default, shows in dev) -->
+                <div id="tilt-debug-panel" class="tilt-debug-panel">
+                    <div class="debug-label">Tilt Debug</div>
+                    <div class="debug-value">
+                        <span id="tilt-gamma-value">γ: 0°</span>
+                        <span id="tilt-status">Inactive</span>
+                    </div>
+                </div>
+                
                 <!-- End Session Button -->
                 <div class="end-session-container">
                     <button class="end-session-btn" id="end-session-btn">End Session</button>
                 </div>
+
                 
                 <!-- Hand Detail Panel (Hidden) -->
                 <div id="hand-detail-panel" class="hand-detail-overlay">
@@ -1695,6 +1749,10 @@
         </button>
     </nav>
 
+    <script src="js/voice-commands.js?v=1.0.0"></script>
+    <script src="js/tilt-controller.js?v=1.0.0"></script>
     <script src="js/main.js?v=2.0.4"></script>
+
 </body>
+
 </html>

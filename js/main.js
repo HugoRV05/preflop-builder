@@ -680,18 +680,29 @@ function setupSessionNamingModal() {
         hideSessionNamingModal();
     });
     
-    // Save button
+    // Save button - prevent double trigger
+    let isSavingSession = false;
     saveBtn.addEventListener('click', () => {
+        if (isSavingSession) return;
+        isSavingSession = true;
         const sessionName = input.value;
         createSessionWithName(sessionName);
+        setTimeout(() => {
+            isSavingSession = false;
+        }, 500);
     });
     
-    // Enter key to save
+    // Enter key to save - prevent double trigger
     input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Prevent form submission
+            if (isSavingSession) return;
+            isSavingSession = true;
             const sessionName = input.value;
             createSessionWithName(sessionName);
+            setTimeout(() => {
+                isSavingSession = false;
+            }, 500);
         }
     });
     
@@ -699,6 +710,95 @@ function setupSessionNamingModal() {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             hideSessionNamingModal();
+        }
+    });
+}
+
+/**
+ * Show profile name edit modal
+ */
+function showProfileNameEditModal() {
+    const modal = document.getElementById('profile-name-edit-modal-overlay');
+    const input = document.getElementById('profile-name-edit-input');
+    const profileNameEl = document.getElementById('profile-name');
+    
+    if (!modal || !input || !profileNameEl) return;
+    
+    // Set current name as input value
+    const currentName = profileNameEl.textContent.trim();
+    input.value = currentName;
+    
+    // Show modal
+    modal.classList.add('active');
+    
+    // Focus input after animation
+    setTimeout(() => {
+        input.focus();
+        input.select(); // Select all text for easy editing
+    }, 100);
+}
+
+/**
+ * Hide profile name edit modal
+ */
+function hideProfileNameEditModal() {
+    const modal = document.getElementById('profile-name-edit-modal-overlay');
+    
+    if (!modal) return;
+    
+    modal.classList.remove('active');
+}
+
+/**
+ * Setup profile name edit modal event listeners
+ */
+function setupProfileNameEditModal() {
+    const modal = document.getElementById('profile-name-edit-modal-overlay');
+    const cancelBtn = document.getElementById('profile-name-edit-cancel-btn');
+    const saveBtn = document.getElementById('profile-name-edit-save-btn');
+    const input = document.getElementById('profile-name-edit-input');
+    
+    if (!modal || !cancelBtn || !saveBtn || !input) return;
+    
+    // Cancel button
+    cancelBtn.addEventListener('click', () => {
+        hideProfileNameEditModal();
+    });
+    
+    // Save button
+    saveBtn.addEventListener('click', () => {
+        const newName = input.value.trim();
+        const profileNameEl = document.getElementById('profile-name');
+        
+        if (!profileNameEl) return;
+        
+        const currentName = profileNameEl.textContent.trim();
+        
+        if (newName && newName !== '' && newName !== currentName) {
+            profileNameEl.textContent = newName;
+            // Save to localStorage
+            try {
+                localStorage.setItem('profile-name', newName);
+            } catch (error) {
+                console.warn('Could not save name to localStorage:', error);
+            }
+        }
+        
+        hideProfileNameEditModal();
+    });
+    
+    // Enter key to save
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent form submission
+            saveBtn.click(); // Trigger save button click
+        }
+    });
+    
+    // Click outside to close
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideProfileNameEditModal();
         }
     });
 }
@@ -1128,6 +1228,20 @@ function showPage(pageId) {
         // Update current page tracking
         currentPageId = pageId;
         
+        // Voice control: stop listening when leaving practice, show/hide button
+        if (typeof stopVoiceRecognition === 'function') {
+            stopVoiceRecognition();
+        }
+        const voiceBtn = document.getElementById('voice-toggle-btn');
+        if (voiceBtn) {
+            voiceBtn.style.display = (pageId === 'practice-page') ? '' : 'none';
+        }
+        
+        // Tilt control: stop when leaving practice page
+        if (pageId !== 'practice-page' && typeof stopTiltControls === 'function') {
+            stopTiltControls();
+        }
+        
         // Reset transition state
         setTimeout(() => {
             isTransitioning = false;
@@ -1135,6 +1249,8 @@ function showPage(pageId) {
         
     }, 300); // Match CSS transition duration
 }
+
+
 
 // ==========================================
 // THEME MANAGEMENT
@@ -2107,7 +2223,7 @@ function setupPracticeMode() {
     const practiceButtons = document.querySelectorAll('.practice-action-btn');
     practiceButtons.forEach(btn => {
         btn.addEventListener('click', function() {
-            const actionClass = Array.from(this.classList).find(cls => cls !== 'practice-action-btn');
+            const actionClass = Array.from(this.classList).find(cls => cls !== 'practice-action-btn' && cls !== 'voice-activated');
             handlePracticeAction(actionClass);
         });
     });
@@ -2120,7 +2236,25 @@ function setupPracticeMode() {
     
     // Setup session management
     setupSessionManagement();
+    
+    // Initialize voice commands (from voice-commands.js)
+    if (typeof initializeVoiceCommands === 'function') {
+        initializeVoiceCommands();
+    }
+    
+    // Initialize tilt controls (from tilt-controller.js)
+    if (typeof initializeTiltControls === 'function') {
+        initializeTiltControls();
+    }
+    
+    // Check and show permission banner if needed
+    if (typeof checkAndShowPermissionBanner === 'function') {
+        checkAndShowPermissionBanner();
+    }
 }
+
+
+
 
 function initializePracticeConfig() {
     // Initialize all hands as selected by default
@@ -4211,23 +4345,12 @@ function setupProfilePage() {
     const editNameBtn = document.getElementById('profile-edit-name');
     if (editNameBtn) {
         editNameBtn.addEventListener('click', () => {
-            const profileNameEl = document.getElementById('profile-name');
-            if (!profileNameEl) return;
-            
-            const currentName = profileNameEl.textContent.trim();
-            const newName = prompt('Enter your new name:', currentName);
-            
-            if (newName && newName.trim() !== '' && newName.trim() !== currentName) {
-                profileNameEl.textContent = newName.trim();
-                // Optionally save to localStorage
-                try {
-                    localStorage.setItem('profile-name', newName.trim());
-                } catch (error) {
-                    console.warn('Could not save name to localStorage:', error);
-                }
-            }
+            showProfileNameEditModal();
         });
     }
+    
+    // Setup profile name edit modal
+    setupProfileNameEditModal();
     
     // Load saved name on page load
     const profileNameEl = document.getElementById('profile-name');

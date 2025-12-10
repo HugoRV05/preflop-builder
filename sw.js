@@ -14,11 +14,15 @@ const STATIC_ASSETS = [
   './manifest.json',
   './css/styles.css',
   './js/main.js',
+  './js/voice-commands.js',
+  './js/tilt-controller.js',
   './assets/default-preflop-ranges-v1.json',
   // Add icon paths when they exist
   // './assets/icon-192.png',
   // './assets/icon-512.png'
 ];
+
+
 
 // Network-first resources (try network, fallback to cache)
 // DEVELOPMENT MODE: Using network-first for CSS/JS for instant updates
