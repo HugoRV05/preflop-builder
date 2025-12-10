@@ -3558,7 +3558,7 @@ body.on-landing-page .header-right {
 
 .practice-config-overlay {
     position: absolute;
-    height: 80svh;
+    height: 85svh;
     top: calc(env(safe-area-inset-top, 20px) + 20px);
     left: 0;
     right: 0;
@@ -9196,7 +9196,7 @@ input:checked + .toggle-slider:before {
 /* Voice Control Button */
 .voice-control-btn {
     position: fixed;
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 70px);
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 50px);
     right: 20px;
     width: 56px;
     height: 56px;
@@ -9370,7 +9370,7 @@ input:checked + .toggle-slider:before {
     .voice-control-btn {
         width: 52px;
         height: 52px;
-        bottom: calc(var(--bottom-nav-height-mobile, 70px) + 70px);
+        bottom: calc(var(--bottom-nav-height-mobile, 70px) + 50px);
         right: 16px;
     }
     
@@ -9922,7 +9922,7 @@ input:checked + .toggle-slider:before {
 /* ---- Poki Chat Icon (Profile Page - Fixed Bottom Right) ---- */
 .poki-chat-icon {
     position: fixed;
-    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 70px);
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 50px);
     right: 20px;
     width: 60px;
     height: 60px;
@@ -10335,7 +10335,7 @@ input:checked + .toggle-slider:before {
 /* ---- Mobile Adjustments ---- */
 @media (max-width: 430px) {
     .poki-help-btn {
-        top: calc(env(safe-area-inset-top, 16px) + 80px);
+        top: calc(env(safe-area-inset-top, 16px) + 60px);
         right: 12px;
         width: 48px;
         height: 48px;
