@@ -1,9 +1,9 @@
 // Service Worker for Preflop Builder PWA
-// Version 2.2.0 - Added bottom navigation and mobile settings button
+// Version 2.3.0 - Poki Assistant Upgrade
 
-const CACHE_NAME = 'preflop-builder-v2.2.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v2.2.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.2.0';
+const CACHE_NAME = 'preflop-builder-v2.3.0';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v2.3.0';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.3.0';
 const GOOGLE_FONTS_CACHE = 'google-fonts';
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -16,11 +16,17 @@ const STATIC_ASSETS = [
   './js/main.js',
   './js/voice-commands.js',
   './js/tilt-controller.js',
+  './js/rule-engine.js',
+  './js/stats-tracker.js',
+  './js/assistant.js',
   './assets/default-preflop-ranges-v1.json',
+  './assets/poki-icon.svg',
   // Add icon paths when they exist
   // './assets/icon-192.png',
   // './assets/icon-512.png'
 ];
+
+
 
 
 

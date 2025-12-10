@@ -286,6 +286,13 @@ function initializeTiltControls() {
     // Check support
     if (!tiltController.isSupported) {
         console.log('[Tilt] Device orientation not supported - tilt controls disabled');
+        // Still show debug panel with "Not Supported" message
+        const debugPanel = document.getElementById('tilt-debug-panel');
+        const statusValue = document.getElementById('tilt-status');
+        if (debugPanel && tiltDebugMode) {
+            debugPanel.classList.add('visible');
+            if (statusValue) statusValue.textContent = 'Not Supported';
+        }
         return;
     }
     
@@ -294,13 +301,29 @@ function initializeTiltControls() {
     tiltController.onTiltRight = handleTiltRight;
     tiltController.onTiltDetected = showTiltFeedback;
     
+    // Show debug panel immediately if debug mode is on
+    if (tiltDebugMode) {
+        const debugPanel = document.getElementById('tilt-debug-panel');
+        const statusValue = document.getElementById('tilt-status');
+        if (debugPanel) {
+            debugPanel.classList.add('visible');
+            if (statusValue) statusValue.textContent = 'Waiting for permission...';
+        }
+    }
+    
     // For non-iOS devices, start immediately
     if (!tiltController.requiresPermission) {
         tiltController.start();
+        console.log('[Tilt] Started automatically (no permission required)');
+        const statusValue = document.getElementById('tilt-status');
+        if (statusValue) statusValue.textContent = 'Active - tilt device!';
+    } else {
+        console.log('[Tilt] Waiting for user permission (iOS)');
     }
     
     console.log('[Tilt] Tilt controls initialized');
 }
+
 
 /**
  * Request tilt permission (needed for iOS 13+)

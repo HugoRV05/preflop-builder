@@ -4750,57 +4750,6 @@ input:checked + .toggle-slider:before {
 }
 
 /* ==========================================
-   MID-SESSION EVENT POPUP
-   ========================================== */
-
-.mid-session-event {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100px);
-    z-index: 1600;
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    pointer-events: none;
-}
-
-.mid-session-event.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-
-.mid-session-bubble {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.95), rgba(2, 117, 216, 0.95));
-    color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.mid-session-text {
-    font-size: 15px;
-    font-weight: 600;
-    white-space: nowrap;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 430px) {
-    .mid-session-event {
-        top: 70px;
-    }
-    
-    .mid-session-bubble {
-        padding: 10px 20px;
-    }
-    
-    .mid-session-text {
-        font-size: 13px;
-    }
-}
-
-/* ==========================================
    SESSION RESULTS PANEL - ENHANCED
    ========================================== */
 
@@ -9724,3 +9673,597 @@ input:checked + .toggle-slider:before {
     color: var(--text-primary);
 }
 
+/* ==========================================
+   POKI ASSISTANT STYLES v2.0
+   ========================================== */
+
+/* ---- Poki Help Button (Top Right, Practice Page) ---- */
+.poki-help-btn {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 20px) + 100px);
+    right: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.5);
+    z-index: 100;
+    transition: all 0.3s ease;
+    animation: poki-float 3s ease-in-out infinite;
+}
+
+@keyframes poki-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.poki-help-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(124, 58, 237, 0.6);
+}
+
+.poki-help-btn:active {
+    transform: scale(0.95);
+}
+
+.poki-btn-icon {
+    width: 36px;
+    height: 36px;
+}
+
+/* ---- Move Voice Button Lower ---- */
+.voice-control-btn {
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 100px) !important;
+}
+
+/* ---- Poki Hint Modal (Centered) ---- */
+.poki-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.poki-modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.poki-modal {
+    width: 100%;
+    max-width: 400px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.poki-modal-overlay.open .poki-modal {
+    transform: scale(1) translateY(0);
+}
+
+.poki-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.poki-modal-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.poki-modal-avatar svg {
+    width: 100%;
+    height: 100%;
+}
+
+.poki-modal-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.poki-modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    font-size: 20px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.poki-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+}
+
+.poki-modal-body {
+    padding: 20px;
+}
+
+/* Hint Meta Badges */
+.hint-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.hint-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hint-badge.position {
+    background: linear-gradient(135deg, var(--primary) 0%, #00b8e6 100%);
+    color: #fff;
+}
+
+.hint-badge.category {
+    background: rgba(124, 58, 237, 0.2);
+    color: #a855f7;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+/* Hint Content */
+.hint-content {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.hint-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+/* Hint Tip */
+.hint-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.tip-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.tip-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ---- Poki Chat Icon (Profile Page - Fixed Bottom Right) ---- */
+.poki-chat-icon {
+    position: fixed;
+    bottom: calc(var(--bottom-nav-height-mobile, 80px) + 24px);
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.5);
+    z-index: 100;
+    transition: all 0.3s ease;
+    animation: poki-pulse 3s ease-in-out infinite;
+}
+
+@keyframes poki-pulse {
+    0%, 100% { box-shadow: 0 6px 24px rgba(124, 58, 237, 0.5); }
+    50% { box-shadow: 0 6px 32px rgba(124, 58, 237, 0.7), 0 0 0 10px rgba(124, 58, 237, 0.1); }
+}
+
+.poki-chat-icon:hover {
+    transform: scale(1.1);
+}
+
+.poki-chat-icon:active {
+    transform: scale(0.95);
+}
+
+.poki-icon-svg {
+    width: 42px;
+    height: 42px;
+}
+
+/* ---- Poki Chat Panel (Large Modal) ---- */
+.poki-chat-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.poki-chat-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.poki-chat-panel {
+    width: 100%;
+    max-width: 500px;
+    height: 85vh;
+    max-height: 700px;
+    background: var(--card-bg);
+    border-radius: 24px;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(40px) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.poki-chat-overlay.open .poki-chat-panel {
+    transform: translateY(0) scale(1);
+}
+
+.poki-chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.poki-chat-avatar {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.poki-chat-avatar svg {
+    width: 100%;
+    height: 100%;
+}
+
+.poki-chat-title-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.poki-chat-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.poki-chat-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.poki-chat-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    font-size: 24px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.poki-chat-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+}
+
+/* Chat Messages Container */
+.poki-chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Chat Message */
+.chat-message {
+    display: flex;
+    gap: 10px;
+    max-width: 90%;
+    animation: message-fade-in 0.3s ease forwards;
+    opacity: 0;
+}
+
+@keyframes message-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-message.poki {
+    align-self: flex-start;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+/* Poki Avatar in Chat */
+.poki-avatar {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.poki-avatar svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Chat Bubble */
+.chat-bubble {
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.chat-message.poki .chat-bubble {
+    background: rgba(124, 58, 237, 0.12);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: var(--text-primary);
+    border-top-left-radius: 4px;
+}
+
+.chat-message.user .chat-bubble {
+    background: linear-gradient(135deg, var(--primary) 0%, #00b8e6 100%);
+    color: #fff;
+    border-top-right-radius: 4px;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 16px;
+    background: rgba(124, 58, 237, 0.12);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 16px;
+    border-top-left-radius: 4px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: #a855f7;
+    border-radius: 50%;
+    animation: typing-bounce 1.4s ease-in-out infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Chat Options */
+.chat-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 0;
+    animation: options-fade-in 0.4s ease forwards;
+    opacity: 0;
+}
+
+@keyframes options-fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-option-btn {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chat-option-btn:hover {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateY(-2px);
+}
+
+.chat-option-btn:active {
+    transform: translateY(0);
+}
+
+/* ---- Poki Feedback Toast (Top Position) ---- */
+.poki-feedback {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 20px) + 20px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(30, 30, 30, 0.95);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 500;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: calc(100vw - 40px);
+}
+
+.poki-feedback.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.poki-feedback-avatar {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.poki-feedback-avatar svg {
+    width: 100%;
+    height: 100%;
+}
+
+.poki-feedback-text {
+    font-size: 14px;
+}
+
+.poki-feedback.poki-feedback-success {
+    border-color: rgba(76, 175, 80, 0.4);
+}
+
+.poki-feedback.poki-feedback-struggle {
+    border-color: rgba(255, 152, 0, 0.4);
+}
+
+/* ---- Skill Icons (SVG) ---- */
+.skill-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
+}
+
+/* ---- Light Theme Adjustments ---- */
+[data-theme="light"] .poki-modal {
+    background: rgba(255, 255, 255, 0.98);
+}
+
+[data-theme="light"] .poki-chat-panel {
+    background: rgba(255, 255, 255, 0.98);
+}
+
+[data-theme="light"] .hint-content {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .chat-message.poki .chat-bubble {
+    background: rgba(124, 58, 237, 0.08);
+}
+
+[data-theme="light"] .typing-indicator {
+    background: rgba(124, 58, 237, 0.08);
+}
+
+[data-theme="light"] .chat-option-btn {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .poki-feedback {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(124, 58, 237, 0.2);
+    color: var(--text-primary);
+}
+
+/* ---- Mobile Adjustments ---- */
+@media (max-width: 430px) {
+    .poki-help-btn {
+        top: calc(env(safe-area-inset-top, 16px) + 80px);
+        right: 12px;
+        width: 48px;
+        height: 48px;
+    }
+    
+    .poki-btn-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .poki-chat-panel {
+        height: 90vh;
+        max-height: none;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .poki-modal {
+        max-width: 100%;
+        border-radius: 16px;
+    }
+    
+    .poki-chat-icon {
+        right: 16px;
+        width: 54px;
+        height: 54px;
+    }
+    
+    .poki-icon-svg {
+        width: 36px;
+        height: 36px;
+    }
+}

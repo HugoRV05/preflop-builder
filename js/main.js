@@ -2251,7 +2251,13 @@ function setupPracticeMode() {
     if (typeof checkAndShowPermissionBanner === 'function') {
         checkAndShowPermissionBanner();
     }
+    
+    // Initialize assistant (from assistant.js)
+    if (typeof initializeAssistant === 'function') {
+        initializeAssistant();
+    }
 }
+
 
 
 
@@ -2555,10 +2561,7 @@ function applyPracticeConfiguration() {
     }
     
     // Initialize feedback timing variables
-    lastDecisionTime = Date.now();
-    midSessionEventLastShown = 0;
-    midSessionEventCount = 0;
-    
+
     // Generate available hands for practice
     generateAvailableHands();
     
@@ -3119,10 +3122,7 @@ function handlePracticeAction(actionClass) {
     } else {
         currentStreak = 0;
     }
-    
-    // Check for mid-session events
-    checkMidSessionEvents(isCorrect, decisionTime);
-    
+
     // Store hand in history
     const handRecord = {
         ...practiceState.currentHand,
@@ -3136,61 +3136,18 @@ function handlePracticeAction(actionClass) {
     // Update history tracker
     updateHistoryTracker(isCorrect, handsPlayed);
     
+    // Show assistant feedback (from assistant.js)
+    if (typeof showPostHandFeedback === 'function') {
+        const hand = practiceState.currentHand.hand;
+        const position = practiceState.currentHeroPosition;
+        showPostHandFeedback(position, hand, isCorrect);
+    }
+
+    
     // Move to next hand after short delay
     setTimeout(() => {
         practiceState.currentHandIndex++;
         dealNextPracticeHand();
-    }, 1500);
-}
-
-// Mid-Session Event System
-function checkMidSessionEvents(isCorrect, decisionTime) {
-    // Limit to one event every 10 hands minimum
-    if (handsPlayed - midSessionEventLastShown < 10) return;
-    
-    let eventMessage = null;
-    
-    // Check for streak events
-    if (currentStreak >= 3 && isCorrect) {
-        eventMessage = "🔥 Streak mode!";
-    } else if (!isCorrect && handsPlayed >= 3) {
-        // Check for 3 wrong in a row
-        const recentHands = practiceState.handHistory.slice(-2);
-        const allWrong = recentHands.every(hand => !hand.isCorrect);
-        if (allWrong) {
-            eventMessage = "Shake it off — next one.";
-        }
-    }
-    
-    // Check for speed events (only if no streak event)
-    if (!eventMessage && handsPlayed > 1) {
-        if (decisionTime < 1000) {
-            eventMessage = "⚡ Lightning speed!";
-        } else if (decisionTime > 8000) {
-            eventMessage = "Taking your time… nice.";
-        }
-    }
-    
-    // Show event if we have one
-    if (eventMessage) {
-        showMidSessionEvent(eventMessage);
-        midSessionEventLastShown = handsPlayed;
-        midSessionEventCount++;
-    }
-}
-
-function showMidSessionEvent(message) {
-    const eventContainer = document.getElementById('mid-session-event');
-    const eventText = eventContainer.querySelector('.mid-session-text');
-    
-    if (!eventContainer || !eventText) return;
-    
-    eventText.textContent = message;
-    eventContainer.classList.add('show');
-    
-    // Hide after 1.5 seconds
-    setTimeout(() => {
-        eventContainer.classList.remove('show');
     }, 1500);
 }
 
@@ -3214,8 +3171,6 @@ const feedbackMessages = {
 };
 
 let lastDecisionTime = Date.now();
-let midSessionEventLastShown = 0;
-let midSessionEventCount = 0;
 
 function showFeedback(isCorrect) {
     const feedbackOverlay = document.getElementById('practice-feedback-overlay');
@@ -3630,8 +3585,6 @@ function startNewSession() {
     bestStreak = 0;
     sessionStartTime = null;
     lastDecisionTime = Date.now();
-    midSessionEventLastShown = 0;
-    midSessionEventCount = 0;
     practiceState.currentHandIndex = 0;
     practiceState.handHistory = [];
     practiceState.historyViewStart = 0;

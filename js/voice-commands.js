@@ -25,10 +25,39 @@ class VoiceCommandManager {
         this.onStateChange = null;
         
         // Command vocabulary mapping
+        // Includes phonetic variations for common misrecognitions
         this.commandMap = {
-            // Single word commands
+            // FOLD - and phonetic variations (sounds like "fold")
             'fold': 'fold',
+            'fault': 'fold',  // Common misrecognition
+            'ford': 'fold',   // Common misrecognition
+            'folds': 'fold',
+            'folding': 'fold',
+            'fuck': 'fold',   // Sometimes recognized as this
+            'foe': 'fold',
+            'full': 'fold',
+            'fall': 'fold',
+            'folk': 'fold',
+            
+            // NO-FOLD (for fold-no-fold mode)
+            'no fold': 'no-fold',
+            'no-fold': 'no-fold',
+            'nofold': 'no-fold',
+            'don\'t fold': 'no-fold',
+            'not fold': 'no-fold',
+            'play': 'no-fold',
+            'stay': 'no-fold',
+            'continue': 'no-fold',
+            'keep': 'no-fold',
+            'raise': 'no-fold',  // Playing means not folding
+            
+            // CALL - and variations
             'call': 'call',
+            'calls': 'call',
+            'calling': 'call',
+            'cool': 'call',    // Misrecognition
+            'cold': 'call',    // Misrecognition
+            'car': 'call',     // Misrecognition
             
             // Open raise variations
             'open': 'or-fold',
@@ -58,6 +87,13 @@ class VoiceCommandManager {
             'threebet call': 'three-bet-call',
             'threebet push': 'three-bet-push'
         };
+        
+        // Words that sound like "fold" (for fuzzy matching)
+        this.foldVariations = ['fold', 'fault', 'ford', 'folds', 'folding', 'fuck', 'foe', 'full', 'fall', 'folk', 'false', 'fort', 'food'];
+        
+        // Words that indicate "no fold" / "play"
+        this.noFoldVariations = ['no', 'play', 'stay', 'continue', 'keep', 'raise', 'bet', 'don\'t'];
+
         
         if (this.isSupported) {
             this.initRecognition();
@@ -207,9 +243,29 @@ class VoiceCommandManager {
             }
         }
         
-        // Single word matches
-        if (tokens.includes('fold')) return 'fold';
-        if (tokens.includes('call') && !tokens.includes('open') && !tokens.includes('three') && !tokens.includes('3')) {
+        // Check for "no fold" pattern first (before checking fold)
+        const hasNoFoldIndicator = tokens.some(t => this.noFoldVariations.includes(t));
+        const hasFoldWord = tokens.some(t => this.foldVariations.includes(t));
+        
+        if (hasNoFoldIndicator && hasFoldWord) {
+            // "no fold", "don't fold", etc.
+            return 'no-fold';
+        }
+        
+        if (hasNoFoldIndicator && (tokens.includes('play') || tokens.includes('stay') || tokens.includes('continue'))) {
+            // Just "play", "stay", "continue" without fold
+            return 'no-fold';
+        }
+        
+        // Single word matches with fuzzy fold detection
+        if (hasFoldWord && !hasNoFoldIndicator) {
+            return 'fold';
+        }
+        
+        // Call variations
+        const callVariations = ['call', 'calls', 'calling', 'cool', 'cold', 'car', 'coal'];
+        if (tokens.some(t => callVariations.includes(t)) && 
+            !tokens.includes('open') && !tokens.includes('three') && !tokens.includes('3')) {
             return 'call';
         }
         
@@ -217,6 +273,7 @@ class VoiceCommandManager {
     }
     
     /**
+
      * Start listening for voice commands
      */
     startListening() {
@@ -382,6 +439,10 @@ function handleVoiceCommand(actionClass, transcript) {
     // Find the button with this action class
     const button = document.querySelector(`.practice-action-btn.${actionClass}`);
     
+    // Log what was recognized and what action will be taken
+    console.log(`%c[VOICE] "${transcript}" → ${actionClass}`, 
+        'background: #4caf50; color: #fff; font-weight: bold; padding: 4px 8px; border-radius: 4px;');
+    
     if (!button) {
         showVoiceError(`Button not found for: ${actionClass}`);
         return;
@@ -393,13 +454,24 @@ function handleVoiceCommand(actionClass, transcript) {
         return;
     }
     
-    // Add voice-activated animation to the button
+    // Show a toast with what was recognized
+    showVoiceToast(`🎤 ${button.textContent}`, 'success');
+    
+    // Add voice-activated animation to the button (stronger effect)
     button.classList.add('voice-activated');
     
-    // Remove animation class after it completes
+    // Also add a temporary scale and glow
+    button.style.transform = 'scale(1.15)';
+    button.style.boxShadow = '0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.4)';
+    button.style.zIndex = '10';
+    
+    // Remove animation class and reset styles after it completes
     setTimeout(() => {
         button.classList.remove('voice-activated');
-    }, 600);
+        button.style.transform = '';
+        button.style.boxShadow = '';
+        button.style.zIndex = '';
+    }, 800);
     
     // Trigger the action (using existing handlePracticeAction function)
     if (typeof handlePracticeAction === 'function') {
@@ -408,6 +480,7 @@ function handleVoiceCommand(actionClass, transcript) {
     
     console.log(`[Voice] Executed action: ${actionClass}`);
 }
+
 
 /**
  * Show voice error feedback

@@ -756,7 +756,65 @@
                         </svg>
                     </button>
 
+                    <!-- Poki Assistant Button (Top Right) -->
+                    <button class="poki-help-btn" id="practice-assistant-btn" aria-label="Ask Poki for help">
+                        <svg class="poki-btn-icon" viewBox="0 0 64 64" fill="none">
+                            <rect x="12" y="16" width="40" height="36" rx="8" fill="url(#poki-btn-grad)"/>
+                            <circle cx="32" cy="6" r="4" fill="#22d3ee"/>
+                            <line x1="32" y1="16" x2="32" y2="8" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                            <rect x="16" y="22" width="32" height="24" rx="4" fill="#1a1a2e"/>
+                            <ellipse cx="24" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                            <ellipse cx="40" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                            <circle cx="22" cy="30" r="1.5" fill="#fff"/>
+                            <circle cx="38" cy="30" r="1.5" fill="#fff"/>
+                            <path d="M26 40 Q32 45 38 40" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <defs><linearGradient id="poki-btn-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs>
+                        </svg>
+                    </button>
                 </div>
+
+                <!-- Poki Hint Modal (Centered) -->
+                <div id="practice-assistant-modal" class="poki-modal-overlay">
+                    <div class="poki-modal">
+                        <div class="poki-modal-header">
+                            <div class="poki-modal-avatar">
+                                <svg viewBox="0 0 64 64" fill="none">
+                                    <rect x="12" y="16" width="40" height="36" rx="8" fill="url(#poki-modal-grad)"/>
+                                    <circle cx="32" cy="6" r="4" fill="#22d3ee"/>
+                                    <line x1="32" y1="16" x2="32" y2="8" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                                    <rect x="16" y="22" width="32" height="24" rx="4" fill="#1a1a2e"/>
+                                    <ellipse cx="24" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                                    <ellipse cx="40" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                                    <circle cx="22" cy="30" r="1.5" fill="#fff"/>
+                                    <circle cx="38" cy="30" r="1.5" fill="#fff"/>
+                                    <path d="M26 40 Q32 45 38 40" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                                    <defs><linearGradient id="poki-modal-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs>
+                                </svg>
+                            </div>
+                            <span class="poki-modal-title">Poki's Take</span>
+                            <button class="poki-modal-close" id="close-practice-modal" aria-label="Close">×</button>
+                        </div>
+                        <div class="poki-modal-body">
+                            <div class="hint-meta">
+                                <span class="hint-badge position" id="hint-position">BU</span>
+                                <span class="hint-badge category" id="hint-category">Pocket Pair</span>
+                            </div>
+                            <div class="hint-content">
+                                <p class="hint-text" id="hint-text">Deal a hand and I'll give you the lowdown!</p>
+                            </div>
+                            <div class="hint-tip">
+                                <svg class="tip-icon" viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12" y2="8"/>
+                                </svg>
+                                <p class="tip-text" id="hint-tip">Position is everything in poker, fam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 
                 <!-- History Tracker -->
@@ -886,13 +944,7 @@
                     <div class="feedback-particles" id="feedback-particles"></div>
                 </div>
                 
-                <!-- Mid-Session Event Popup -->
-                <div id="mid-session-event" class="mid-session-event">
-                    <div class="mid-session-bubble">
-                        <span class="mid-session-text"></span>
-                    </div>
-                </div>
-                
+
                 <!-- Session Results Panel (Hidden) -->
                 <div id="session-results-panel" class="session-results-overlay">
                     <div class="session-results-content">
@@ -1009,7 +1061,18 @@
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
+                        <div class="setting-item toggle-row">
+                            <div class="setting-copy">
+                                <label for="assistant-practice-toggle">Assistant in Practice Mode</label>
+                                <p>Get contextual hints and post-hand feedback while practicing.</p>
+                            </div>
+                            <label class="toggle-switch" aria-label="Enable assistant">
+                                <input type="checkbox" id="assistant-practice-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
                     </div>
+
 
                     <div class="setting-group">
                         <h3>Theme</h3>
@@ -1120,6 +1183,22 @@
         <!-- Profile Page -->
         <section id="profile-page" class="page">
             <div class="profile-container">
+                <!-- Poki Chat Icon (Fixed Bottom Right) -->
+                <button class="poki-chat-icon" id="profile-assistant-btn" aria-label="Chat with Poki">
+                    <svg class="poki-icon-svg" viewBox="0 0 64 64" fill="none">
+                        <rect x="12" y="16" width="40" height="36" rx="8" fill="url(#poki-profile-grad)"/>
+                        <circle cx="32" cy="6" r="4" fill="#22d3ee"/>
+                        <line x1="32" y1="16" x2="32" y2="8" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="16" y="22" width="32" height="24" rx="4" fill="#1a1a2e"/>
+                        <ellipse cx="24" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                        <ellipse cx="40" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                        <circle cx="22" cy="30" r="1.5" fill="#fff"/>
+                        <circle cx="38" cy="30" r="1.5" fill="#fff"/>
+                        <path d="M26 40 Q32 45 38 40" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                        <defs><linearGradient id="poki-profile-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs>
+                    </svg>
+                </button>
+
                 <!-- Profile Core Section -->
                 <div class="profile-core">
                     <div class="profile-avatar" id="profile-avatar">
@@ -1141,17 +1220,31 @@
                     <h3 class="skill-breakdown-title">Quick Summary</h3>
                     <div class="skill-breakdown-section">
                         <div class="skill-card">
-                            <div class="skill-icon">🎯</div>
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <circle cx="12" cy="12" r="6"/>
+                                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                                </svg>
+                            </div>
                             <div class="skill-label">Accuracy</div>
                             <div class="skill-value">85%</div>
                         </div>
                         <div class="skill-card">
-                            <div class="skill-icon">⚡</div>
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor"/>
+                                </svg>
+                            </div>
                             <div class="skill-label">Speed</div>
                             <div class="skill-value">2.3s</div>
                         </div>
                         <div class="skill-card">
-                            <div class="skill-icon">🔥</div>
+                            <div class="skill-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" fill="currentColor"/>
+                                </svg>
+                            </div>
                             <div class="skill-label">Streak</div>
                             <div class="skill-value">12</div>
                         </div>
@@ -1719,7 +1812,38 @@
             </div>
         </section>
 
+        <!-- Poki Chat Panel (Large Modal) -->
+        <div id="assistant-chat-panel" class="poki-chat-overlay">
+            <div class="poki-chat-panel">
+                <div class="poki-chat-header">
+                    <div class="poki-chat-avatar">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <rect x="12" y="16" width="40" height="36" rx="8" fill="url(#poki-chat-grad)"/>
+                            <circle cx="32" cy="6" r="4" fill="#22d3ee"/>
+                            <line x1="32" y1="16" x2="32" y2="8" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                            <rect x="16" y="22" width="32" height="24" rx="4" fill="#1a1a2e"/>
+                            <ellipse cx="24" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                            <ellipse cx="40" cy="32" rx="4" ry="5" fill="#22d3ee"/>
+                            <circle cx="22" cy="30" r="1.5" fill="#fff"/>
+                            <circle cx="38" cy="30" r="1.5" fill="#fff"/>
+                            <path d="M26 40 Q32 45 38 40" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            <defs><linearGradient id="poki-chat-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <div class="poki-chat-title-section">
+                        <span class="poki-chat-title">Poki</span>
+                        <span class="poki-chat-subtitle">Your poker homie</span>
+                    </div>
+                    <button class="poki-chat-close" id="close-profile-chat" aria-label="Close">×</button>
+                </div>
+                <div class="poki-chat-messages" id="chat-messages-container">
+                    <!-- Messages rendered by JavaScript -->
+                </div>
+            </div>
+        </div>
+
     </main>
+
 
     <!-- Bottom Navigation Bar (Mobile) -->
     <nav class="bottom-nav" id="bottom-nav">
@@ -1751,7 +1875,11 @@
 
     <script src="js/voice-commands.js?v=1.0.0"></script>
     <script src="js/tilt-controller.js?v=1.0.0"></script>
+    <script src="js/rule-engine.js?v=1.0.0"></script>
+    <script src="js/stats-tracker.js?v=1.0.0"></script>
+    <script src="js/assistant.js?v=1.0.0"></script>
     <script src="js/main.js?v=2.0.4"></script>
+
 
 </body>
 
