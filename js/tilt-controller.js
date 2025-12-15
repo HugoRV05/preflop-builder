@@ -686,67 +686,70 @@ function flashDebugTriggered(direction) {
 }
 
 /**
- * Check if permissions are needed and show banner if so
+ * Check if this is the first practice visit and show setup modal if needed
+ * Uses localStorage key 'preflop-sensors-setup-complete' to track
  */
-function checkAndShowPermissionBanner() {
-    const banner = document.getElementById('sensor-permission-banner');
-    if (!banner) return;
+function checkAndShowSensorsSetupModal() {
+    const modal = document.getElementById('sensors-setup-modal');
+    if (!modal) return;
     
-    // Check if permissions have been dismissed before
-    const dismissed = localStorage.getItem('preflop-permissions-dismissed');
-    if (dismissed === 'true') {
-        banner.style.display = 'none';
+    // Check if sensors setup has already been completed
+    const setupComplete = localStorage.getItem('preflop-sensors-setup-complete');
+    if (setupComplete === 'true') {
+        // Already set up, don't show modal
         return;
     }
     
-    // Check if we need permissions
-    const needsTiltPermission = tiltController && tiltController.requiresPermission && !tiltController.hasPermission;
-    const needsMicPermission = typeof navigator.permissions !== 'undefined'; // Mic always needs user gesture
-    
-    // Show banner if any permission is needed
-    if (needsTiltPermission || needsMicPermission) {
-        banner.style.display = 'block';
-        setupPermissionButtons();
-    } else {
-        banner.style.display = 'none';
-    }
+    // First time - show the modal
+    modal.classList.add('open');
+    setupSensorsModalButtons();
 }
 
 /**
- * Setup permission button click handlers
+ * Setup modal button click handlers
  */
-function setupPermissionButtons() {
-    const grantBtn = document.getElementById('grant-permissions-btn');
-    const dismissBtn = document.getElementById('dismiss-permissions-btn');
-    const banner = document.getElementById('sensor-permission-banner');
+function setupSensorsModalButtons() {
+    const enableBtn = document.getElementById('sensors-enable-btn');
+    const skipBtn = document.getElementById('sensors-skip-btn');
+    const modal = document.getElementById('sensors-setup-modal');
     
-    if (grantBtn) {
-        grantBtn.addEventListener('click', async () => {
-            console.log('[Permissions] Requesting permissions...');
+    if (enableBtn) {
+        enableBtn.addEventListener('click', async () => {
+            console.log('[Sensors] User chose to enable sensors...');
             
             // Request all permissions
             const results = await requestAllSensorPermissions();
             
-            console.log('[Permissions] Results:', results);
+            console.log('[Sensors] Results:', results);
             
             // Show result toast
             if (results.tilt || results.microphone) {
                 showTiltToast('Sensors enabled! 🎉', 'success');
             } else {
-                showTiltToast('Some permissions denied', 'error');
+                showTiltToast('Some permissions were denied', 'info');
             }
             
-            // Hide banner
-            if (banner) banner.style.display = 'none';
+            // Mark setup as complete and close modal
+            localStorage.setItem('preflop-sensors-setup-complete', 'true');
+            if (modal) modal.classList.remove('open');
         });
     }
     
-    if (dismissBtn) {
-        dismissBtn.addEventListener('click', () => {
-            if (banner) banner.style.display = 'none';
-            localStorage.setItem('preflop-permissions-dismissed', 'true');
+    if (skipBtn) {
+        skipBtn.addEventListener('click', () => {
+            console.log('[Sensors] User skipped sensor setup');
+            
+            // Mark setup as complete (user made a choice) and close modal
+            localStorage.setItem('preflop-sensors-setup-complete', 'true');
+            if (modal) modal.classList.remove('open');
         });
     }
+}
+
+// Keep legacy function for backwards compatibility
+function checkAndShowPermissionBanner() {
+    // Redirect to new modal-based system
+    checkAndShowSensorsSetupModal();
 }
 
 /**
@@ -855,6 +858,25 @@ showTiltFeedback = function(direction) {
         'background: #ff9800; color: #000; font-weight: bold; padding: 4px 8px; border-radius: 4px;');
 };
 
+/**
+ * Enable or disable tilt controls from settings
+ * Called from settings page toggle
+ * @param {boolean} enabled - Whether tilt controls should be enabled
+ */
+function setTiltEnabled(enabled) {
+    if (enabled) {
+        if (tiltController) {
+            resumeTiltControls();
+            console.log('[Tilt] Controls enabled via settings');
+        }
+    } else {
+        if (tiltController) {
+            pauseTiltControls();
+            console.log('[Tilt] Controls disabled via settings');
+        }
+    }
+}
+
 // Export for use in main.js
 if (typeof window !== 'undefined') {
     window.initializeTiltControls = initializeTiltControls;
@@ -867,5 +889,6 @@ if (typeof window !== 'undefined') {
     window.requestAllSensorPermissions = requestAllSensorPermissions;
     window.setTiltDebugMode = setTiltDebugMode;
     window.checkAndShowPermissionBanner = checkAndShowPermissionBanner;
+    window.setTiltEnabled = setTiltEnabled;
 }
 

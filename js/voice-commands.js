@@ -168,19 +168,7 @@ class VoiceCommandManager {
             this.isStarting = false; // Clear starting flag
             this.clearTimeout();
             
-            // Auto-restart if user has voice enabled (persistent toggle)
-            if (this.userEnabledVoice) {
-                console.log('[Voice] Recognition ended, auto-restarting...');
-                // Small delay before restarting to avoid rapid fire
-                setTimeout(() => {
-                    if (this.userEnabledVoice && !this.isListening && !this.isStarting) {
-                        this.startListening();
-                    }
-                }, 300);
-                // Keep UI showing as "listening" since we're restarting
-                return;
-            }
-            
+            // Notify state change - no auto-restart for hold-to-talk mode
             if (this.onStateChange) {
                 this.onStateChange(false);
             }
@@ -464,14 +452,63 @@ function initializeVoiceCommands() {
         showVoiceError(errorMessage);
     };
     
-    // Set up voice button click handler
+    // Set up voice button HOLD-TO-TALK handlers
     if (voiceBtn) {
-        voiceBtn.addEventListener('click', () => {
-            voiceManager.toggle();
+        // Mouse events (desktop)
+        voiceBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            startHoldToTalk();
+        });
+        
+        voiceBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            stopHoldToTalk();
+        });
+        
+        voiceBtn.addEventListener('mouseleave', (e) => {
+            // Stop if user drags off the button while holding
+            if (voiceManager && voiceManager.isListening) {
+                stopHoldToTalk();
+            }
+        });
+        
+        // Touch events (mobile)
+        voiceBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startHoldToTalk();
+        });
+        
+        voiceBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopHoldToTalk();
+        });
+        
+        voiceBtn.addEventListener('touchcancel', (e) => {
+            stopHoldToTalk();
         });
     }
     
-    console.log('[Voice] Voice commands initialized');
+    console.log('[Voice] Voice commands initialized (hold-to-talk mode)');
+}
+
+/**
+ * Start hold-to-talk: begin listening
+ */
+function startHoldToTalk() {
+    if (!voiceManager) return;
+    
+    console.log('[Voice] Hold started - listening...');
+    voiceManager.startListening();
+}
+
+/**
+ * Stop hold-to-talk: stop listening
+ */
+function stopHoldToTalk() {
+    if (!voiceManager) return;
+    
+    console.log('[Voice] Hold released - stopping...');
+    voiceManager.stopListening();
 }
 
 /**
@@ -482,10 +519,8 @@ function updateVoiceButtonState(isListening) {
     const voiceBtn = document.getElementById('voice-toggle-btn');
     if (!voiceBtn) return;
     
-    // Check both current listening state AND user's persistent toggle state
-    const shouldShowActive = isListening || (voiceManager && voiceManager.userEnabledVoice);
-    
-    if (shouldShowActive) {
+    // For hold-to-talk, just check if we're currently listening
+    if (isListening) {
         voiceBtn.classList.add('listening');
         voiceBtn.setAttribute('aria-pressed', 'true');
     } else {

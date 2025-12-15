@@ -205,6 +205,8 @@ function setupProfileChat() {
     const chatBtn = document.getElementById('profile-assistant-btn');
     const closeBtn = document.getElementById('close-profile-chat');
     const chatPanel = document.getElementById('assistant-chat-panel');
+    const chatInput = document.getElementById('poki-chat-input');
+    const sendBtn = document.getElementById('poki-send-btn');
     
     if (chatBtn) {
         chatBtn.addEventListener('click', openProfileChat);
@@ -221,6 +223,67 @@ function setupProfileChat() {
             }
         });
     }
+    
+    // Setup free-text input
+    if (chatInput && sendBtn) {
+        // Send on button click
+        sendBtn.addEventListener('click', () => {
+            handleFreeTextSubmit(chatInput);
+        });
+        
+        // Send on Enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleFreeTextSubmit(chatInput);
+            }
+        });
+    }
+}
+
+/**
+ * Handle free-text message submission
+ */
+async function handleFreeTextSubmit(inputEl) {
+    const text = inputEl.value.trim();
+    if (!text || assistantState.isTyping) return;
+    
+    // Clear input
+    inputEl.value = '';
+    
+    // Add user message to history
+    assistantState.chatHistory.push({
+        sender: 'user',
+        text: text,
+        timestamp: Date.now()
+    });
+    
+    // Re-render to show user message
+    renderChatMessages();
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    // Get AI response
+    let aiResponse;
+    if (typeof sendToPokiAI === 'function') {
+        aiResponse = await sendToPokiAI(text, assistantState.chatHistory);
+    } else {
+        console.warn('[Poki] AI module not loaded, using fallback');
+        aiResponse = "Hey! I'm here to help with poker questions. Ask me about positions, hand ranges, or strategy!";
+    }
+    
+    // Hide typing and add AI response
+    hideTypingIndicator();
+    
+    assistantState.chatHistory.push({
+        sender: 'poki',
+        text: aiResponse,
+        timestamp: Date.now(),
+        isAI: true  // Mark as AI response (no follow-up buttons)
+    });
+    
+    renderChatMessages();
 }
 
 /**
@@ -276,9 +339,9 @@ function renderChatMessages() {
         container.appendChild(msgEl);
     });
     
-    // Add options if last message is from Poki
+    // Add options if last message is from Poki AND is not an AI response
     const lastMsg = assistantState.chatHistory[assistantState.chatHistory.length - 1];
-    if (lastMsg && lastMsg.sender === 'poki') {
+    if (lastMsg && lastMsg.sender === 'poki' && !lastMsg.isAI) {
         const optionsEl = createUserOptions(lastMsg.followUps);
         container.appendChild(optionsEl);
     }

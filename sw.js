@@ -1,9 +1,9 @@
 // Service Worker for Preflop Builder PWA
-// Version 2.3.0 - Poki Assistant Upgrade
+// Version 2.4.0 - Poki AI Fix
 
-const CACHE_NAME = 'preflop-builder-v2.3.0';
-const STATIC_CACHE_NAME = 'preflop-builder-static-v2.3.0';
-const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.3.0';
+const CACHE_NAME = 'preflop-builder-v2.4.0';
+const STATIC_CACHE_NAME = 'preflop-builder-static-v2.4.0';
+const DYNAMIC_CACHE_NAME = 'preflop-builder-dynamic-v2.4.0';
 const GOOGLE_FONTS_CACHE = 'google-fonts';
 const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -19,6 +19,7 @@ const STATIC_ASSETS = [
   './js/rule-engine.js',
   './js/stats-tracker.js',
   './js/assistant.js',
+  './js/poki-ai.js',
   './assets/default-preflop-ranges-v1.json',
   './assets/poki-icon.svg',
   // Add icon paths when they exist
@@ -35,7 +36,9 @@ const STATIC_ASSETS = [
 const NETWORK_FIRST_PATHS = [
   './assets/default-preflop-ranges-v1.json',
   './css/styles.css',
-  './js/main.js'
+  './js/main.js',
+  './js/poki-ai.js',
+  './js/assistant.js'
 ];
 
 // Cache-first resources (serve from cache, update in background)

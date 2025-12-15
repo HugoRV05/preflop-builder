@@ -1068,6 +1068,19 @@ function setupBottomNavigation() {
 function updateBottomNavActiveState(pageId) {
     const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
     
+    // Profile subsection pages that should highlight "Profile" in nav
+    const profileSubsections = [
+        'profile-page',
+        'profile-achievements-page',
+        'profile-player-dna-page',
+        'profile-activity-calendar-page',
+        'profile-personal-goals-page',
+        'avatar-selection-page'
+    ];
+    
+    // Map subsection pages to their parent nav item
+    const isProfileSubsection = profileSubsections.includes(pageId);
+    
     bottomNavItems.forEach(item => {
         const itemPage = item.getAttribute('data-page');
         
@@ -1075,7 +1088,10 @@ function updateBottomNavActiveState(pageId) {
         item.classList.remove('active');
         
         // Add active class to the current page's nav item
+        // Or to profile nav if we're in a profile subsection
         if (itemPage === pageId) {
+            item.classList.add('active');
+        } else if (isProfileSubsection && itemPage === 'profile-page') {
             item.classList.add('active');
         }
     });
@@ -1380,6 +1396,46 @@ function updateLanguageDisplay(languageCode) {
 function initializeSoundAndNotificationSettings() {
     setupSettingsToggle('sound-toggle', SOUND_STORAGE_KEY, 'soundEnabled');
     setupSettingsToggle('notifications-toggle', NOTIFICATION_STORAGE_KEY, 'notificationsEnabled');
+    
+    // Set up tilt controls toggle with custom handler
+    initializeTiltControlsToggle();
+}
+
+/**
+ * Initialize tilt controls toggle with integration to tilt controller
+ */
+function initializeTiltControlsToggle() {
+    const toggle = document.getElementById('tilt-controls-toggle');
+    if (!toggle) return;
+    
+    const TILT_STORAGE_KEY = 'preflop-tilt-controls-enabled';
+    
+    // Load saved value (default: enabled)
+    const savedValue = localStorage.getItem(TILT_STORAGE_KEY);
+    if (savedValue !== null) {
+        toggle.checked = savedValue === 'true';
+    } else {
+        toggle.checked = true; // Default enabled
+        localStorage.setItem(TILT_STORAGE_KEY, 'true');
+    }
+    
+    // Apply initial state to tilt controller if it exists
+    if (typeof window.setTiltEnabled === 'function') {
+        window.setTiltEnabled(toggle.checked);
+    }
+    
+    // Listen for changes
+    toggle.addEventListener('change', (event) => {
+        const isEnabled = event.target.checked;
+        localStorage.setItem(TILT_STORAGE_KEY, String(isEnabled));
+        
+        // Update tilt controller if available
+        if (typeof window.setTiltEnabled === 'function') {
+            window.setTiltEnabled(isEnabled);
+        }
+        
+        console.log(`[Settings] Tilt controls ${isEnabled ? 'enabled' : 'disabled'}`);
+    });
 }
 
 function setupSettingsToggle(toggleId, storageKey, dataAttribute) {
@@ -3199,6 +3255,92 @@ const feedbackMessages = {
 
 let lastDecisionTime = Date.now();
 
+// ==========================================
+// PRACTICE SOUND EFFECTS
+// ==========================================
+
+// Audio context for generating sounds (lazy initialization)
+let audioContext = null;
+
+/**
+ * Initialize audio context on first user interaction
+ */
+function initAudioContext() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    // Resume if suspended (required by some browsers)
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
+    return audioContext;
+}
+
+/**
+ * Check if sounds are enabled in settings
+ */
+function isSoundEnabled() {
+    const savedValue = localStorage.getItem(SOUND_STORAGE_KEY);
+    // Default to enabled if not set
+    return savedValue !== 'false';
+}
+
+/**
+ * Play a simple tone using Web Audio API
+ * @param {number} frequency - Frequency in Hz
+ * @param {number} duration - Duration in seconds
+ * @param {string} type - Oscillator type: 'sine', 'square', 'sawtooth', 'triangle'
+ * @param {number} volume - Volume from 0 to 1
+ */
+function playTone(frequency, duration, type = 'sine', volume = 0.3) {
+    if (!isSoundEnabled()) return;
+    
+    try {
+        const ctx = initAudioContext();
+        const oscillator = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+        
+        // Set volume with envelope for smooth sound
+        gainNode.gain.setValueAtTime(0, ctx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.02);
+        gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + duration);
+        
+        oscillator.start(ctx.currentTime);
+        oscillator.stop(ctx.currentTime + duration);
+    } catch (e) {
+        console.warn('[Sound] Failed to play tone:', e);
+    }
+}
+
+/**
+ * Play success sound (ascending tones)
+ */
+function playCorrectSound() {
+    if (!isSoundEnabled()) return;
+    
+    // Pleasant ascending chord
+    playTone(523.25, 0.15, 'sine', 0.25); // C5
+    setTimeout(() => playTone(659.25, 0.15, 'sine', 0.25), 80); // E5
+    setTimeout(() => playTone(783.99, 0.2, 'sine', 0.3), 160); // G5
+}
+
+/**
+ * Play error sound (descending tone)
+ */
+function playWrongSound() {
+    if (!isSoundEnabled()) return;
+    
+    // Short descending buzz
+    playTone(220, 0.12, 'sawtooth', 0.15); // A3
+    setTimeout(() => playTone(165, 0.15, 'sawtooth', 0.12), 100); // E3
+}
+
 function showFeedback(isCorrect) {
     const feedbackOverlay = document.getElementById('practice-feedback-overlay');
     const feedbackMessage = document.getElementById('feedback-message');
@@ -3221,13 +3363,15 @@ function showFeedback(isCorrect) {
     // Show overlay
     feedbackOverlay.classList.add('visible');
     
-    // Create visual effects
+    // Create visual effects and play sounds
     if (isCorrect) {
         createParticles(true);
         addGlowEffect(true);
+        playCorrectSound();
     } else {
         addShakeEffect();
         addGlowEffect(false);
+        playWrongSound();
     }
     
     // Hide after delay
@@ -4385,15 +4529,18 @@ function setupProfilePage() {
 }
 
 function setupBadgeFlip() {
-    const badgeItems = document.querySelectorAll('.badge-item.clickable');
+    // New implementation for .badge-card structure
+    const badges = document.querySelectorAll('.badge-card');
     
-    badgeItems.forEach(badge => {
-        // Don't allow flipping locked badges
-        if (badge.classList.contains('locked')) {
-            return;
-        }
-        
-        badge.addEventListener('click', function() {
+    badges.forEach(badge => {
+        // Don't allow flipping locked badges if we want to prevent it
+        // Or keep it clickable but visually locked. Here assuming we toggle flip.
+        badge.addEventListener('click', function(e) {
+            // If it's locked, maybe we don't flip? Or we flip to show "Locked"?
+            // User requested "Badges don't flip, delete everything related to that flip and start over"
+            // So we implement a simple toggle on the card itself.
+            if (this.classList.contains('locked')) return;
+
             this.classList.toggle('flipped');
         });
     });
@@ -4456,6 +4603,16 @@ function setupCalendarNavigation() {
             }
             
             calendarDaysGrid.appendChild(dayElement);
+        }
+
+        // Add empty cells at the end to always fill 42 slots (6 rows x 7 days)
+        const totalCells = startingDayOfWeek + daysInMonth;
+        const remainingCells = 42 - totalCells;
+        
+        for (let i = 0; i < remainingCells; i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.className = 'calendar-day empty';
+            calendarDaysGrid.appendChild(emptyDay);
         }
     }
     
@@ -4627,6 +4784,9 @@ function setupPersonalGoalsControls() {
         const percentage = ((goalHands - 10) / 290) * 100;
         if (goalHandsBar) goalHandsBar.style.height = percentage + '%';
     }
+
+
+
 }
 
 // ==========================================
