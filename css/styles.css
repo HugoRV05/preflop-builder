@@ -9781,9 +9781,9 @@ input:checked + .toggle-slider:before {
     height: 52px;
     border-radius: 50%;
     /* Clean, professional solid color */
-    background: var(--accent-purple, #7c3aed);
-    /* Subtle 1px border */
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--dark-grey);
+    /* Border to match profile */
+    border: 2.5px solid rgb(168 90 255);
     display: flex;
     align-items: center;
     justify-content: center;

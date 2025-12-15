@@ -1362,6 +1362,7 @@ function updateThemeSwitchUI(theme) {
 function initializeSettingsControls() {
     initializeLanguageSetting();
     initializeSoundAndNotificationSettings();
+    initializeTiltDebugToggle();
 }
 
 function initializeLanguageSetting() {
@@ -1399,6 +1400,34 @@ function initializeSoundAndNotificationSettings() {
     
     // Set up tilt controls toggle with custom handler
     initializeTiltControlsToggle();
+    initializeTiltDebugToggle();
+}
+
+function initializeTiltDebugToggle() {
+    const toggle = document.getElementById('tilt-debug-toggle');
+    if (!toggle) return;
+    
+    const DEBUG_STORAGE_KEY = 'preflop-tilt-debug-enabled';
+    
+    // Load saved value (default: disabled)
+    const savedValue = localStorage.getItem(DEBUG_STORAGE_KEY);
+    const isEnabled = savedValue === 'true'; // Default is false
+    
+    toggle.checked = isEnabled;
+    updateTiltDebugVisibility(isEnabled);
+    
+    toggle.addEventListener('change', (event) => {
+        const isEnabled = event.target.checked;
+        localStorage.setItem(DEBUG_STORAGE_KEY, String(isEnabled));
+        updateTiltDebugVisibility(isEnabled);
+    });
+}
+
+function updateTiltDebugVisibility(isEnabled) {
+    const debugPanel = document.getElementById('tilt-debug-panel');
+    if (debugPanel) {
+        debugPanel.style.display = isEnabled ? 'flex' : 'none';
+    }
 }
 
 /**

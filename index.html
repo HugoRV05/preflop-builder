@@ -864,7 +864,7 @@
                 </div>
                 
                 <!-- Debug Panel for Tilt (hidden by default, shows in dev) -->
-                <div id="tilt-debug-panel" class="tilt-debug-panel">
+                <div id="tilt-debug-panel" class="tilt-debug-panel" style="display: none;">
                     <div class="debug-label">Tilt Debug</div>
                     <div class="debug-value">
                         <span id="tilt-gamma-value">γ: 0°</span>
@@ -1082,6 +1082,16 @@
                             </div>
                             <label class="toggle-switch" aria-label="Enable tilt controls">
                                 <input type="checkbox" id="tilt-controls-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-row">
+                            <div class="setting-copy">
+                                <label for="tilt-debug-toggle">Show Tilt Debug</label>
+                                <p>Display real-time sensor data.</p>
+                            </div>
+                            <label class="toggle-switch" aria-label="Show tilt debug">
+                                <input type="checkbox" id="tilt-debug-toggle">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
