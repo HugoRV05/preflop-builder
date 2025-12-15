@@ -11771,3 +11771,210 @@ input:checked + .toggle-slider:before {
     background: #f1f5f9;
     color: #475569;
 }
+
+/* ==========================================
+   TIMELINE REDESIGN
+   ========================================== */
+
+.timeline-section {
+    padding-top: 40px;
+}
+
+.timeline-section h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timeline-section h3::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to bottom, #00d4ff, #7c3aed);
+    border-radius: 2px;
+}
+
+.timeline-list {
+    position: relative;
+    padding-left: 0;
+}
+
+/* The vertical connecting line */
+.timeline-line {
+    position: absolute;
+    left: 24px;
+    top: 10px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, 
+        rgba(0, 212, 255, 0.5) 0%, 
+        rgba(124, 58, 237, 0.5) 50%, 
+        rgba(124, 58, 237, 0.1) 100%);
+    border-radius: 2px;
+    z-index: 0;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    z-index: 1;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Markers (Icons) */
+.timeline-marker {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--dark-grey);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-marker::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: inherit;
+    filter: blur(8px);
+    opacity: 0.4;
+    z-index: -1;
+}
+
+/* Marker Variants */
+.achievement-marker {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.2) 100%);
+    border-color: rgba(251, 191, 36, 0.5);
+    color: #fbbf24;
+}
+
+.milestone-marker {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(59, 130, 246, 0.2) 100%);
+    border-color: rgba(34, 211, 238, 0.5);
+    color: #22d3ee;
+}
+
+.start-marker {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(217, 70, 239, 0.2) 100%);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #d946ef;
+}
+
+.marker-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.timeline-item:hover .timeline-marker {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Content Cards */
+.timeline-content-card {
+    flex: 1;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 16px 20px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.timeline-item:hover .timeline-content-card {
+    transform: translateX(4px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-date {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.timeline-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 6px 0;
+}
+
+.timeline-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Light Theme Support */
+[data-theme="light"] .timeline-content-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .timeline-item:hover .timeline-content-card {
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .timeline-line {
+    background: linear-gradient(180deg, 
+        rgba(0, 212, 255, 0.3) 0%, 
+        rgba(124, 58, 237, 0.3) 50%, 
+        rgba(124, 58, 237, 0.05) 100%);
+}
+
+[data-theme="light"] .timeline-section h3 {
+    color: #1e293b;
+}
+
+[data-theme="light"] .timeline-title {
+    color: #0f172a;
+}
+
+[data-theme="light"] .timeline-desc {
+    color: #64748b;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+    .timeline-marker {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .marker-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .timeline-line {
+        left: 20px; /* Center of 40px marker */
+    }
+    
+    .timeline-item {
+        gap: 16px;
+    }
+}
