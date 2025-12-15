@@ -848,16 +848,18 @@
                     </button>
                 </div>
                 
-                <!-- Sensor Permissions Banner (shows if permissions needed) -->
-                <div id="sensor-permission-banner" class="sensor-permission-banner" style="display: none;">
-                    <div class="permission-content">
-                        <div class="permission-icon">🎤📱</div>
-                        <div class="permission-text">
-                            <strong>Enable Hands-Free Controls</strong>
-                            <span>Voice commands & tilt gestures</span>
+                <!-- Sensors Setup Modal (shows only on first practice visit) -->
+                <div id="sensors-setup-modal" class="sensors-setup-modal-overlay">
+                    <div class="sensors-setup-modal">
+                        <div class="sensors-modal-icon">🎤📱</div>
+                        <h3 class="sensors-modal-title">Enable Hands-Free Controls?</h3>
+                        <p class="sensors-modal-description">
+                            Use <strong>voice commands</strong> to call actions and <strong>tilt gestures</strong> to navigate hands while practicing.
+                        </p>
+                        <div class="sensors-modal-buttons">
+                            <button id="sensors-enable-btn" class="sensors-modal-btn primary">Enable</button>
+                            <button id="sensors-skip-btn" class="sensors-modal-btn secondary">No Thanks</button>
                         </div>
-                        <button id="grant-permissions-btn" class="grant-permissions-btn">Enable</button>
-                        <button id="dismiss-permissions-btn" class="dismiss-permissions-btn" aria-label="Dismiss">×</button>
                     </div>
                 </div>
                 
@@ -966,7 +968,7 @@
                                 </svg>
                                 <div class="progress-ring-text">
                                     <div class="progress-ring-value" id="accuracy-stat">0%</div>
-                                    <div class="progress-ring-label">Accuracy</div>
+                                    <div class="progress-ring-label"></div>
                                 </div>
                             </div>
                         </div>
@@ -1070,6 +1072,16 @@
                             </div>
                             <label class="toggle-switch" aria-label="Enable assistant">
                                 <input type="checkbox" id="assistant-practice-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-row">
+                            <div class="setting-copy">
+                                <label for="tilt-controls-toggle">Tilt Controls</label>
+                                <p>Use device tilt gestures to navigate hands in practice mode.</p>
+                            </div>
+                            <label class="toggle-switch" aria-label="Enable tilt controls">
+                                <input type="checkbox" id="tilt-controls-toggle" checked>
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1209,7 +1221,7 @@
                     <div class="profile-name-section">
                         <h2 class="profile-name" id="profile-name">Player Name</h2>
                         <button class="profile-edit-btn" id="profile-edit-name" aria-label="Edit name">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="2">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
@@ -1222,7 +1234,7 @@
                     <h3 class="skill-breakdown-title">Quick Summary</h3>
                     <div class="skill-breakdown-section">
                         <div class="skill-card accuracy-card">
-                            <div class="skill-icon">
+                            <div class="skill-icon colored-icon accent-blue-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"/>
                                     <circle cx="12" cy="12" r="6"/>
@@ -1233,7 +1245,7 @@
                             <div class="skill-value">85%</div>
                         </div>
                         <div class="skill-card speed-card">
-                            <div class="skill-icon">
+                            <div class="skill-icon colored-icon accent-blue-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor"/>
                                 </svg>
@@ -1241,8 +1253,8 @@
                             <div class="skill-label">Speed</div>
                             <div class="skill-value">2.3s</div>
                         </div>
-                        <div class="skill-card streak-card">
-                            <div class="skill-icon">
+                        <div class="skill-card">
+                            <div class="skill-icon colored-icon accent-blue-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" fill="currentColor"/>
                                 </svg>
@@ -1253,12 +1265,22 @@
                     </div>
                 </div>
 
+
                 <!-- Section Groups -->
                 <div class="profile-sections">
                     <!-- Achievements Preview -->
                     <div class="profile-section-card" id="achievements-preview">
                         <div class="section-header">
-                            <div class="section-icon">🏆</div>
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                                    <path d="M4 22h16"/>
+                                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                                </svg>
+                            </div>
                             <h3>Achievements</h3>
                         </div>
                         <div class="section-preview achievements-preview-content">
@@ -1266,22 +1288,38 @@
                                 <h4 class="last-badges-title">Last 3 Badges</h4>
                                 <div class="preview-badges-large">
                                     <div class="badge-preview-item">
-                                        <div class="badge-icon-large">🎖️</div>
+                                        <div class="badge-icon-large badge-svg">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.5">
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="var(--accent-blue)" opacity="0.2"/>
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                            </svg>
+                                        </div>
                                         <span class="badge-preview-name">First Win</span>
                                     </div>
                                     <div class="badge-preview-item">
-                                        <div class="badge-icon-large">⭐</div>
+                                        <div class="badge-icon-large badge-svg">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.5">
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="var(--accent-blue)" opacity="0.2"/>
+                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                            </svg>
+                                        </div>
                                         <span class="badge-preview-name">10 Sessions</span>
                                     </div>
                                     <div class="badge-preview-item">
-                                        <div class="badge-icon-large">💎</div>
+                                        <div class="badge-icon-large badge-svg">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.5">
+                                                <path d="M12 2L2 7l10 5 10-5-10-5z" fill="var(--accent-blue)" opacity="0.3"/>
+                                                <path d="M2 17l10 5 10-5"/>
+                                                <path d="M2 12l10 5 10-5"/>
+                                            </svg>
+                                        </div>
                                         <span class="badge-preview-name">100 Hands</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="section-arrow">
-                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
                         </div>
@@ -1290,7 +1328,17 @@
                     <!-- Player DNA Preview -->
                     <div class="profile-section-card" id="player-dna-preview">
                         <div class="section-header">
-                            <div class="section-icon">🧬</div>
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 15c6.667-6 13.333 0 20-6"/>
+                                    <path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/>
+                                    <path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/>
+                                    <path d="M17 6l-2.5-2.5"/>
+                                    <path d="M14 8l-1.5-1.5"/>
+                                    <path d="M7 18l2.5 2.5"/>
+                                    <path d="M10 16l1.5 1.5"/>
+                                </svg>
+                            </div>
                             <h3>Player DNA</h3>
                         </div>
                         <div class="section-preview dna-preview-redesign">
@@ -1320,19 +1368,29 @@
                             </div>
                             <div class="dna-positions-badges">
                                 <div class="position-badge best">
-                                    <span class="position-badge-emoji">🌟</span>
+                                    <span class="position-badge-icon">
+                                        <svg viewBox="0 0 24 24" fill="var(--accent-blue)" stroke="var(--accent-blue)" stroke-width="1">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                        </svg>
+                                    </span>
                                     <span class="position-badge-label">Best</span>
                                     <span class="position-badge-value">BU</span>
                                 </div>
                                 <div class="position-badge worst">
-                                    <span class="position-badge-emoji">⚠️</span>
+                                    <span class="position-badge-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                            <line x1="12" y1="9" x2="12" y2="13"/>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                        </svg>
+                                    </span>
                                     <span class="position-badge-label">Weak</span>
                                     <span class="position-badge-value">SB</span>
                                 </div>
                             </div>
                         </div>
                         <div class="section-arrow">
-                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
                         </div>
@@ -1341,7 +1399,20 @@
                     <!-- Activity Calendar Preview -->
                     <div class="profile-section-card" id="activity-calendar-preview">
                         <div class="section-header">
-                            <div class="section-icon">📅</div>
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                    <path d="M8 14h.01"/>
+                                    <path d="M12 14h.01"/>
+                                    <path d="M16 14h.01"/>
+                                    <path d="M8 18h.01"/>
+                                    <path d="M12 18h.01"/>
+                                    <path d="M16 18h.01"/>
+                                </svg>
+                            </div>
                             <h3>Activity Calendar</h3>
                         </div>
                         <div class="section-preview calendar-preview-content">
@@ -1370,7 +1441,7 @@
                             </div>
                         </div>
                         <div class="section-arrow">
-                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
                         </div>
@@ -1379,13 +1450,24 @@
                     <!-- Personal Goals Preview -->
                     <div class="profile-section-card" id="personal-goals-preview">
                         <div class="section-header">
-                            <div class="section-icon">🎯</div>
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
                             <h3>Personal Goals</h3>
                         </div>
                         <div class="section-preview goals-preview-content">
                             <div class="goal-preview-item">
                                 <div class="goal-preview-label">
-                                    <span class="goal-emoji">📅</span>
+                                    <span class="goal-svg-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/>
+                                            <line x1="3" y1="10" x2="21" y2="10"/>
+                                        </svg>
+                                    </span>
                                     <span>Practice Days</span>
                                 </div>
                                 <div class="goal-preview-bar-full">
@@ -1395,7 +1477,16 @@
                             </div>
                             <div class="goal-preview-item">
                                 <div class="goal-preview-label">
-                                    <span class="goal-emoji">🃏</span>
+                                    <span class="goal-svg-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2">
+                                            <rect x="2" y="4" width="6" height="8" rx="1"/>
+                                            <rect x="9" y="4" width="6" height="8" rx="1"/>
+                                            <path d="M4 8h2"/>
+                                            <path d="M11 6v4"/>
+                                            <path d="M13 8h1"/>
+                                            <path d="M17 4h5l-1.5 3L22 10h-5"/>
+                                        </svg>
+                                    </span>
                                     <span>Hands Played</span>
                                 </div>
                                 <div class="goal-preview-bar-full">
@@ -1405,7 +1496,7 @@
                             </div>
                         </div>
                         <div class="section-arrow">
-                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
                         </div>
@@ -1456,47 +1547,159 @@
                     <div class="achievements-section">
                         <h3>Badges</h3>
                         <div class="badges-grid">
-                            <div class="badge-item clickable" data-badge="first-win">
-                                <div class="badge-flip-card">
-                                    <div class="badge-flip-front">
-                                        <div class="badge-large">🎖️</div>
+                            <div class="badge-card earned" data-badge="first-win">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.5">
+                                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
                                         <span>First Win</span>
                                     </div>
-                                    <div class="badge-flip-back">
-                                        <p>Complete your first practice session with at least 80% accuracy</p>
+                                    <div class="badge-back">
+                                        <span class="badge-name">First Win</span>
+                                        <p>Complete your first session with 80%+ accuracy</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="badge-item clickable" data-badge="10-sessions">
-                                <div class="badge-flip-card">
-                                    <div class="badge-flip-front">
-                                        <div class="badge-large">⭐</div>
+                            <div class="badge-card earned" data-badge="10-sessions">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.5">
+                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
                                         <span>10 Sessions</span>
                                     </div>
-                                    <div class="badge-flip-back">
-                                        <p>Complete 10 practice sessions to earn this badge</p>
+                                    <div class="badge-back">
+                                        <span class="badge-name">10 Sessions</span>
+                                        <p>Complete 10 practice sessions</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="badge-item clickable" data-badge="100-hands">
-                                <div class="badge-flip-card">
-                                    <div class="badge-flip-front">
-                                        <div class="badge-large">💎</div>
+                            <div class="badge-card earned" data-badge="100-hands">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5">
+                                                <path d="M12 2L2 7l10 5 10-5-10-5z" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M2 17l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
                                         <span>100 Hands</span>
                                     </div>
-                                    <div class="badge-flip-back">
-                                        <p>Practice 100 hands to unlock this achievement</p>
+                                    <div class="badge-back">
+                                        <span class="badge-name">100 Hands</span>
+                                        <p>Practice 100 total hands</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="badge-item clickable locked" data-badge="perfectionist">
-                                <div class="badge-flip-card">
-                                    <div class="badge-flip-front">
-                                        <div class="badge-large">🏅</div>
+                            <div class="badge-card" data-badge="sharpshooter">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="1.5">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <circle cx="12" cy="12" r="6"/>
+                                                <circle cx="12" cy="12" r="2"/>
+                                                <line x1="22" y1="12" x2="18" y2="12"/>
+                                                <line x1="6" y1="12" x2="2" y2="12"/>
+                                                <line x1="12" y1="6" x2="12" y2="2"/>
+                                                <line x1="12" y1="22" x2="12" y2="18"/>
+                                            </svg>
+                                        </div>
+                                        <span>Sharpshooter</span>
+                                    </div>
+                                    <div class="badge-back">
+                                        <span class="badge-name">Sharpshooter</span>
+                                        <p>Get 95% accuracy with 50+ hands</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-card" data-badge="grinder">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.5">
+                                                <path d="M12 2v20M2 12h20" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <span>Grinder</span>
+                                    </div>
+                                    <div class="badge-back">
+                                        <span class="badge-name">Grinder</span>
+                                        <p>Play 1000 hands total</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-card locked" data-badge="perfectionist">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                                                <circle cx="12" cy="8" r="7" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
                                         <span>Perfectionist</span>
                                     </div>
-                                    <div class="badge-flip-back">
-                                        <p>Complete a session with 100% accuracy (25+ hands)</p>
+                                    <div class="badge-back">
+                                        <span class="badge-name">Perfectionist</span>
+                                        <p>100% accuracy in 25+ hand session</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-card locked" data-badge="streak-master">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <span>Streak Master</span>
+                                    </div>
+                                    <div class="badge-back">
+                                        <span class="badge-name">Streak Master</span>
+                                        <p>7-day practice streak</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-card locked" data-badge="range-expert">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                <path d="M3 9h18M9 21V9"/>
+                                            </svg>
+                                        </div>
+                                        <span>Range Expert</span>
+                                    </div>
+                                    <div class="badge-back">
+                                        <span class="badge-name">Range Expert</span>
+                                        <p>Master all positions at 90%+</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="badge-card locked" data-badge="night-owl">
+                                <div class="badge-inner">
+                                    <div class="badge-front">
+                                        <div class="badge-large">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <span>Night Owl</span>
+                                    </div>
+                                    <div class="badge-back">
+                                        <span class="badge-name">Night Owl</span>
+                                        <p>Practice after midnight</p>
                                     </div>
                                 </div>
                             </div>
@@ -1535,67 +1738,80 @@
                     <h2>Player DNA</h2>
                 </div>
                 <div class="settings-content">
-                    <div class="dna-section">
-                        <h3>Playing Style</h3>
-                        <div class="style-indicator">
-                            <div class="style-bar">
-                                <div class="style-label-left">Tight</div>
-                                <div class="style-track">
-                                    <div class="style-marker" style="left: 65%"></div>
+                    <div class="dna-overview-card">
+                        <div class="dna-card-header">
+                            <h3>Poker Personality</h3>
+                            <div class="dna-badge">New!</div>
+                        </div>
+                        <div class="dna-visual-chart">
+                            <div class="dna-trait-row">
+                                <div class="trait-label">Solid</div>
+                                <div class="trait-bar-container">
+                                    <div class="trait-bar-fill solid-fill" style="width: 75%"></div>
                                 </div>
-                                <div class="style-label-right">Loose</div>
+                                <div class="trait-value">75%</div>
                             </div>
-                            <div class="style-bar">
-                                <div class="style-label-left">Passive</div>
-                                <div class="style-track">
-                                    <div class="style-marker" style="left: 75%"></div>
+                            <div class="dna-trait-row">
+                                <div class="trait-label">Aggressive</div>
+                                <div class="trait-bar-container">
+                                    <div class="trait-bar-fill aggro-fill" style="width: 60%"></div>
                                 </div>
-                                <div class="style-label-right">Aggressive</div>
+                                <div class="trait-value">60%</div>
+                            </div>
+                            <div class="dna-trait-row">
+                                <div class="trait-label">Intuitive</div>
+                                <div class="trait-bar-container">
+                                    <div class="trait-bar-fill intuitive-fill" style="width: 40%"></div>
+                                </div>
+                                <div class="trait-value">40%</div>
                             </div>
                         </div>
                     </div>
-                    <div class="positions-stats-section">
-                        <h3>Position Stats</h3>
-                        <div class="positions-table">
-                            <div class="position-row">
-                                <span class="position-name">BU</span>
-                                <div class="position-bar">
-                                    <div class="position-fill" style="width: 92%"></div>
+
+                    <div class="dna-mastery-grid">
+                        <h3>Positional Mastery</h3>
+                        <div class="mastery-cards">
+                            <div class="mastery-card bu-card">
+                                <div class="mastery-circle">
+                                    <svg viewBox="0 0 36 36" class="circular-chart">
+                                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle" stroke-dasharray="92, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" class="percentage">92%</text>
+                                    </svg>
                                 </div>
-                                <span class="position-value">92%</span>
+                                <span>Button</span>
                             </div>
-                            <div class="position-row">
-                                <span class="position-name">CO</span>
-                                <div class="position-bar">
-                                    <div class="position-fill" style="width: 85%"></div>
+                            <div class="mastery-card co-card">
+                                <div class="mastery-circle">
+                                    <svg viewBox="0 0 36 36" class="circular-chart">
+                                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" class="percentage">85%</text>
+                                    </svg>
                                 </div>
-                                <span class="position-value">85%</span>
+                                <span>CO</span>
                             </div>
-                            <div class="position-row">
-                                <span class="position-name">MP</span>
-                                <div class="position-bar">
-                                    <div class="position-fill" style="width: 78%"></div>
+                            <div class="mastery-card mp-card">
+                                <div class="mastery-circle">
+                                    <svg viewBox="0 0 36 36" class="circular-chart">
+                                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle" stroke-dasharray="78, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" class="percentage">78%</text>
+                                    </svg>
                                 </div>
-                                <span class="position-value">78%</span>
+                                <span>MP</span>
                             </div>
-                            <div class="position-row">
-                                <span class="position-name">BB</span>
-                                <div class="position-bar">
-                                    <div class="position-fill" style="width: 72%"></div>
+                            <div class="mastery-card blinds-card">
+                                <div class="mastery-circle">
+                                    <svg viewBox="0 0 36 36" class="circular-chart">
+                                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle" stroke-dasharray="68, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" class="percentage">68%</text>
+                                    </svg>
                                 </div>
-                                <span class="position-value">72%</span>
-                            </div>
-                            <div class="position-row">
-                                <span class="position-name">SB</span>
-                                <div class="position-bar">
-                                    <div class="position-fill" style="width: 65%"></div>
-                                </div>
-                                <span class="position-value">65%</span>
+                                <span>Blinds</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="charts-placeholder">
-                        <p>📊 Advanced charts coming soon</p>
                     </div>
                 </div>
             </div>
@@ -1714,101 +1930,171 @@
                     </button>
                     <h2>Personal Goals</h2>
                 </div>
-                <div class="settings-content">
-                    <div class="goals-section-vertical">
-                        <h3>Weekly Goals</h3>
-                        
-                        <div class="goals-grid-vertical">
-                            <!-- Days Goal Vertical -->
-                            <div class="goal-item-vertical">
-                                <div class="goal-vertical-header">
-                                    <span class="goal-vertical-icon">📅</span>
-                                    <span class="goal-vertical-title">Practice Days</span>
+                <div class="settings-content goals-page-content">
+                    <!-- Two Column Goals Row -->
+                    <div class="goals-row-container">
+                        <!-- Practice Days Column -->
+                        <div class="goal-column">
+                            <div class="goal-column-header">
+                                <div class="goal-column-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="goal-vertical-controls">
-                                    <button class="goal-btn-vertical plus" id="goal-days-plus">+</button>
-                                    <div class="goal-vertical-value" id="goal-days-value">3</div>
-                                    <button class="goal-btn-vertical minus" id="goal-days-minus">−</button>
+                                <h3>Practice Days</h3>
+                            </div>
+                            
+                            <div class="goal-column-value-section">
+                                <div class="goal-column-controls">
+                                    <button class="goal-column-btn" id="goal-days-minus">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/></svg>
+                                    </button>
+                                    <div class="goal-column-value" id="goal-days-value">3</div>
+                                    <button class="goal-column-btn" id="goal-days-plus">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                                    </button>
                                 </div>
-                                
-                                <div class="goal-vertical-bar-container">
-                                    <div class="goal-vertical-scale">
-                                        <span>7</span>
-                                        <span>6</span>
-                                        <span>5</span>
-                                        <span>4</span>
-                                        <span>3</span>
-                                        <span>2</span>
-                                        <span>1</span>
-                                    </div>
-                                    <div class="goal-vertical-bars">
-                                        <div class="goal-vertical-bar-track">
-                                            <div class="goal-vertical-bar-goal" id="goal-days-bar" style="height: 42.8%"></div>
-                                            <div class="goal-vertical-bar-progress" style="height: 28.5%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="goal-vertical-stats">
-                                    <div class="goal-stat-row">
-                                        <span class="goal-stat-label">Current:</span>
-                                        <span class="goal-stat-value days">2 days</span>
-                                    </div>
-                                    <div class="goal-stat-row">
-                                        <span class="goal-stat-label">Target:</span>
-                                        <span class="goal-stat-value target">3 days</span>
+                                <span class="goal-column-label">days / week</span>
+                            </div>
+                            
+                            <div class="goal-column-progress">
+                                <div class="goal-progress-ring" data-progress="66">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle class="progress-ring-bg" cx="50" cy="50" r="42"/>
+                                        <circle class="progress-ring-fill days-fill" cx="50" cy="50" r="42" style="stroke-dashoffset: calc(264 - (264 * 66 / 100))"/>
+                                    </svg>
+                                    <div class="progress-ring-text">
+                                        <span class="progress-current">2</span>
+                                        <span class="progress-separator">/</span>
+                                        <span class="progress-target">3</span>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Hands Goal Vertical -->
-                            <div class="goal-item-vertical">
-                                <div class="goal-vertical-header">
-                                    <span class="goal-vertical-icon">🃏</span>
-                                    <span class="goal-vertical-title">Hands Played</span>
+                            
+                            <div class="goal-column-status on-track">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                On Track
+                            </div>
+                        </div>
+                        
+                        <!-- Hands Played Column -->
+                        <div class="goal-column">
+                            <div class="goal-column-header">
+                                <div class="goal-column-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    </svg>
                                 </div>
-                                
-                                <div class="goal-vertical-controls">
-                                    <button class="goal-btn-vertical plus" id="goal-hands-plus">+</button>
-                                    <div class="goal-vertical-value" id="goal-hands-value">100</div>
-                                    <button class="goal-btn-vertical minus" id="goal-hands-minus">−</button>
+                                <h3>Hands Played</h3>
+                            </div>
+                            
+                            <div class="goal-column-value-section">
+                                <div class="goal-column-controls">
+                                    <button class="goal-column-btn" id="goal-hands-minus">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/></svg>
+                                    </button>
+                                    <div class="goal-column-value" id="goal-hands-value">100</div>
+                                    <button class="goal-column-btn" id="goal-hands-plus">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                                    </button>
                                 </div>
-                                
-                                <div class="goal-vertical-bar-container">
-                                    <div class="goal-vertical-scale">
-                                        <span>300</span>
-                                        <span>250</span>
-                                        <span>200</span>
-                                        <span>150</span>
-                                        <span>100</span>
-                                        <span>50</span>
-                                        <span>10</span>
-                                    </div>
-                                    <div class="goal-vertical-bars">
-                                        <div class="goal-vertical-bar-track">
-                                            <div class="goal-vertical-bar-goal" id="goal-hands-bar" style="height: 31%"></div>
-                                            <div class="goal-vertical-bar-progress" style="height: 14%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="goal-vertical-stats">
-                                    <div class="goal-stat-row">
-                                        <span class="goal-stat-label">Current:</span>
-                                        <span class="goal-stat-value hands">45 hands</span>
-                                    </div>
-                                    <div class="goal-stat-row">
-                                        <span class="goal-stat-label">Target:</span>
-                                        <span class="goal-stat-value target">100 hands</span>
+                                <span class="goal-column-label">hands / week</span>
+                            </div>
+                            
+                            <div class="goal-column-progress">
+                                <div class="goal-progress-ring" data-progress="45">
+                                    <svg viewBox="0 0 100 100">
+                                        <circle class="progress-ring-bg" cx="50" cy="50" r="42"/>
+                                        <circle class="progress-ring-fill hands-fill" cx="50" cy="50" r="42" style="stroke-dashoffset: calc(264 - (264 * 45 / 100))"/>
+                                    </svg>
+                                    <div class="progress-ring-text">
+                                        <span class="progress-current">45</span>
+                                        <span class="progress-separator">/</span>
+                                        <span class="progress-target">100</span>
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <div class="goal-column-status needs-work">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+                                Needs Work
                             </div>
                         </div>
                     </div>
 
-                    <div class="goals-tip">
-                        <p>💡 Tip: Consistent practice leads to better results. Set realistic goals and track your progress!</p>
+                    <!-- Creative Bottom Content -->
+                    <div class="goals-extra-content">
+                        <!-- Current Streak Card -->
+                        <div class="streak-card">
+                            <div class="streak-flame">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2C8 6 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-4-8-8-12z" fill="url(#flame-gradient)" stroke="none"/>
+                                    <path d="M12 9c-2 2-3 4-3 6 0 1.7 1.3 3 3 3s3-1.3 3-3c0-2-1-4-3-6z" fill="#FFD700"/>
+                                    <defs>
+                                        <linearGradient id="flame-gradient" x1="50%" y1="100%" x2="50%" y2="0%">
+                                            <stop offset="0%" stop-color="#ff6b35"/>
+                                            <stop offset="50%" stop-color="#ff9500"/>
+                                            <stop offset="100%" stop-color="#FFD700"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <div class="streak-info">
+                                <span class="streak-count">5</span>
+                                <span class="streak-label">Day Streak</span>
+                            </div>
+                            <div class="streak-best">
+                                <span class="streak-best-label">Best</span>
+                                <span class="streak-best-value">12 days</span>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Insights -->
+                        <div class="weekly-insights-card">
+                            <div class="insights-header">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent-blue)" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                                </svg>
+                                <h4>Weekly Insights</h4>
+                            </div>
+                            <div class="insights-grid">
+                                <div class="insight-item">
+                                    <span class="insight-value accent">+23%</span>
+                                    <span class="insight-label">vs Last Week</span>
+                                </div>
+                                <div class="insight-item">
+                                    <span class="insight-value">4.2</span>
+                                    <span class="insight-label">Avg. Sessions</span>
+                                </div>
+                                <div class="insight-item">
+                                    <span class="insight-value">78%</span>
+                                    <span class="insight-label">Goal Rate</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Motivational Quote -->
+                        <div class="motivation-card">
+                            <div class="motivation-quote-mark">"</div>
+                            <p class="motivation-text">Consistency beats intensity. Every hand you practice is a step toward mastery.</p>
+                            <div class="motivation-author">
+                                <span class="motivation-dash">—</span>
+                                <span>Poker Wisdom</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1840,6 +2126,15 @@
                 </div>
                 <div class="poki-chat-messages" id="chat-messages-container">
                     <!-- Messages rendered by JavaScript -->
+                </div>
+                <div class="poki-chat-input-area">
+                    <input type="text" id="poki-chat-input" placeholder="Ask me anything about poker..." autocomplete="off">
+                    <button id="poki-send-btn" aria-label="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1879,6 +2174,7 @@
     <script src="js/tilt-controller.js?v=1.0.0"></script>
     <script src="js/rule-engine.js?v=1.0.0"></script>
     <script src="js/stats-tracker.js?v=1.0.0"></script>
+    <script src="js/poki-ai.js?v=1.2.0"></script>
     <script src="js/assistant.js?v=1.0.0"></script>
     <script src="js/main.js?v=2.0.4"></script>
 
