@@ -139,17 +139,60 @@ class TiltController {
             return true;
         }
         
+        // Flag to track if we received any events
+        let eventsReceived = false;
+        const self = this;
+        
         // Add a one-time test listener to verify events are coming through
         const testHandler = (e) => {
+            eventsReceived = true;
             console.log('[Tilt] TEST EVENT RECEIVED! gamma:', e.gamma, 'beta:', e.beta, 'alpha:', e.alpha);
             window.removeEventListener('deviceorientation', testHandler);
+            
+            // Clear the verification timeout
+            if (self.verificationTimeout) {
+                clearTimeout(self.verificationTimeout);
+                self.verificationTimeout = null;
+            }
         };
         window.addEventListener('deviceorientation', testHandler);
+        
+        // Set a verification timeout - if no events within 2 seconds on iOS, something is wrong
+        if (this.requiresPermission) {
+            this.verificationTimeout = setTimeout(() => {
+                if (!eventsReceived) {
+                    console.warn('[Tilt] WARNING: No orientation events received after 2 seconds!');
+                    console.warn('[Tilt] This usually means iOS permission needs to be requested fresh.');
+                    
+                    // Update UI to show warning
+                    const statusValue = document.getElementById('tilt-status');
+                    if (statusValue) {
+                        statusValue.textContent = 'No events - try re-enabling';
+                        statusValue.classList.add('warning');
+                    }
+                    
+                    // Mark that we need fresh permission
+                    this.hasPermission = false;
+                    this.eventsWorking = false;
+                    
+                    // Update toggle button if present
+                    if (typeof updateTiltToggleButtonState === 'function') {
+                        updateTiltToggleButtonState();
+                    }
+                    
+                    // Show toast on mobile
+                    if (typeof showTiltToast === 'function') {
+                        showTiltToast('Tilt not working - tap to re-enable', 'info');
+                    }
+                }
+            }, 2000);
+        }
         
         // Use false (bubble) instead of true (capture) - more reliable across browsers
         window.addEventListener('deviceorientation', this.boundOrientationHandler, false);
         this.isActive = true;
         this.config.enabled = true;
+        this.eventsWorking = true; // Assume working until proven otherwise
         
         if (this.onStateChange) {
             this.onStateChange(true);
@@ -687,22 +730,62 @@ function flashDebugTriggered(direction) {
 
 /**
  * Check if this is the first practice visit and show setup modal if needed
- * Uses localStorage key 'preflop-sensors-setup-complete' to track
+ * 
+ * IMPORTANT: On iOS Safari, DeviceOrientationEvent.requestPermission() must be 
+ * called from a user gesture EACH page load. The permission is not cached.
+ * So we need to show the modal on iOS even if user previously enabled sensors.
+ * 
+ * Uses localStorage key 'preflop-sensors-setup-complete' to track user preference
+ * Uses sessionStorage key 'preflop-sensors-session-granted' to track current session
  */
 function checkAndShowSensorsSetupModal() {
     const modal = document.getElementById('sensors-setup-modal');
     if (!modal) return;
     
-    // Check if sensors setup has already been completed
-    const setupComplete = localStorage.getItem('preflop-sensors-setup-complete');
-    if (setupComplete === 'true') {
-        // Already set up, don't show modal
+    // Check if permission already granted this session (for iOS re-permission issue)
+    const sessionGranted = sessionStorage.getItem('preflop-sensors-session-granted');
+    if (sessionGranted === 'true') {
+        console.log('[Sensors] Already granted this session, skipping modal');
         return;
     }
     
-    // First time - show the modal
-    modal.classList.add('open');
-    setupSensorsModalButtons();
+    // Initialize tilt controller to check if permission is required
+    if (!tiltController) {
+        initializeTiltControls();
+    }
+    
+    // Check if this device requires permission (iOS 13+)
+    const requiresPermission = tiltController && tiltController.requiresPermission;
+    
+    // Check if user previously chose to enable or skip
+    const userPreference = localStorage.getItem('preflop-sensors-setup-complete');
+    
+    if (requiresPermission) {
+        // iOS: Always need to request permission each page load
+        // Show modal if user previously said "Enable", or if first time
+        const userWantsEnabled = localStorage.getItem('preflop-sensors-enabled') === 'true';
+        
+        if (userPreference === 'true' && !userWantsEnabled) {
+            // User previously chose to skip - respect that
+            console.log('[Sensors] User previously chose to skip sensors');
+            return;
+        }
+        
+        // iOS: Need to show modal for fresh permission request
+        console.log('[Sensors] iOS detected - showing modal for permission request');
+        modal.classList.add('open');
+        setupSensorsModalButtons();
+    } else {
+        // Non-iOS: Just check if first time
+        if (userPreference === 'true') {
+            // Already set up, don't show modal
+            return;
+        }
+        
+        // First time - show the modal
+        modal.classList.add('open');
+        setupSensorsModalButtons();
+    }
 }
 
 /**
@@ -713,14 +796,25 @@ function setupSensorsModalButtons() {
     const skipBtn = document.getElementById('sensors-skip-btn');
     const modal = document.getElementById('sensors-setup-modal');
     
+    // Remove old click handlers to prevent duplicates
     if (enableBtn) {
-        enableBtn.addEventListener('click', async () => {
+        const newEnableBtn = enableBtn.cloneNode(true);
+        enableBtn.parentNode.replaceChild(newEnableBtn, enableBtn);
+        
+        newEnableBtn.addEventListener('click', async () => {
             console.log('[Sensors] User chose to enable sensors...');
             
-            // Request all permissions
+            // Store user preference (they want sensors enabled)
+            localStorage.setItem('preflop-sensors-enabled', 'true');
+            localStorage.setItem('preflop-sensors-setup-complete', 'true');
+            
+            // Request all permissions (must be from this user gesture!)
             const results = await requestAllSensorPermissions();
             
             console.log('[Sensors] Results:', results);
+            
+            // Mark this session as having requested permissions
+            sessionStorage.setItem('preflop-sensors-session-granted', 'true');
             
             // Show result toast
             if (results.tilt || results.microphone) {
@@ -729,18 +823,39 @@ function setupSensorsModalButtons() {
                 showTiltToast('Some permissions were denied', 'info');
             }
             
-            // Mark setup as complete and close modal
-            localStorage.setItem('preflop-sensors-setup-complete', 'true');
+            // Update toggle button state
+            if (typeof updateTiltToggleButtonState === 'function') {
+                updateTiltToggleButtonState();
+            }
+            if (typeof updatePermissionDebugPanel === 'function') {
+                updatePermissionDebugPanel();
+            }
+            
+            // Close modal
             if (modal) modal.classList.remove('open');
         });
     }
     
     if (skipBtn) {
-        skipBtn.addEventListener('click', () => {
+        const newSkipBtn = skipBtn.cloneNode(true);
+        skipBtn.parentNode.replaceChild(newSkipBtn, skipBtn);
+        
+        newSkipBtn.addEventListener('click', () => {
             console.log('[Sensors] User skipped sensor setup');
             
-            // Mark setup as complete (user made a choice) and close modal
+            // Store user preference (they don't want sensors)
+            localStorage.setItem('preflop-sensors-enabled', 'false');
             localStorage.setItem('preflop-sensors-setup-complete', 'true');
+            
+            // Mark this session as handled
+            sessionStorage.setItem('preflop-sensors-session-granted', 'true');
+            
+            // Update toggle button state
+            if (typeof updateTiltToggleButtonState === 'function') {
+                updateTiltToggleButtonState();
+            }
+            
+            // Close modal
             if (modal) modal.classList.remove('open');
         });
     }
@@ -1008,7 +1123,8 @@ function updateTiltToggleButtonState() {
         return;
     }
     
-    if (tiltController.requiresPermission && !tiltController.hasPermission) {
+    // Check if permission is needed OR if events aren't working despite having permission
+    if (tiltController.requiresPermission && (!tiltController.hasPermission || tiltController.eventsWorking === false)) {
         btn.classList.add('needs-permission');
         if (status) status.textContent = 'TAP';
         return;
@@ -1071,9 +1187,12 @@ function updatePermissionDebugPanel() {
         if (!tiltController.requiresPermission) {
             permission.textContent = 'Not Required';
             permission.className = 'debug-value success';
-        } else if (tiltController.hasPermission) {
+        } else if (tiltController.hasPermission && tiltController.eventsWorking !== false) {
             permission.textContent = 'Granted';
             permission.className = 'debug-value success';
+        } else if (tiltController.hasPermission && tiltController.eventsWorking === false) {
+            permission.textContent = 'No Events!';
+            permission.className = 'debug-value error';
         } else {
             permission.textContent = 'Needed (iOS)';
             permission.className = 'debug-value warning';
