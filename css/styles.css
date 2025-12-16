@@ -5049,18 +5049,31 @@ input:checked + .toggle-slider:before {
 .results-link-btn {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: var(--accent-blue);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     padding: 8px 12px;
     border-radius: 6px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.results-link-btn .back-arrow-icon {
+    stroke: var(--accent-blue);
+    transition: all 0.3s ease;
+    margin-bottom: 3px;
 }
 
 .results-link-btn:hover {
-    background: var(--darker-grey);
-    color: var(--text-primary);
+    color: var(--accent-purple, #a855f7);
+}
+
+.results-link-btn:hover .back-arrow-icon {
+    stroke: var(--accent-purple, #a855f7);
+    transform: translateX(-3px);
 }
 
 /* Mobile Optimizations for Session Results */
@@ -10070,8 +10083,8 @@ input:checked + .toggle-slider:before {
 .section-arrow svg,
 .back-btn svg,
 .back-arrow-icon {
-    stroke: var(--accent-cyan, #22d3ee) !important;
-    filter: drop-shadow(0 0 2px rgba(34, 211, 238, 0.3));
+    stroke: var(--accent-blue) !important;
+    filter: drop-shadow(0 0 2px rgba(37, 99, 235, 0.3));
     transition: all 0.3s ease;
 }
 
@@ -11186,6 +11199,7 @@ input:checked + .toggle-slider:before {
     transform: rotate(-90deg);
     width: 100%;
     height: 100%;
+    overflow: visible;
 }
 
 .progress-ring-bg {
@@ -11220,7 +11234,7 @@ input:checked + .toggle-slider:before {
     transform: translate(-50%, -50%);
     display: flex;
     align-items: baseline;
-    gap: 2px;
+    gap: 0px;
 }
 
 .progress-current {
@@ -11977,4 +11991,109 @@ input:checked + .toggle-slider:before {
     .timeline-item {
         gap: 16px;
     }
+}
+
+/* ==========================================
+   LIGHT MODE FIXES - CONSOLIDATED
+   ========================================== */
+
+/* 1. Poki chat button - light background in light mode */
+[data-theme="light"] .poki-chat-icon {
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .poki-chat-icon:hover {
+    box-shadow: 
+        0 20px 40px rgba(91, 33, 182, 0.25),
+        0 0 0 2px rgba(124, 58, 237, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* 2. Toggle sliders - consistent styling for all toggles in settings (light mode active state) */
+[data-theme="light"] input:checked + .toggle-slider {
+    background-color: #2563eb;
+    border-color: #1d4ed8;
+}
+
+[data-theme="light"] input:checked + .toggle-slider:before {
+    background-color: #ffffff;
+}
+
+[data-theme="light"] .toggle-slider {
+    background-color: #cbd5e1;
+    border-color: #94a3b8;
+}
+
+[data-theme="light"] .toggle-slider:before {
+    background-color: #ffffff;
+}
+
+/* 3. Theme switch slider - same styling as other toggle sliders */
+[data-theme="light"] .theme-switch {
+    background: #cbd5e1;
+    border-color: #94a3b8;
+}
+
+[data-theme="light"] .theme-switch.light {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border-color: #1d4ed8;
+}
+
+/* 4. Config option buttons - dark text when not active in light mode */
+[data-theme="light"] .config-option-btn {
+    color: #1e293b;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .config-option-btn:hover {
+    color: #0f172a;
+    background: #e2e8f0;
+}
+
+[data-theme="light"] .config-option-btn.active {
+    color: #ffffff;
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+/* 5. Sensors modal buttons - proper styling for both themes, no glow */
+.sensors-modal-btn.primary {
+    background: linear-gradient(135deg, #00d4ff 0%, #00b8e6 100%);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.sensors-modal-btn.primary:hover {
+    box-shadow: none;
+    transform: translateY(-2px);
+}
+
+[data-theme="light"] .sensors-modal-btn.primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+[data-theme="light"] .sensors-modal-btn.secondary {
+    color: #1e293b;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .sensors-modal-btn.secondary:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* 6. Player rectangle - overflow hidden in light mode */
+[data-theme="light"] .player-rectangle {
+    overflow: hidden;
+}
+
+/* 7. User message in poki chat - ensure visibility in light mode */
+[data-theme="light"] .chat-message.user .chat-bubble {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
 }
