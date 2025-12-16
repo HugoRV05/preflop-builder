@@ -2364,6 +2364,11 @@ function setupPracticeMode() {
         checkAndShowPermissionBanner();
     }
     
+    // Setup tilt toggle button (from tilt-controller.js)
+    if (typeof setupTiltToggleButton === 'function') {
+        setupTiltToggleButton();
+    }
+    
     // Initialize assistant (from assistant.js)
     if (typeof initializeAssistant === 'function') {
         initializeAssistant();

@@ -877,6 +877,230 @@ function setTiltEnabled(enabled) {
     }
 }
 
+// ==========================================
+// TILT TOGGLE BUTTON FUNCTIONALITY
+// ==========================================
+
+/**
+ * Detect the device type for debug info
+ */
+function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/iPad|iPhone|iPod/.test(ua)) return 'iOS';
+    if (/Android/.test(ua)) return 'Android';
+    if (/Windows/.test(ua)) return 'Windows';
+    if (/Mac/.test(ua)) return 'macOS';
+    if (/Linux/.test(ua)) return 'Linux';
+    return 'Unknown';
+}
+
+/**
+ * Setup the tilt toggle button (called on practice page load)
+ */
+function setupTiltToggleButton() {
+    const btn = document.getElementById('tilt-toggle-btn');
+    const debugCloseBtn = document.getElementById('debug-close-btn');
+    const debugRequestBtn = document.getElementById('debug-request-permission-btn');
+    
+    if (!btn) {
+        console.log('[TiltToggle] Button not found');
+        return;
+    }
+    
+    // Initialize tilt controller if not already done
+    if (!tiltController) {
+        initializeTiltControls();
+    }
+    
+    // Update initial state
+    updateTiltToggleButtonState();
+    updatePermissionDebugPanel();
+    
+    // Handle button click
+    btn.addEventListener('click', async () => {
+        console.log('[TiltToggle] Button clicked');
+        
+        if (!tiltController) {
+            initializeTiltControls();
+        }
+        
+        if (!tiltController.isSupported) {
+            console.log('[TiltToggle] Tilt not supported');
+            showTiltToast('Tilt not supported on this device', 'info');
+            return;
+        }
+        
+        // If requires permission and doesn't have it, request it
+        if (tiltController.requiresPermission && !tiltController.hasPermission) {
+            console.log('[TiltToggle] Requesting permission...');
+            const granted = await requestTiltPermission();
+            
+            if (granted) {
+                showTiltToast('Tilt controls enabled! 📱', 'success');
+            } else {
+                showTiltToast('Permission denied - check Settings', 'info');
+            }
+        } else {
+            // Toggle on/off
+            if (tiltController.isActive) {
+                tiltController.stop();
+                showTiltToast('Tilt controls off', 'info');
+            } else {
+                tiltController.start();
+                showTiltToast('Tilt controls on', 'success');
+            }
+        }
+        
+        updateTiltToggleButtonState();
+        updatePermissionDebugPanel();
+    });
+    
+    // Debug panel close button
+    if (debugCloseBtn) {
+        debugCloseBtn.addEventListener('click', () => {
+            setTiltDebugMode(false);
+        });
+    }
+    
+    // Debug panel request permission button
+    if (debugRequestBtn) {
+        debugRequestBtn.addEventListener('click', async () => {
+            console.log('[TiltToggle] Debug request permission clicked');
+            if (tiltController && tiltController.requiresPermission) {
+                const granted = await requestTiltPermission();
+                updatePermissionDebugPanel();
+                updateTiltToggleButtonState();
+                
+                if (granted) {
+                    showTiltToast('Permission granted! 📱', 'success');
+                } else {
+                    showTiltToast('Permission denied', 'info');
+                }
+            }
+        });
+    }
+    
+    console.log('[TiltToggle] Button setup complete');
+}
+
+/**
+ * Update the tilt toggle button visual state
+ */
+function updateTiltToggleButtonState() {
+    const btn = document.getElementById('tilt-toggle-btn');
+    const status = document.getElementById('tilt-btn-status');
+    
+    if (!btn) return;
+    
+    // Remove all state classes
+    btn.classList.remove('active', 'disabled', 'needs-permission', 'not-supported');
+    btn.setAttribute('aria-pressed', 'false');
+    
+    if (!tiltController) {
+        btn.classList.add('disabled');
+        if (status) status.textContent = 'OFF';
+        return;
+    }
+    
+    if (!tiltController.isSupported) {
+        btn.classList.add('not-supported');
+        if (status) status.textContent = 'N/A';
+        return;
+    }
+    
+    if (tiltController.requiresPermission && !tiltController.hasPermission) {
+        btn.classList.add('needs-permission');
+        if (status) status.textContent = 'TAP';
+        return;
+    }
+    
+    if (tiltController.isActive) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+        if (status) status.textContent = 'ON';
+    } else {
+        btn.classList.add('disabled');
+        if (status) status.textContent = 'OFF';
+    }
+}
+
+/**
+ * Update the permission debug panel with current state info
+ */
+function updatePermissionDebugPanel() {
+    const deviceType = document.getElementById('tilt-device-type');
+    const supported = document.getElementById('tilt-supported');
+    const permission = document.getElementById('tilt-permission-status');
+    const active = document.getElementById('tilt-active-status');
+    const requestBtn = document.getElementById('debug-request-permission-btn');
+    
+    // Device type
+    if (deviceType) {
+        deviceType.textContent = getDeviceType();
+    }
+    
+    if (!tiltController) {
+        if (supported) {
+            supported.textContent = '?';
+            supported.className = 'debug-value';
+        }
+        if (permission) {
+            permission.textContent = 'Unknown';
+            permission.className = 'debug-value';
+        }
+        if (active) {
+            active.textContent = 'No';
+            active.className = 'debug-value';
+        }
+        return;
+    }
+    
+    // Supported status
+    if (supported) {
+        if (tiltController.isSupported) {
+            supported.textContent = 'Yes';
+            supported.className = 'debug-value success';
+        } else {
+            supported.textContent = 'No';
+            supported.className = 'debug-value error';
+        }
+    }
+    
+    // Permission status
+    if (permission) {
+        if (!tiltController.requiresPermission) {
+            permission.textContent = 'Not Required';
+            permission.className = 'debug-value success';
+        } else if (tiltController.hasPermission) {
+            permission.textContent = 'Granted';
+            permission.className = 'debug-value success';
+        } else {
+            permission.textContent = 'Needed (iOS)';
+            permission.className = 'debug-value warning';
+        }
+    }
+    
+    // Active status
+    if (active) {
+        if (tiltController.isActive) {
+            active.textContent = 'Yes';
+            active.className = 'debug-value success';
+        } else {
+            active.textContent = 'No';
+            active.className = 'debug-value';
+        }
+    }
+    
+    // Show/hide request button based on state
+    if (requestBtn) {
+        if (tiltController.requiresPermission && !tiltController.hasPermission) {
+            requestBtn.style.display = 'block';
+        } else {
+            requestBtn.style.display = 'none';
+        }
+    }
+}
+
 // Export for use in main.js
 if (typeof window !== 'undefined') {
     window.initializeTiltControls = initializeTiltControls;
@@ -890,5 +1114,9 @@ if (typeof window !== 'undefined') {
     window.setTiltDebugMode = setTiltDebugMode;
     window.checkAndShowPermissionBanner = checkAndShowPermissionBanner;
     window.setTiltEnabled = setTiltEnabled;
+    window.setupTiltToggleButton = setupTiltToggleButton;
+    window.updateTiltToggleButtonState = updateTiltToggleButtonState;
+    window.updatePermissionDebugPanel = updatePermissionDebugPanel;
+    window.getDeviceType = getDeviceType;
 }
 

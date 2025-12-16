@@ -7614,7 +7614,7 @@ input:checked + .toggle-slider:before {
     
     /* Adjust practice page end session button positioning */
     #practice-page .end-session-container {
-        margin-bottom: 80px;
+        margin-bottom: 50px;
     }
 }
 
@@ -9702,63 +9702,259 @@ input:checked + .toggle-slider:before {
 }
 
 /* ==========================================
-   TILT DEBUG PANEL STYLES (for testing)
+   TILT TOGGLE BUTTON (Top Left of Practice Page)
+   ========================================== */
+
+.tilt-toggle-btn {
+    position: fixed;
+    top: calc(var(--header-height) + 12px);
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: linear-gradient(145deg, rgba(45, 45, 55, 0.95) 0%, rgba(30, 30, 38, 0.98) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 24px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.tilt-toggle-btn .tilt-btn-icon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+}
+
+.tilt-toggle-btn .tilt-btn-label {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tilt-toggle-btn .tilt-btn-status {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tilt-toggle-btn:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.15);
+}
+
+.tilt-toggle-btn.active {
+    border-color: rgba(0, 212, 255, 0.7);
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.tilt-toggle-btn.active .tilt-btn-icon {
+    color: var(--accent-blue);
+    filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.5));
+    animation: tilt-wiggle 2s ease-in-out infinite;
+}
+
+.tilt-toggle-btn.active .tilt-btn-status {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-blue);
+}
+
+.tilt-toggle-btn.disabled {
+    border-color: rgba(100, 100, 100, 0.3);
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.tilt-toggle-btn.needs-permission {
+    border-color: rgba(255, 152, 0, 0.5);
+    animation: pulse-permission 2s ease-in-out infinite;
+}
+
+.tilt-toggle-btn.needs-permission .tilt-btn-status {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+}
+
+.tilt-toggle-btn.not-supported {
+    border-color: rgba(100, 100, 100, 0.3);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+@keyframes pulse-permission {
+    0%, 100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 152, 0, 0.3); }
+}
+
+@keyframes tilt-wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    75% { transform: rotate(-5deg); }
+}
+
+/* ==========================================
+   ENHANCED TILT DEBUG PANEL STYLES
    ========================================== */
 
 .tilt-debug-panel {
     position: fixed;
     top: 80px;
     right: 10px;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(15, 15, 20, 0.95);
     border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 12px;
+    padding: 0;
     z-index: 999;
-    font-family: monospace;
+    font-family: 'SF Mono', 'Consolas', monospace;
     font-size: 11px;
-    display: none; /* Show via JS when debug mode is on */
+    width: 200px;
+    display: none;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .tilt-debug-panel.visible {
     display: block;
 }
 
+.tilt-debug-panel .debug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
 .tilt-debug-panel .debug-label {
-    color: var(--primary);
+    color: var(--accent-blue);
     font-weight: bold;
-    margin-bottom: 4px;
     text-transform: uppercase;
     font-size: 10px;
     letter-spacing: 1px;
+    margin-bottom: 0;
 }
 
-.tilt-debug-panel .debug-value {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    color: #fff;
-}
-
-.tilt-debug-panel .debug-value span {
-    display: block;
-}
-
-#tilt-status {
+.debug-close-btn {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-radius: 50%;
     color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.debug-close-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+}
+
+.debug-section {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.debug-section:last-of-type {
+    border-bottom: none;
+}
+
+.debug-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.debug-row:last-child {
+    margin-bottom: 0;
+}
+
+.debug-key {
+    color: var(--text-muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.debug-section .debug-value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.debug-section .debug-value.success { color: #4caf50; }
+.debug-section .debug-value.error { color: #f44336; }
+.debug-section .debug-value.warning { color: #ff9800; }
+
+.debug-section.debug-angles {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.debug-angles span { color: var(--text-secondary); font-size: 10px; }
+
+.tilt-state-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(100, 100, 100, 0.3);
+    color: var(--text-muted);
 }
 
 #tilt-status.active {
+    background: rgba(76, 175, 80, 0.2);
     color: #4caf50;
 }
 
 #tilt-status.triggered {
+    background: rgba(255, 152, 0, 0.2);
     color: #ff9800;
     animation: debug-flash 0.3s ease;
 }
 
 #tilt-status.warning {
+    background: rgba(255, 87, 34, 0.2);
     color: #ff5722;
     font-weight: bold;
+}
+
+.debug-action-btn {
+    display: block;
+    width: calc(100% - 24px);
+    margin: 10px 12px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: var(--accent-blue);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.debug-action-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
+    border-color: rgba(0, 212, 255, 0.5);
 }
 
 @keyframes debug-flash {
@@ -9767,17 +9963,27 @@ input:checked + .toggle-slider:before {
 }
 
 /* Light theme */
+[data-theme="light"] .tilt-toggle-btn {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+    border-color: rgba(0, 132, 199, 0.3);
+}
+
 [data-theme="light"] .sensor-permission-banner {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
 }
 
 [data-theme="light"] .tilt-debug-panel {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="light"] .tilt-debug-panel .debug-value {
     color: var(--text-primary);
+}
+
+/* Hide toggle button on desktop */
+@media (min-width: 768px) {
+    .tilt-toggle-btn { display: none; }
 }
 
 /* ==========================================

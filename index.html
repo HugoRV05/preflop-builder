@@ -635,6 +635,16 @@
             </div>
             
             <div class="practice-layout">
+                <!-- Tilt Toggle Button (Top Left) -->
+                <button class="tilt-toggle-btn" id="tilt-toggle-btn" aria-label="Toggle tilt controls" aria-pressed="false">
+                    <svg class="tilt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </svg>
+                    <span class="tilt-btn-label" id="tilt-btn-label">Tilt</span>
+                    <span class="tilt-btn-status" id="tilt-btn-status"></span>
+                </button>
+
                 <!-- Facing Positions Display -->
                 <div class="facing-positions" id="facing-positions">    
                     <span class="facing-text-mobile">Now facing:</span>
@@ -863,15 +873,39 @@
                     </div>
                 </div>
                 
-                <!-- Debug Panel for Tilt (hidden by default, shows in dev) -->
-                <div id="tilt-debug-panel" class="tilt-debug-panel" style="display: none;">
-                    <div class="debug-label">Tilt Debug</div>
-                    <div class="debug-value">
+                <!-- Enhanced Debug Panel for Tilt with Permission Info -->
+                <div id="tilt-debug-panel" class="tilt-debug-panel">
+                    <div class="debug-header">
+                        <div class="debug-label">Tilt Debug</div>
+                        <button class="debug-close-btn" id="debug-close-btn" aria-label="Close debug">×</button>
+                    </div>
+                    <div class="debug-section">
+                        <div class="debug-row">
+                            <span class="debug-key">Device:</span>
+                            <span class="debug-value" id="tilt-device-type">Unknown</span>
+                        </div>
+                        <div class="debug-row">
+                            <span class="debug-key">Supported:</span>
+                            <span class="debug-value" id="tilt-supported">?</span>
+                        </div>
+                        <div class="debug-row">
+                            <span class="debug-key">Permission:</span>
+                            <span class="debug-value" id="tilt-permission-status">Unknown</span>
+                        </div>
+                        <div class="debug-row">
+                            <span class="debug-key">Active:</span>
+                            <span class="debug-value" id="tilt-active-status">No</span>
+                        </div>
+                    </div>
+                    <div class="debug-section debug-angles">
                         <span id="tilt-gamma-value">γ: 0°</span>
                         <span id="tilt-beta-value">β: 0°</span>
                         <span id="tilt-alpha-value">α: 0°</span>
-                        <span id="tilt-status">Inactive</span>
                     </div>
+                    <div class="debug-section">
+                        <span id="tilt-status" class="tilt-state-badge">Inactive</span>
+                    </div>
+                    <button class="debug-action-btn" id="debug-request-permission-btn">Request Permission</button>
                 </div>
                 
                 <!-- End Session Button -->
