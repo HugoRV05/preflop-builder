@@ -12303,3 +12303,125 @@ input:checked + .toggle-slider:before {
     background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     color: #ffffff;
 }
+
+/* 8. Achievements Page - Badge cards light mode */
+[data-theme="light"] .badge-card .badge-inner {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .badge-front {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .badge-card.earned .badge-front {
+    background: linear-gradient(145deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-color: rgba(14, 165, 233, 0.2);
+    box-shadow: 0 0 12px rgba(14, 165, 233, 0.12);
+}
+
+[data-theme="light"] .badge-front::before {
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.02) 0%, transparent 60%);
+}
+
+[data-theme="light"] .badge-back {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+}
+
+[data-theme="light"] .badge-back p {
+    color: #64748b;
+}
+
+[data-theme="light"] .badge-back .badge-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .badge-front span {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+
+
+[data-theme="light"] .badge-card.locked .badge-inner {
+    opacity: 0.5;
+}
+
+[data-theme="light"] .badge-card:not(.locked) .badge-front::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2'%3E%3Cpath d='M3 12a9 9 0 0 0 9 9 9 9 0 0 0 6-2.25M21 12a9 9 0 0 0-9-9 9 9 0 0 0-6 2.25'/%3E%3Cpath d='M21 3v6h-6M3 21v-6h6'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* 9. Timeline markers - improved contrast in light mode */
+[data-theme="light"] .timeline-marker {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .timeline-marker::after {
+    opacity: 0.2;
+}
+
+[data-theme="light"] .achievement-marker {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.25) 100%);
+    border-color: rgba(245, 158, 11, 0.6);
+    color: #b45309;
+}
+
+[data-theme="light"] .milestone-marker {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(6, 182, 212, 0.25) 100%);
+    border-color: rgba(14, 165, 233, 0.6);
+    color: #0369a1;
+}
+
+[data-theme="light"] .start-marker {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(217, 70, 239, 0.25) 100%);
+    border-color: rgba(168, 85, 247, 0.6);
+    color: #9333ea;
+}
+
+[data-theme="light"] .timeline-item:hover .timeline-marker {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .timeline-date {
+    color: #64748b;
+}
+
+/* 10. Achievements section header light mode */
+[data-theme="light"] .achievements-section h3,
+[data-theme="light"] .timeline-section h3 {
+    color: #1e293b;
+}
+
+
+
+/* 12. Badge icon large in preview - better visibility in light mode */
+[data-theme="light"] .badge-icon-large {
+    border-radius: 12px;
+}
+
+[data-theme="light"] .badge-preview-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .last-badges-title {
+    color: #475569;
+}
+
+/* 13. Profile section cards in light mode - improved styling */
+[data-theme="light"] .profile-section-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .profile-section-card:hover {
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .section-header h3 {
+    color: #1e293b;
+}
+
