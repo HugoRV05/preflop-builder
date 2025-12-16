@@ -7614,7 +7614,7 @@ input:checked + .toggle-slider:before {
     
     /* Adjust practice page end session button positioning */
     #practice-page .end-session-container {
-        margin-bottom: 20px;
+        margin-bottom: 80px;
     }
 }
 
