@@ -64,7 +64,19 @@ class TiltController {
             }
         }
         
+        // Enhanced debugging for iOS/PWA issues
+        const isStandalone = window.navigator.standalone === true || 
+                            window.matchMedia('(display-mode: standalone)').matches;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
         console.log(`[Tilt] Supported: ${this.isSupported}, Requires permission: ${this.requiresPermission}`);
+        console.log(`[Tilt] iOS: ${isIOS}, Standalone PWA: ${isStandalone}`);
+        
+        // Warning for known PWA issue
+        if (isIOS && isStandalone) {
+            console.warn('[Tilt] iOS PWA detected - DeviceOrientation may have issues in standalone mode');
+        }
+        
         return this.isSupported;
     }
     
@@ -162,27 +174,40 @@ class TiltController {
             this.verificationTimeout = setTimeout(() => {
                 if (!eventsReceived) {
                     console.warn('[Tilt] WARNING: No orientation events received after 2 seconds!');
-                    console.warn('[Tilt] This usually means iOS permission needs to be requested fresh.');
+                    console.warn('[Tilt] Possible causes: iOS PWA issue, Low Power Mode, or Motion disabled in Settings');
+                    
+                    // Check if running as PWA
+                    const isStandalone = window.navigator.standalone === true || 
+                                        window.matchMedia('(display-mode: standalone)').matches;
                     
                     // Update UI to show warning
                     const statusValue = document.getElementById('tilt-status');
                     if (statusValue) {
-                        statusValue.textContent = 'No events - try re-enabling';
+                        if (isStandalone) {
+                            statusValue.textContent = 'PWA issue - try Safari';
+                        } else {
+                            statusValue.textContent = 'No events - check Motion in Settings';
+                        }
                         statusValue.classList.add('warning');
                     }
                     
-                    // Mark that we need fresh permission
+                    // Mark that we need fresh permission AND clear session flag
                     this.hasPermission = false;
                     this.eventsWorking = false;
+                    sessionStorage.removeItem('preflop-tilt-permission-requested');
                     
                     // Update toggle button if present
                     if (typeof updateTiltToggleButtonState === 'function') {
                         updateTiltToggleButtonState();
                     }
                     
-                    // Show toast on mobile
+                    // Show toast on mobile with helpful message
                     if (typeof showTiltToast === 'function') {
-                        showTiltToast('Tilt not working - tap to re-enable', 'info');
+                        if (isStandalone) {
+                            showTiltToast('Tilt may not work in PWA - try Safari browser', 'info');
+                        } else {
+                            showTiltToast('Tilt not working - check iOS Settings > Safari > Motion', 'info');
+                        }
                     }
                 }
             }, 2000);
@@ -423,6 +448,9 @@ async function requestTiltPermission() {
     if (!tiltController) {
         initializeTiltControls();
     }
+    
+    // Mark that we've requested permission this session
+    sessionStorage.setItem('preflop-tilt-permission-requested', 'true');
     
     const granted = await tiltController.requestPermission();
     if (granted) {
@@ -1045,25 +1073,57 @@ function setupTiltToggleButton() {
             return;
         }
         
-        // If requires permission and doesn't have it, request it
-        if (tiltController.requiresPermission && !tiltController.hasPermission) {
-            console.log('[TiltToggle] Requesting permission...');
-            const granted = await requestTiltPermission();
+        // If already active, stop it
+        if (tiltController.isActive) {
+            tiltController.stop();
+            showTiltToast('Tilt controls off', 'info');
+            updateTiltToggleButtonState();
+            updatePermissionDebugPanel();
+            return;
+        }
+        
+        // On iOS, we MUST call requestPermission() from a user gesture EVERY page load
+        // The cached hasPermission state doesn't persist across page loads in Safari
+        if (tiltController.requiresPermission) {
+            // Check if we've already requested permission THIS session
+            const sessionRequested = sessionStorage.getItem('preflop-tilt-permission-requested');
             
-            if (granted) {
-                showTiltToast('Tilt controls enabled! 📱', 'success');
+            if (!sessionRequested) {
+                console.log('[TiltToggle] iOS: Requesting fresh permission (required each page load)...');
+                
+                try {
+                    // Call the API directly from this user gesture
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    console.log('[TiltToggle] iOS permission result:', permission);
+                    
+                    sessionStorage.setItem('preflop-tilt-permission-requested', 'true');
+                    
+                    if (permission === 'granted') {
+                        tiltController.hasPermission = true;
+                        tiltController.start();
+                        showTiltToast('Tilt controls enabled! 📱', 'success');
+                    } else {
+                        tiltController.hasPermission = false;
+                        showTiltToast('Permission denied - check Settings', 'info');
+                    }
+                } catch (error) {
+                    console.error('[TiltToggle] Permission request error:', error);
+                    // Some devices throw but might still work - try starting anyway
+                    tiltController.hasPermission = true;
+                    tiltController.start();
+                    showTiltToast('Tilt enabled (fallback)', 'info');
+                }
             } else {
-                showTiltToast('Permission denied - check Settings', 'info');
-            }
-        } else {
-            // Toggle on/off
-            if (tiltController.isActive) {
-                tiltController.stop();
-                showTiltToast('Tilt controls off', 'info');
-            } else {
+                // Already requested this session, just start
+                console.log('[TiltToggle] Already requested permission this session, starting...');
+                tiltController.hasPermission = true;
                 tiltController.start();
                 showTiltToast('Tilt controls on', 'success');
             }
+        } else {
+            // Non-iOS: just start
+            tiltController.start();
+            showTiltToast('Tilt controls on', 'success');
         }
         
         updateTiltToggleButtonState();
